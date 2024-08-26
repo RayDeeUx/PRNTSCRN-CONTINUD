@@ -27,8 +27,9 @@ void copy_screenshot(std::unique_ptr<uint8_t[]> data, const CCSize& size, bool c
 			}
 		} else {
 			CCImage* image = new CCImage();
-			image->initWithImageData(data, (int)size.width * (int)size.height * 4, CCImage::EImageFormat::kFmtPng, (int)size.width, (int)size.height, 8);
-			image->saveToFile((geode::Mod::get()->getConfigDir() / "test.png").c_str(), true);
+			std::string filepath = geode::Mod::get()->getConfigDir() / "test.png").string();
+			image->initWithImageData((void*)data, (int)size.width * (int)size.height * 4, CCImage::EImageFormat::kFmtPng, (int)size.width, (int)size.height, 8);
+			image->saveToFile(filepath.c_str(), true);
 		}
     }).detach();
 }
