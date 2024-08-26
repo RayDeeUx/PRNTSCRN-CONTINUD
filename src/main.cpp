@@ -10,7 +10,7 @@ using namespace geode::prelude;
 
 using uint = unsigned int;
 
-void copy_screenshot(std::unique_ptr<uint8_t[]> data, const CCSize& size, bool copy, uint x, uint y, uint a, uint b) {
+void screenshot(std::unique_ptr<uint8_t[]> data, const CCSize& size, bool copy, uint x, uint y, uint a, uint b) {
     const auto src_width = static_cast<uint>(size.width);
     const auto src_height = static_cast<uint>(size.height);
     a = a ? a : src_width;
