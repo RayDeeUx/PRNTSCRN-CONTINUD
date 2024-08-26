@@ -40,4 +40,4 @@ public:
 	cocos2d::CCTexture2D* intoTexture();
 };
 
-void screenshot(std::unique_ptr<uint8_t[]> data, const cocos2d::CCSize& size, bool copy, uint x = 0, uint y = 0, uint a = 0, uint b = 0);
+void screenshot(std::unique_ptr<uint8_t[]> data, const cocos2d::CCSize& size, bool copy, unsigned int x = 0, unsigned int y = 0, unsigned int a = 0, unsigned int b = 0);
