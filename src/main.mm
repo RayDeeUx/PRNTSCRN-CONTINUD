@@ -73,7 +73,7 @@ void screenshot(std::unique_ptr<uint8_t[]> data, const cocos2d::CCSize& size, bo
                 [pasteboard writeObjects:copiedObjects];
             }
         } else {
-            CGImageWriteToFile(cgImg, geode::Mod::get()->getConfigDir() / "test.png");
+            CGImageWriteToFile(cgImg, (geode::Mod::get()->getConfigDir() / "test.png").string());
         }
     });
 }
