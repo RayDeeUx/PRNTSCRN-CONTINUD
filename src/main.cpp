@@ -15,25 +15,21 @@ void screenshot(std::unique_ptr<uint8_t[]> data, const CCSize& size, bool copy, 
     const auto src_height = static_cast<uint>(size.height);
     a = a ? a : src_width;
     b = b ? b : src_height;
-    std::thread([=, data = std::move(data)]() {
-        if (copy) {
-			auto bitmap = CreateBitmap((int)size.width, (int)size.height, 1, 32, data.get());
+    if (copy) {
+		auto bitmap = CreateBitmap((int)size.width, (int)size.height, 1, 32, data);
 
-			if (OpenClipboard(NULL)) {
-				if (EmptyClipboard()) {
-					SetClipboardData(CF_BITMAP, bitmap);
-					CloseClipboard();
-				}
+		if (OpenClipboard(NULL)) {
+			if (EmptyClipboard()) {
+				SetClipboardData(CF_BITMAP, bitmap);
+				CloseClipboard();
 			}
-		} else {
-			geode::Loader::get()->queueInMainThread([&]() {
-				CCImage* image = new CCImage();
-				std::string filepath = (geode::Mod::get()->getConfigDir() / "test.png").string();
-				image->initWithImageData(data.get(), (int)size.width * (int)size.height * 4, CCImage::EImageFormat::kFmtPng, (int)size.width, (int)size.height, 8);
-				image->saveToFile(filepath.c_str(), true);
-			});
 		}
-    }).detach();
+	} else {
+		CCImage* image = new CCImage();
+		std::string filepath = (geode::Mod::get()->getConfigDir() / "test.png").string();
+		image->initWithImageData(data, (int)size.width * (int)size.height * 4, CCImage::EImageFormat::kFmtRawData, (int)size.width, (int)size.height, 8);
+		image->saveToFile(filepath.c_str(), true);
+	}
 }
 
 #endif
