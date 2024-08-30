@@ -25,9 +25,17 @@ void screenshot(std::unique_ptr<uint8_t[]> data, const CCSize& size, bool copy, 
 			}
 		}
 	} else {
+		GLubyte* newData = nullptr;
+		newData = new GLubyte[(int)size.width * (int)size.width * 4];
+		for (int i = 0; i < (int)size.height; ++i){
+			memcpy(&newData[i * (int)size.width * 4], 
+					&data.get()[((int)size.height - i - 1) * (int)size.width * 4], 
+					(int)size.width * 4);
+		}
+
 		CCImage* image = new CCImage();
 		std::string filepath = (geode::Mod::get()->getConfigDir() / "test.png").string();
-		image->initWithImageData(data.get(), (int)size.width * (int)size.height * 4, CCImage::EImageFormat::kFmtRawData, (int)size.width, (int)size.height, 8);
+		image->initWithImageData(newData, (int)size.width * (int)size.height * 4, CCImage::EImageFormat::kFmtRawData, (int)size.width, (int)size.height, 8);
 		image->saveToFile(filepath.c_str(), true);
 	}
 }
@@ -60,13 +68,13 @@ class $modify(NewPauseLayer, PauseLayer) {
 	void customSetup() {
 		PauseLayer::customSetup();
 		
-		auto btn = CCMenuItemSpriteExtra::create(
+		/*auto btn = CCMenuItemSpriteExtra::create(
 			CircleButtonSprite::createWithSprite("screenshot.png"_spr),
 			this,
 			menu_selector(NewPauseLayer::onScreenshotPopup)
 		);
 		static_cast<CCMenu*>(getChildByID("left-button-menu"))->addChild(btn);
-		static_cast<CCMenu*>(getChildByID("left-button-menu"))->updateLayout();
+		static_cast<CCMenu*>(getChildByID("left-button-menu"))->updateLayout();*/
 	}
 
 	void onScreenshotPopup(CCObject*) {
