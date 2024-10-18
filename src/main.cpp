@@ -15,7 +15,7 @@ void screenshot(std::unique_ptr<uint8_t[]> data, const CCSize& size, bool copy, 
     const auto src_height = static_cast<uint>(size.height);
     a = a ? a : src_width;
     b = b ? b : src_height;
-	std::thread([=]() {
+	std::thread([=, data = std::move(data)]() {
 		if (copy) {
 			auto bitmap = CreateBitmap((int)size.width, (int)size.height, 1, 32, data.get());
 
@@ -34,12 +34,12 @@ void screenshot(std::unique_ptr<uint8_t[]> data, const CCSize& size, bool copy, 
 						(int)size.width * 4);
 			}
 
-			Loader::get()->queueInMainThread([=, size, filepath, filename](){
+			Loader::get()->queueInMainThread([=](){
 				CCImage* image = new CCImage();
 				std::string filepath = (geode::Mod::get()->getConfigDir() / filename).string();
 				image->initWithImageData(newData, (int)size.width * (int)size.height * 4, CCImage::EImageFormat::kFmtRawData, (int)size.width, (int)size.height, 8);
 				image->saveToFile(filepath.c_str(), true);
-			})
+			});
 		}
 	}).detach();
 }
