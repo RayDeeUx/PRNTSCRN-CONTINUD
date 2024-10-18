@@ -118,7 +118,7 @@ class $modify(PlayLayer) {
 			while (std::filesystem::exists(folder / (std::string("auto_") + std::to_string(Mod::get()->getSavedValue<int64_t>("auto-percent")) + "-" + std::to_string(i) + extension))) {
 				i++;
 			}
-			name = folder / (std::string("auto_") + std::to_string(Mod::get()->getSavedValue<int64_t>("auto-percent")) + "-" + std::to_string(i));
+			name = (folder / (std::string("auto_") + std::to_string(Mod::get()->getSavedValue<int64_t>("auto-percent")) + "-" + std::to_string(i))).string();
 			name += extension;
 
 			screenshot(std::move(data), captureSize, false, name);
