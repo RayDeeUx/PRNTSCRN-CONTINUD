@@ -72,7 +72,7 @@ class $modify(CCKeyboardDispatcher) {
 				while (std::filesystem::exists(folder / (std::to_string(i) + extension))) {
 					i++;
 				}
-				name = folder / (std::to_string(i));
+				name = (folder / (std::to_string(i))).string();
 			}
 			name += extension;
 
