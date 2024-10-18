@@ -46,7 +46,7 @@ bool ScreenshotPopup::setup() {
         .collect();
 
     resolutionWidthInput->setString(std::to_string(Mod::get()->getSavedValue<int64_t>("resolution-width")));
-    resolutionWidthInput->setID("resolution-width-input");
+    resolutionWidthInput->getInput()->setID("resolution-width-input");
     resolutionWidthInput->getInput()->setDelegate(this);
     
     CCLabelBMFont* xLabel = CCLabelBMFont::create("x", "bigFont.fnt");
@@ -59,7 +59,7 @@ bool ScreenshotPopup::setup() {
         .collect();
 
     resolutionHeightInput->setString(std::to_string(Mod::get()->getSavedValue<int64_t>("resolution-height")));
-    resolutionHeightInput->setID("resolution-height-input");
+    resolutionHeightInput->getInput()->setID("resolution-height-input");
     resolutionHeightInput->getInput()->setDelegate(this);
 
     CCMenu* settingsMenu = CCMenu::create();
@@ -85,7 +85,7 @@ bool ScreenshotPopup::setup() {
         .collect();
 
     autoPercentInput->setString(std::to_string(Mod::get()->getSavedValue<int64_t>("auto-percent")));
-    autoPercentInput->setID("auto-percent-input");
+    autoPercentInput->getInput()->setID("auto-percent-input");
     autoPercentInput->getInput()->setDelegate(this);
 
     Build<CCLabelBMFont>::create("Auto Percent", "bigFont.fnt")
@@ -107,6 +107,7 @@ void ScreenshotPopup::onScreenshot(CCObject*) {
 }
 
 void ScreenshotPopup::textChanged(CCTextInputNode* p0) {
+    if (p0->getString().length() < 1) return;
     std::string inputID = p0->getID();
     if (inputID == "auto-percent-input") Mod::get()->setSavedValue<int64_t>("auto-percent", std::stoi(p0->getString()));
     if (inputID == "resolution-width-input") Mod::get()->setSavedValue<int64_t>("resolution-width", std::stoi(p0->getString()));

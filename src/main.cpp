@@ -54,7 +54,52 @@ class $modify(CCKeyboardDispatcher) {
 			auto winSize = director->getWinSize();
 			auto scene = director->getRunningScene();
 
-			
+			auto captureSize = CCSize(Mod::get()->getSavedValue<int64_t>("resolution-width"), Mod::get()->getSavedValue<int64_t>("resolution-height"));
+			RenderTexture texture(captureSize.width, captureSize.height);
+			auto data = texture.capture(scene);
+
+			auto* ctexture = texture.intoTexture();
+
+			std::string extension = Mod::get()->getSavedValue<bool>("jpeg-mafia") ? ".jpg" : ".png";
+			std::string name = "menu";
+
+			if (PlayLayer::get()) {
+				std::filesystem::path folder = Mod::get()->getConfigDir() / (std::to_string(PlayLayer::get()->m_level->m_levelID));
+				
+				if (!std::filesystem::exists(folder)) std::filesystem::create_directory(folder);
+
+				int i = 1;
+				while (std::filesystem::exists(folder / (std::to_string(i) + extension))) {
+					i++;
+				}
+				name = folder / (std::to_string(i));
+			}
+			name += extension;
+
+			screenshot(std::move(data), captureSize, false, name);
+		}
+		return CCKeyboardDispatcher::dispatchKeyboardMSG(key, down, repeat);
+	}
+};
+
+#include <Geode/modify/PlayLayer.hpp>
+class $modify(PlayLayer) {
+	struct Fields {
+		bool screenshotted = false;
+	};
+
+	void resetLevel() {
+		PlayLayer::resetLevel();
+		m_fields->screenshotted = false;
+	}
+
+	void postUpdate(float dt) {
+		PlayLayer::postUpdate(dt);
+
+		if (Mod::get()->getSavedValue<bool>("auto-screenshot") && getCurrentPercentInt() >= Mod::get()->getSavedValue<int64_t>("auto-percent") && !m_fields->screenshotted) {
+			auto director = CCDirector::sharedDirector();
+			auto winSize = director->getWinSize();
+			auto scene = director->getRunningScene();
 
 			auto captureSize = CCSize(Mod::get()->getSavedValue<int64_t>("resolution-width"), Mod::get()->getSavedValue<int64_t>("resolution-height"));
 			RenderTexture texture(captureSize.width, captureSize.height);
@@ -64,22 +109,21 @@ class $modify(CCKeyboardDispatcher) {
 
 			std::string extension = Mod::get()->getSavedValue<bool>("jpeg-mafia") ? ".jpg" : ".png";
 			std::string name = "menu";
-			if (PlayLayer::get()) {
-				if (std::filesystem::exists(Mod::get()->getConfigDir() / (std::to_string(PlayLayer::get()->m_level->m_levelID) + extension))) {
-					int i = 1;
-					while (std::filesystem::exists(Mod::get()->getConfigDir() / (std::to_string(PlayLayer::get()->m_level->m_levelID) + "-" + std::to_string(i) + extension))) {
-						i++;
-					}
-					name = (std::to_string(PlayLayer::get()->m_level->m_levelID) + "-" + std::to_string(i));
-				} else {
-					name = std::to_string(PlayLayer::get()->m_level->m_levelID);
-				}
+
+			std::filesystem::path folder = Mod::get()->getConfigDir() / (std::to_string(m_level->m_levelID));
+				
+			if (!std::filesystem::exists(folder)) std::filesystem::create_directory(folder);
+
+			int i = 0;
+			while (std::filesystem::exists(folder / (std::string("auto_") + std::to_string(Mod::get()->getSavedValue<int64_t>("auto-percent")) + "-" + std::to_string(i) + extension))) {
+				i++;
 			}
+			name = folder / (std::string("auto_") + std::to_string(Mod::get()->getSavedValue<int64_t>("auto-percent")) + "-" + std::to_string(i));
 			name += extension;
 
 			screenshot(std::move(data), captureSize, false, name);
+			m_fields->screenshotted = true;
 		}
-		return CCKeyboardDispatcher::dispatchKeyboardMSG(key, down, repeat);
 	}
 };
 
