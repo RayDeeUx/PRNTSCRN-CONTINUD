@@ -18,7 +18,7 @@ bool CGImageWriteToFile(CGImageRef image, std::string name) {
     kCFStringEncodingMacRoman);
     CFStringRef type = CFSTR("public.png");
     CFURLRef urlRef = CFURLCreateWithFileSystemPath( kCFAllocatorDefault, file, kCFURLPOSIXPathStyle, false );
-    CGImageDestinationRef destination = CGImageDestinationCreateWithURL( urlRef, kUTTypePNG, 1, NULL );
+    CGImageDestinationRef destination = CGImageDestinationCreateWithURL( urlRef, geode::Mod::get()->getSavedValue<bool>("jpeg-mafia") ? kUTTypeJPEG : kUTTypePNG, 1, NULL );
     CGImageDestinationAddImage( destination, image, NULL );
     CGImageDestinationFinalize( destination );
     if (!destination) {
@@ -36,7 +36,7 @@ bool CGImageWriteToFile(CGImageRef image, std::string name) {
     return true;
 }
 
-void screenshot(std::unique_ptr<uint8_t[]> data, const cocos2d::CCSize& size, bool copy, unsigned int x, unsigned int y, unsigned int a, unsigned int b) {
+void screenshot(std::unique_ptr<uint8_t[]> data, const cocos2d::CCSize& size, bool copy, const std::string& filename, unsigned int x, unsigned int y, unsigned int a, unsigned int b) {
     int width = size.width;
     int height = size.height;
     int dataLen = width * height * 4;
@@ -73,7 +73,7 @@ void screenshot(std::unique_ptr<uint8_t[]> data, const cocos2d::CCSize& size, bo
                 [pasteboard writeObjects:copiedObjects];
             }
         } else {
-            CGImageWriteToFile(cgImg, (geode::Mod::get()->getConfigDir() / "test.png").string());
+            CGImageWriteToFile(cgImg, (geode::Mod::get()->getConfigDir() / filename).string());
         }
     });
 }

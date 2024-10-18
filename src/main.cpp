@@ -10,34 +10,38 @@ using namespace geode::prelude;
 
 using uint = unsigned int;
 
-void screenshot(std::unique_ptr<uint8_t[]> data, const CCSize& size, bool copy, uint x, uint y, uint a, uint b) {
+void screenshot(std::unique_ptr<uint8_t[]> data, const CCSize& size, bool copy, const std::string& filename, uint x, uint y, uint a, uint b) {
     const auto src_width = static_cast<uint>(size.width);
     const auto src_height = static_cast<uint>(size.height);
     a = a ? a : src_width;
     b = b ? b : src_height;
-    if (copy) {
-		auto bitmap = CreateBitmap((int)size.width, (int)size.height, 1, 32, data.get());
+	std::thread([=]() {
+		if (copy) {
+			auto bitmap = CreateBitmap((int)size.width, (int)size.height, 1, 32, data.get());
 
-		if (OpenClipboard(NULL)) {
-			if (EmptyClipboard()) {
-				SetClipboardData(CF_BITMAP, bitmap);
-				CloseClipboard();
+			if (OpenClipboard(NULL)) {
+				if (EmptyClipboard()) {
+					SetClipboardData(CF_BITMAP, bitmap);
+					CloseClipboard();
+				}
 			}
-		}
-	} else {
-		GLubyte* newData = nullptr;
-		newData = new GLubyte[(int)size.width * (int)size.width * 4];
-		for (int i = 0; i < (int)size.height; ++i){
-			memcpy(&newData[i * (int)size.width * 4], 
-					&data.get()[((int)size.height - i - 1) * (int)size.width * 4], 
-					(int)size.width * 4);
-		}
+		} else {
+			GLubyte* newData = nullptr;
+			newData = new GLubyte[(int)size.width * (int)size.width * 4];
+			for (int i = 0; i < (int)size.height; ++i){
+				memcpy(&newData[i * (int)size.width * 4], 
+						&data.get()[((int)size.height - i - 1) * (int)size.width * 4], 
+						(int)size.width * 4);
+			}
 
-		CCImage* image = new CCImage();
-		std::string filepath = (geode::Mod::get()->getConfigDir() / "test.png").string();
-		image->initWithImageData(newData, (int)size.width * (int)size.height * 4, CCImage::EImageFormat::kFmtRawData, (int)size.width, (int)size.height, 8);
-		image->saveToFile(filepath.c_str(), true);
-	}
+			Loader::get()->queueInMainThread([=, size, filepath, filename](){
+				CCImage* image = new CCImage();
+				std::string filepath = (geode::Mod::get()->getConfigDir() / filename).string();
+				image->initWithImageData(newData, (int)size.width * (int)size.height * 4, CCImage::EImageFormat::kFmtRawData, (int)size.width, (int)size.height, 8);
+				image->saveToFile(filepath.c_str(), true);
+			})
+		}
+	}).detach();
 }
 
 #endif
@@ -50,13 +54,30 @@ class $modify(CCKeyboardDispatcher) {
 			auto winSize = director->getWinSize();
 			auto scene = director->getRunningScene();
 
-			auto captureSize = CCSize(1920, 1080);
+			
+
+			auto captureSize = CCSize(Mod::get()->getSavedValue<int64_t>("resolution-width"), Mod::get()->getSavedValue<int64_t>("resolution-height"));
 			RenderTexture texture(captureSize.width, captureSize.height);
 			auto data = texture.capture(scene);
 
 			auto* ctexture = texture.intoTexture();
 
-			screenshot(std::move(data), captureSize, false);
+			std::string extension = Mod::get()->getSavedValue<bool>("jpeg-mafia") ? ".jpg" : ".png";
+			std::string name = "menu";
+			if (PlayLayer::get()) {
+				if (std::filesystem::exists(Mod::get()->getConfigDir() / (std::to_string(PlayLayer::get()->m_level->m_levelID) + extension))) {
+					int i = 1;
+					while (std::filesystem::exists(Mod::get()->getConfigDir() / (std::to_string(PlayLayer::get()->m_level->m_levelID) + "-" + std::to_string(i) + extension))) {
+						i++;
+					}
+					name = (std::to_string(PlayLayer::get()->m_level->m_levelID) + "-" + std::to_string(i));
+				} else {
+					name = std::to_string(PlayLayer::get()->m_level->m_levelID);
+				}
+			}
+			name += extension;
+
+			screenshot(std::move(data), captureSize, false, name);
 		}
 		return CCKeyboardDispatcher::dispatchKeyboardMSG(key, down, repeat);
 	}
@@ -67,14 +88,28 @@ class $modify(CCKeyboardDispatcher) {
 class $modify(NewPauseLayer, PauseLayer) {
 	void customSetup() {
 		PauseLayer::customSetup();
+
+		auto* mod = Mod::get();
+
+		if (!mod->getSavedValue<bool>("set-defaults")) {
+			mod->setSavedValue<bool>("copy-clipboard", true);
+			mod->setSavedValue<bool>("hide-player", false);
+			mod->setSavedValue<bool>("hide-ui", false);
+			mod->setSavedValue<bool>("jpeg-mafia", false);
+			mod->setSavedValue<bool>("auto-screenshot", false);
+			mod->setSavedValue<int64_t>("auto-percent", 10);
+			mod->setSavedValue<int64_t>("resolution-width", 1920);
+			mod->setSavedValue<int64_t>("resolution-height", 1080);
+			mod->setSavedValue<bool>("set-defaults", true);
+		}
 		
-		/*auto btn = CCMenuItemSpriteExtra::create(
+		auto btn = CCMenuItemSpriteExtra::create(
 			CircleButtonSprite::createWithSprite("screenshot.png"_spr),
 			this,
 			menu_selector(NewPauseLayer::onScreenshotPopup)
 		);
 		static_cast<CCMenu*>(getChildByID("left-button-menu"))->addChild(btn);
-		static_cast<CCMenu*>(getChildByID("left-button-menu"))->updateLayout();*/
+		static_cast<CCMenu*>(getChildByID("left-button-menu"))->updateLayout();
 	}
 
 	void onScreenshotPopup(CCObject*) {

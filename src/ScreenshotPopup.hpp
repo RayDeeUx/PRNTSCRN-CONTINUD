@@ -14,6 +14,9 @@ protected:
     CCMenuItemToggler* copyClipboardToggle;
     CCMenuItemToggler* hidePlayerToggle;
     CCMenuItemToggler* hideUIToggle;
+    geode::InputNode* autoPercentInput;
+    geode::InputNode* resolutionWidthInput;
+    geode::InputNode* resolutionHeightInput;
 
     bool setup() override;
 
