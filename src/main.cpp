@@ -54,13 +54,24 @@ class $modify(CCKeyboardDispatcher) {
 			auto winSize = director->getWinSize();
 			auto scene = director->getRunningScene();
 
-			auto captureSize = CCSize(Mod::get()->getSavedValue<int64_t>("resolution-width"), Mod::get()->getSavedValue<int64_t>("resolution-height"));
+			auto captureSize = CCSize(Mod::get()->getSettingValue<int64_t>("resolution-width"), Mod::get()->getSettingValue<int64_t>("resolution-height"));
 			RenderTexture texture(captureSize.width, captureSize.height);
+			PlayLayer* pl = PlayLayer::get();
+			if (pl && Mod::get()->getSettingValue<bool>("hide-ui")) {
+				pl->getChildByID("UILayer")->setVisible(false);
+				pl->getChildByID("percentage-label")->setVisible(false);
+				pl->getChildByID("progress-bar")->setVisible(false);
+			}
 			auto data = texture.capture(scene);
+			if (pl && Mod::get()->getSettingValue<bool>("hide-ui")) {
+				pl->getChildByID("UILayer")->setVisible(true);
+				pl->getChildByID("percentage-label")->setVisible(true);
+				pl->getChildByID("progress-bar")->setVisible(true);
+			}
 
 			auto* ctexture = texture.intoTexture();
 
-			std::string extension = Mod::get()->getSavedValue<bool>("jpeg-mafia") ? ".jpg" : ".png";
+			std::string extension = Mod::get()->getSettingValue<bool>("jpeg-mafia") ? ".jpg" : ".png";
 			std::string name = "menu";
 
 			if (PlayLayer::get()) {
@@ -96,18 +107,18 @@ class $modify(PlayLayer) {
 	void postUpdate(float dt) {
 		PlayLayer::postUpdate(dt);
 
-		if (Mod::get()->getSavedValue<bool>("auto-screenshot") && getCurrentPercentInt() >= Mod::get()->getSavedValue<int64_t>("auto-percent") && !m_fields->screenshotted) {
+		if (Mod::get()->getSettingValue<bool>("auto-screenshot") && getCurrentPercentInt() >= Mod::get()->getSettingValue<int64_t>("auto-percent") && !m_fields->screenshotted) {
 			auto director = CCDirector::sharedDirector();
 			auto winSize = director->getWinSize();
 			auto scene = director->getRunningScene();
 
-			auto captureSize = CCSize(Mod::get()->getSavedValue<int64_t>("resolution-width"), Mod::get()->getSavedValue<int64_t>("resolution-height"));
+			auto captureSize = CCSize(Mod::get()->getSettingValue<int64_t>("resolution-width"), Mod::get()->getSettingValue<int64_t>("resolution-height"));
 			RenderTexture texture(captureSize.width, captureSize.height);
 			auto data = texture.capture(scene);
 
 			auto* ctexture = texture.intoTexture();
 
-			std::string extension = Mod::get()->getSavedValue<bool>("jpeg-mafia") ? ".jpg" : ".png";
+			std::string extension = Mod::get()->getSettingValue<bool>("jpeg-mafia") ? ".jpg" : ".png";
 			std::string name = "menu";
 
 			std::filesystem::path folder = Mod::get()->getConfigDir() / (std::to_string(m_level->m_levelID));
@@ -115,13 +126,13 @@ class $modify(PlayLayer) {
 			if (!std::filesystem::exists(folder)) std::filesystem::create_directory(folder);
 
 			int i = 0;
-			while (std::filesystem::exists(folder / (std::string("auto_") + std::to_string(Mod::get()->getSavedValue<int64_t>("auto-percent")) + "-" + std::to_string(i) + extension))) {
+			while (std::filesystem::exists(folder / (std::string("auto_") + std::to_string(Mod::get()->getSettingValue<int64_t>("auto-percent")) + "-" + std::to_string(i) + extension))) {
 				i++;
 			}
-			name = (folder / (std::string("auto_") + std::to_string(Mod::get()->getSavedValue<int64_t>("auto-percent")) + "-" + std::to_string(i))).string();
+			name = (folder / (std::string("auto_") + std::to_string(Mod::get()->getSettingValue<int64_t>("auto-percent")) + "-" + std::to_string(i))).string();
 			name += extension;
 
-			screenshot(std::move(data), captureSize, false, name);
+			screenshot(std::move(data), captureSize, Mod::get()->getSettingValue<bool>("copy-clipboard"), name);
 			m_fields->screenshotted = true;
 		}
 	}
@@ -133,20 +144,6 @@ class $modify(NewPauseLayer, PauseLayer) {
 	void customSetup() {
 		PauseLayer::customSetup();
 
-		auto* mod = Mod::get();
-
-		if (!mod->getSavedValue<bool>("set-defaults")) {
-			mod->setSavedValue<bool>("copy-clipboard", true);
-			mod->setSavedValue<bool>("hide-player", false);
-			mod->setSavedValue<bool>("hide-ui", false);
-			mod->setSavedValue<bool>("jpeg-mafia", false);
-			mod->setSavedValue<bool>("auto-screenshot", false);
-			mod->setSavedValue<int64_t>("auto-percent", 10);
-			mod->setSavedValue<int64_t>("resolution-width", 1920);
-			mod->setSavedValue<int64_t>("resolution-height", 1080);
-			mod->setSavedValue<bool>("set-defaults", true);
-		}
-		
 		auto btn = CCMenuItemSpriteExtra::create(
 			CircleButtonSprite::createWithSprite("screenshot.png"_spr),
 			this,

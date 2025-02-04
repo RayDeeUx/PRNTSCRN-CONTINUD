@@ -1,10 +1,10 @@
 {
-	"geode": "3.8.1",
+	"geode": "4.2.1",
 	"gd": {
-		"win": "2.206",
-		"android": "2.206",
-		"mac": "2.206",
-		"ios": "2.206"
+		"win": "2.2074",
+		"android": "2.2074",
+		"mac": "2.2074",
+		"ios": "2.2074"
 	},
 	"id": "ninxout.prntscrn",
 	"name": "PRNTSCRN",
@@ -15,5 +15,52 @@
         "sprites": [
             "resources/screenshot.png"
         ]
-    }
+    },
+	"settings": {
+		"copy-clipboard": {
+			"type": "bool",
+			"name": "Copy to Clipboard",
+			"default": true
+		},
+		"hide-player": {
+			"type": "bool",
+			"name": "Hide Player",
+			"default": false
+		},
+		"hide-ui": {
+			"type": "bool",
+			"name": "Hide UI",
+			"default": true
+		},
+		"resolution-width": {
+			"type": "int",
+			"name": "Resolution Width",
+			"description": "The width of the image",
+			"default": 1920
+		},
+		"resolution-height": {
+			"type": "int",
+			"name": "Resolution Height",
+			"description": "The height of the image",
+			"default": 1080
+		},
+		"jpeg-mafia": {
+			"type": "bool",
+			"name": "Output to JPEG",
+			"description": "Use JPEG for images instead of PNG",
+			"default": false
+		},
+		"auto-screenshot": {
+			"type": "bool",
+			"name": "Auto Screenshot",
+			"description": "Screenshot automatically at a specified percentage",
+			"default": false
+		},
+		"auto-percent": {
+			"type": "int",
+			"name": "Auto Screenshot Percentage",
+			"description": "The percentage value to screenshot at",
+			"default": 30
+		}
+	}
 }

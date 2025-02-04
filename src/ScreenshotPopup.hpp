@@ -1,5 +1,7 @@
 #pragma once
 #include <Geode/Geode.hpp>
+#include <Geode/ui/TextInput.hpp>
+#include <Geode/ui/Popup.hpp>
 
 class ScreenshotPopup : public geode::Popup<>, public TextInputDelegate {
 public:
@@ -14,9 +16,9 @@ protected:
     CCMenuItemToggler* copyClipboardToggle;
     CCMenuItemToggler* hidePlayerToggle;
     CCMenuItemToggler* hideUIToggle;
-    geode::InputNode* autoPercentInput;
-    geode::InputNode* resolutionWidthInput;
-    geode::InputNode* resolutionHeightInput;
+    geode::TextInput* autoPercentInput;
+    geode::TextInput* resolutionWidthInput;
+    geode::TextInput* resolutionHeightInput;
 
     bool setup() override;
 
