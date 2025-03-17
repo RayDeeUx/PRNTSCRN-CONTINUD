@@ -38,6 +38,9 @@ public:
 	// creates a CCTexture2D from the internal texture. this class should not be used after this
 	// as cocos now owns the texture, and a new one isnt created
 	cocos2d::CCTexture2D* intoTexture();
+
+	void applyWinSize();
+	void restoreWinSize();
 };
 
 void screenshot(std::unique_ptr<uint8_t[]> data, const cocos2d::CCSize& size, bool copy, const std::string& filename, unsigned int x = 0, unsigned int y = 0, unsigned int a = 0, unsigned int b = 0);

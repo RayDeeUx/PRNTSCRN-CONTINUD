@@ -1,7 +1,18 @@
 #include "ScreenshotPopup.hpp"
+#include "Screenshot.hpp"
 #include <UIBuilder.hpp>
 
 using namespace geode::prelude;
+
+#define ADD_NODE(val) uiNodes[#val] = pl->getChildByID(#val)->isVisible(); \
+pl->getChildByID(#val)->setVisible(false);
+
+#define ADD_MEM(val) uiNodes[#val] = pl->val->isVisible(); \
+pl->val->setVisible(false);
+
+#define RES_NODE(val) pl->getChildByID(#val)->setVisible(uiNodes[#val]);
+
+#define RES_MEM(val) pl->val->setVisible(uiNodes[#val]);
 
 CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::string& key) {
     CCMenu* thing = Build<CCMenu>(CCMenu::create())
@@ -63,20 +74,20 @@ bool ScreenshotPopup::setup() {
     resolutionHeightInput->getInputNode()->setDelegate(this);
 
     CCMenu* settingsMenu = CCMenu::create();
-    settingsMenu->setPosition(ccp(275.f, 115.f));
-    settingsMenu->setContentWidth(240.f);
-    settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(false)->setAxisReverse(true));
+    settingsMenu->setPosition(ccp(265.f, 110.f));
+    settingsMenu->setContentSize({240.f, 175.f});
+    settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(false)->setAxisReverse(true)->setAxisAlignment(AxisAlignment::End));
 
     settingsMenu->addChild(createSetting("Copy To Clipboard", "copy-clipboard"));
-    settingsMenu->addChild(createSetting("Hide Player Icon", "hide-player"));
     settingsMenu->addChild(createSetting("Hide UI Layer", "hide-ui"));
+    settingsMenu->addChild(createSetting("Hide Player", "hide-player"));
     settingsMenu->addChild(createSetting("JPEG", "jpeg-mafia"));
     settingsMenu->addChild(createSetting("Auto Screenshot", "auto-screenshot"));
 
     CCMenu* autoPercent = Build<CCMenu>::create()
-        .layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(4.f))
+        .layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(4.f)->setAxisReverse(true))
+        .pos(130, 150)
         .width(230.f)
-        .parent(settingsMenu)
         .collect();
 
     autoPercentInput = Build<TextInput>::create(35.f, "%", "bigFont.fnt")
@@ -92,18 +103,67 @@ bool ScreenshotPopup::setup() {
         .scale(0.4f)
         .parent(autoPercent);
 
-    autoPercent->updateLayout();
-
     m_mainLayer->addChild(settingsMenu);
     m_mainLayer->addChild(resolutionMenu);
+    m_mainLayer->addChild(autoPercent);
     settingsMenu->updateLayout();
     resolutionMenu->updateLayout();
+    autoPercent->updateLayout();
+
+    CCMenuItemSpriteExtra* scrnshotBTN = CCMenuItemSpriteExtra::create(
+        ButtonSprite::create("Screenshot!"),
+        this,
+        menu_selector(ScreenshotPopup::onScreenshot)
+    );
+    scrnshotBTN->setPosition(ccp(170, 30));
+    m_buttonMenu->addChild(scrnshotBTN);
 
     return true;
 }
 
 void ScreenshotPopup::onScreenshot(CCObject*) {
-    //Mod::get()->setSettingValue<int64_t>("auto-percent", std::stoi(input->getString()));
+    PlayLayer* pl = PlayLayer::get();
+
+    if (!pl) return;
+    std::unordered_map<const char*, bool> uiNodes = {};
+			
+    bool hideUI = Mod::get()->getSettingValue<bool>("hide-ui");
+    bool hidePL = Mod::get()->getSettingValue<bool>("hide-player");
+
+    if (hideUI) {
+        ADD_NODE(UILayer);
+        ADD_NODE(percentage-label);
+        ADD_NODE(progress-bar);
+    }
+    if (hidePL) {
+        ADD_MEM(m_player1);
+        ADD_MEM(m_player2);
+    }
+    Screenshot ss = Screenshot(Mod::get()->getSettingValue<int64_t>("resolution-width"), Mod::get()->getSettingValue<int64_t>("resolution-height"), pl);
+    if (hideUI) {
+        RES_NODE(UILayer);
+        RES_NODE(percentage-label);
+        RES_NODE(progress-bar);
+    }
+    if (hidePL) {
+        RES_MEM(m_player1);
+        RES_MEM(m_player2);
+    }
+
+    bool jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");
+    std::string extension = jpeg ? ".jpg" : ".png";
+
+    std::filesystem::path folder = Mod::get()->getConfigDir() / (std::to_string(PlayLayer::get()->m_level->m_levelID));
+    if (!std::filesystem::exists(folder)) std::filesystem::create_directory(folder);
+
+    int index = 1;
+    while (std::filesystem::exists(folder / (std::to_string(index) + extension))) {
+        index++;
+    }
+
+    std::string filename = fmt::format("{}/{}{}", folder.string(), index, extension);
+
+    Mod::get()->getSettingValue<bool>("copy-clipboard") ? ss.intoClipboard() : ss.intoFile(filename, jpeg);
 }
 
 void ScreenshotPopup::textChanged(CCTextInputNode* p0) {

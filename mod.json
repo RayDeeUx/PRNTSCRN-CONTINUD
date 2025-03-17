@@ -1,5 +1,5 @@
 {
-	"geode": "4.2.1",
+	"geode": "4.2.0",
 	"gd": {
 		"win": "2.2074",
 		"android": "2.2074",
@@ -10,7 +10,7 @@
 	"name": "PRNTSCRN",
 	"version": "v1.0.0",
 	"developers": ["ninXout", "mat"],
-	"description": "",
+	"description": "Quick and easy screenshot tool!",
 	"resources": {
         "sprites": [
             "resources/screenshot.png"
@@ -53,14 +53,14 @@
 		"auto-screenshot": {
 			"type": "bool",
 			"name": "Auto Screenshot",
-			"description": "Screenshot automatically at a specified percentage",
+			"description": "Automatically at every percentage interval",
 			"default": false
 		},
 		"auto-percent": {
 			"type": "int",
 			"name": "Auto Screenshot Percentage",
-			"description": "The percentage value to screenshot at",
-			"default": 30
+			"description": "Automatically at every percentage interval",
+			"default": 10
 		}
 	}
 }

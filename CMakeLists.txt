@@ -10,9 +10,9 @@ file(GLOB_RECURSE SOURCES
     src/*.cpp
 )
 
-add_library(${PROJECT_NAME} SHARED ${SOURCES} src/main.mm)
+add_library(${PROJECT_NAME} SHARED ${SOURCES} src/Screenshot.mm)
 
-set_source_files_properties(src/main.mm PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
+set_source_files_properties(src/Screenshot.mm PROPERTIES SKIP_PRECOMPILE_HEADERS ON)
 
 if (NOT DEFINED ENV{GEODE_SDK})
     message(FATAL_ERROR "Unable to find Geode SDK! Please define GEODE_SDK environment variable to point to Geode")

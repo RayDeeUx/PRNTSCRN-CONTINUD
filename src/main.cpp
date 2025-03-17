@@ -1,93 +1,70 @@
-#include "RenderTexture.hpp"
+#include "Screenshot.hpp"
 #include <Geode/Geode.hpp>
 
 using namespace geode::prelude;
 
-// #include <CCGL.h>
-#include <thread>
+#define ADD_NODE(val) uiNodes[#val] = pl->getChildByID(#val)->isVisible(); \
+pl->getChildByID(#val)->setVisible(false);
 
-#ifdef GEODE_IS_WINDOWS
+#define ADD_MEM(val) uiNodes[#val] = pl->val->isVisible(); \
+pl->val->setVisible(false);
 
-using uint = unsigned int;
+#define RES_NODE(val) pl->getChildByID(#val)->setVisible(uiNodes[#val]);
 
-void screenshot(std::unique_ptr<uint8_t[]> data, const CCSize& size, bool copy, const std::string& filename, uint x, uint y, uint a, uint b) {
-    const auto src_width = static_cast<uint>(size.width);
-    const auto src_height = static_cast<uint>(size.height);
-    a = a ? a : src_width;
-    b = b ? b : src_height;
-	std::thread([=, data = std::move(data)]() {
-		if (copy) {
-			auto bitmap = CreateBitmap((int)size.width, (int)size.height, 1, 32, data.get());
+#define RES_MEM(val) pl->val->setVisible(uiNodes[#val]);
 
-			if (OpenClipboard(NULL)) {
-				if (EmptyClipboard()) {
-					SetClipboardData(CF_BITMAP, bitmap);
-					CloseClipboard();
-				}
-			}
-		} else {
-			GLubyte* newData = nullptr;
-			newData = new GLubyte[(int)size.width * (int)size.width * 4];
-			for (int i = 0; i < (int)size.height; ++i){
-				memcpy(&newData[i * (int)size.width * 4], 
-						&data.get()[((int)size.height - i - 1) * (int)size.width * 4], 
-						(int)size.width * 4);
-			}
+void screenshot(PlayLayer* pl) {
+	auto director = CCDirector::sharedDirector();
+	auto winSize = director->getWinSize();
+	auto scene = director->getRunningScene();
 
-			Loader::get()->queueInMainThread([=](){
-				CCImage* image = new CCImage();
-				std::string filepath = (geode::Mod::get()->getConfigDir() / filename).string();
-				image->initWithImageData(newData, (int)size.width * (int)size.height * 4, CCImage::EImageFormat::kFmtRawData, (int)size.width, (int)size.height, 8);
-				image->saveToFile(filepath.c_str(), true);
-			});
-		}
-	}).detach();
+	std::unordered_map<const char*, bool> uiNodes = {};
+	
+	bool hideUI = Mod::get()->getSettingValue<bool>("hide-ui");
+	bool hidePL = Mod::get()->getSettingValue<bool>("hide-player");
+
+	if (hideUI) {
+		ADD_NODE(UILayer);
+		ADD_NODE(percentage-label);
+		ADD_NODE(progress-bar);
+	}
+	if (hidePL) {
+		ADD_MEM(m_player1);
+		ADD_MEM(m_player2);
+	}
+	Screenshot ss = Screenshot(Mod::get()->getSettingValue<int64_t>("resolution-width"), Mod::get()->getSettingValue<int64_t>("resolution-height"), pl);
+	if (hideUI) {
+		RES_NODE(UILayer);
+		RES_NODE(percentage-label);
+		RES_NODE(progress-bar);
+	}
+	if (hidePL) {
+		RES_MEM(m_player1);
+		RES_MEM(m_player2);
+	}
+
+	bool jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");
+	std::string extension = jpeg ? ".jpg" : ".png";
+
+	std::filesystem::path folder = Mod::get()->getConfigDir() / (std::to_string(PlayLayer::get()->m_level->m_levelID));
+	if (!std::filesystem::exists(folder)) std::filesystem::create_directory(folder);
+
+	int index = 1;
+	while (std::filesystem::exists(folder / (std::to_string(index) + extension))) {
+		index++;
+	}
+
+	std::string filename = fmt::format("{}/{}{}", folder.string(), index, extension);
+
+	Mod::get()->getSettingValue<bool>("copy-clipboard") ? ss.intoClipboard() : ss.intoFile(filename, jpeg);
 }
-
-#endif
 
 #include <Geode/modify/CCKeyboardDispatcher.hpp>
 class $modify(CCKeyboardDispatcher) {
 	bool dispatchKeyboardMSG(enumKeyCodes key, bool down, bool repeat) {
-		if (down && key == enumKeyCodes::KEY_F2) {
-			auto director = CCDirector::sharedDirector();
-			auto winSize = director->getWinSize();
-			auto scene = director->getRunningScene();
-
-			auto captureSize = CCSize(Mod::get()->getSettingValue<int64_t>("resolution-width"), Mod::get()->getSettingValue<int64_t>("resolution-height"));
-			RenderTexture texture(captureSize.width, captureSize.height);
-			PlayLayer* pl = PlayLayer::get();
-			if (pl && Mod::get()->getSettingValue<bool>("hide-ui")) {
-				pl->getChildByID("UILayer")->setVisible(false);
-				pl->getChildByID("percentage-label")->setVisible(false);
-				pl->getChildByID("progress-bar")->setVisible(false);
-			}
-			auto data = texture.capture(scene);
-			if (pl && Mod::get()->getSettingValue<bool>("hide-ui")) {
-				pl->getChildByID("UILayer")->setVisible(true);
-				pl->getChildByID("percentage-label")->setVisible(true);
-				pl->getChildByID("progress-bar")->setVisible(true);
-			}
-
-			auto* ctexture = texture.intoTexture();
-
-			std::string extension = Mod::get()->getSettingValue<bool>("jpeg-mafia") ? ".jpg" : ".png";
-			std::string name = "menu";
-
-			if (PlayLayer::get()) {
-				std::filesystem::path folder = Mod::get()->getConfigDir() / (std::to_string(PlayLayer::get()->m_level->m_levelID));
-				
-				if (!std::filesystem::exists(folder)) std::filesystem::create_directory(folder);
-
-				int i = 1;
-				while (std::filesystem::exists(folder / (std::to_string(i) + extension))) {
-					i++;
-				}
-				name = (folder / (std::to_string(i))).string();
-			}
-			name += extension;
-
-			screenshot(std::move(data), captureSize, false, name);
+		PlayLayer* pl = PlayLayer::get();
+		if (down && key == enumKeyCodes::KEY_F2 && pl) {
+			screenshot(pl);
 		}
 		return CCKeyboardDispatcher::dispatchKeyboardMSG(key, down, repeat);
 	}
@@ -96,44 +73,27 @@ class $modify(CCKeyboardDispatcher) {
 #include <Geode/modify/PlayLayer.hpp>
 class $modify(PlayLayer) {
 	struct Fields {
-		bool screenshotted = false;
+		int lastScreenshot = 0;
+		bool autoScreenshot = false;
+		int autoPercent = 10;
+		bool hideUI = false;
 	};
 
 	void resetLevel() {
 		PlayLayer::resetLevel();
-		m_fields->screenshotted = false;
+		m_fields->autoScreenshot = Mod::get()->getSettingValue<bool>("auto-screenshot");
+		m_fields->autoPercent = Mod::get()->getSettingValue<int64_t>("auto-percent");
+		m_fields->hideUI = Mod::get()->getSettingValue<bool>("hide-ui");
+		m_fields->lastScreenshot = 0;
 	}
 
 	void postUpdate(float dt) {
 		PlayLayer::postUpdate(dt);
+		int currentPercent = getCurrentPercentInt();
 
-		if (Mod::get()->getSettingValue<bool>("auto-screenshot") && getCurrentPercentInt() >= Mod::get()->getSettingValue<int64_t>("auto-percent") && !m_fields->screenshotted) {
-			auto director = CCDirector::sharedDirector();
-			auto winSize = director->getWinSize();
-			auto scene = director->getRunningScene();
-
-			auto captureSize = CCSize(Mod::get()->getSettingValue<int64_t>("resolution-width"), Mod::get()->getSettingValue<int64_t>("resolution-height"));
-			RenderTexture texture(captureSize.width, captureSize.height);
-			auto data = texture.capture(scene);
-
-			auto* ctexture = texture.intoTexture();
-
-			std::string extension = Mod::get()->getSettingValue<bool>("jpeg-mafia") ? ".jpg" : ".png";
-			std::string name = "menu";
-
-			std::filesystem::path folder = Mod::get()->getConfigDir() / (std::to_string(m_level->m_levelID));
-				
-			if (!std::filesystem::exists(folder)) std::filesystem::create_directory(folder);
-
-			int i = 0;
-			while (std::filesystem::exists(folder / (std::string("auto_") + std::to_string(Mod::get()->getSettingValue<int64_t>("auto-percent")) + "-" + std::to_string(i) + extension))) {
-				i++;
-			}
-			name = (folder / (std::string("auto_") + std::to_string(Mod::get()->getSettingValue<int64_t>("auto-percent")) + "-" + std::to_string(i))).string();
-			name += extension;
-
-			screenshot(std::move(data), captureSize, Mod::get()->getSettingValue<bool>("copy-clipboard"), name);
-			m_fields->screenshotted = true;
+		if (m_fields->autoScreenshot && currentPercent % m_fields->autoPercent == 0 && m_fields->lastScreenshot != currentPercent) {
+			screenshot(this);
+			m_fields->lastScreenshot = currentPercent;
 		}
 	}
 };
