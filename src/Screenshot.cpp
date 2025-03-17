@@ -25,8 +25,10 @@ void Screenshot::intoFile(const std::string& filename, bool jpeg) { // jpeg is u
 
         Loader::get()->queueInMainThread([=](){
             CCImage* image = new CCImage();
-            image->initWithImageData(newData, m_width * m_height * 4, CCImage::EImageFormat::kFmtRawData, m_width, m_height, 8);
-            image->saveToFile(filename.c_str(), true);
+            if (image->initWithImageData(newData, m_width * m_height * 4, CCImage::EImageFormat::kFmtRawData, m_width, m_height, 8)) {
+                image->autorelease();
+                image->saveToFile(filename.c_str(), true);
+            }
         });
     }).detach();
 }
