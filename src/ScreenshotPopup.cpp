@@ -5,8 +5,11 @@
 
 using namespace geode::prelude;
 
-#define ADD_NODE(val) uiNodes[#val] = pl->getChildByID(#val)->isVisible(); \
-pl->getChildByID(#val)->setVisible(false);
+#define ADD_NODE(val)\
+    if (auto node = pl->getChildByID(#val)) { \
+        uiNodes[#val] = node->isVisible(); \
+        node->setVisible(false); \
+    }
 
 #define ADD_MEM(val) uiNodes[#val] = pl->val->isVisible(); \
 pl->val->setVisible(false);

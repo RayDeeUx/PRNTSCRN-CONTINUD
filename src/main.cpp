@@ -4,8 +4,11 @@
 
 using namespace geode::prelude;
 
-#define ADD_NODE(val) uiNodes[#val] = pl->getChildByID(#val)->isVisible(); \
-if (auto node = pl->getChildByID(#val)) node->setVisible(false);
+#define ADD_NODE(val)\
+	if (auto node = pl->getChildByID(#val)) { \
+		uiNodes[#val] = node->isVisible(); \
+		node->setVisible(false); \
+	}
 
 #define ADD_MEM(val) uiNodes[#val] = pl->val->isVisible(); \
 pl->val->setVisible(false);
@@ -44,6 +47,7 @@ void screenshot(CCNode* node) {
 		ADD_NODE(debug-text);
 		ADD_NODE(testmode-label);
 		ADD_NODE(percentage-label);
+		ADD_NODE(mat.run-info/RunInfoWidget);
 		ADD_NODE(progress-bar);
 	}
 	if (hidePL && pl) {
