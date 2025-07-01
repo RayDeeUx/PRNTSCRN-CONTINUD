@@ -5,19 +5,6 @@
 
 using namespace geode::prelude;
 
-#define ADD_NODE(val)\
-    if (auto node = pl->getChildByID(#val)) { \
-        uiNodes[#val] = node->isVisible(); \
-        node->setVisible(false); \
-    }
-
-#define ADD_MEM(val) uiNodes[#val] = pl->val->isVisible(); \
-pl->val->setVisible(false);
-
-#define RES_NODE(val) pl->getChildByID(#val)->setVisible(uiNodes[#val]);
-
-#define RES_MEM(val) pl->val->setVisible(uiNodes[#val]);
-
 CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::string& key) {
     CCMenu* thing = Build<CCMenu>(CCMenu::create())
         .layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(5.f))
@@ -57,7 +44,7 @@ bool ScreenshotPopup::setup() {
         .parent(resolutionMenu)
         .collect();
 
-    resolutionWidthInput->setString(std::to_string(Mod::get()->getSettingValue<int64_t>("resolution-width")));
+    resolutionWidthInput->setString(numToString(Manager::get()->width));
     resolutionWidthInput->getInputNode()->setID("resolution-width-input");
     resolutionWidthInput->getInputNode()->setDelegate(this);
     
@@ -70,7 +57,7 @@ bool ScreenshotPopup::setup() {
         .parent(resolutionMenu)
         .collect();
 
-    resolutionHeightInput->setString(numToString(Mod::get()->getSettingValue<int64_t>("resolution-height")));
+    resolutionHeightInput->setString(numToString(Manager::get()->height));
     resolutionHeightInput->getInputNode()->setID("resolution-height-input"_spr);
     resolutionHeightInput->getInputNode()->setDelegate(this);
 

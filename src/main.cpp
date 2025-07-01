@@ -4,19 +4,6 @@
 
 using namespace geode::prelude;
 
-#define ADD_NODE(val)\
-	if (auto node = pl->getChildByID(#val)) { \
-		uiNodes[#val] = node->isVisible(); \
-		node->setVisible(false); \
-	}
-
-#define ADD_MEM(val) uiNodes[#val] = pl->val->isVisible(); \
-pl->val->setVisible(false);
-
-#define RES_NODE(val) if (auto node = pl->getChildByID(#val)) node->setVisible(uiNodes[#val]);
-
-#define RES_MEM(val) pl->val->setVisible(uiNodes[#val]);
-
 #define SET_WIDTH(value)\
 	int& width = Manager::get()->width;\
 	width = value;\
