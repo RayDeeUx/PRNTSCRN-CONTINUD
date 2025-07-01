@@ -10,7 +10,7 @@
 	uiNodes[#val] = pl->val->isVisible(); \
 	pl->val->setVisible(false);
 
-#define RES_NODE(val) pl->getChildByID(#val)->setVisible(uiNodes[#val]);
+#define RES_NODE(val) if (auto node = pl->getChildByID(#val)) pl->getChildByID(#val)->setVisible(uiNodes[#val]);
 
 #define RES_MEM(val) pl->val->setVisible(uiNodes[#val]);
 
