@@ -135,6 +135,7 @@ void ScreenshotPopup::onScreenshot(CCObject*) {
         ADD_NODE(debug-text);
         ADD_NODE(testmode-label);
         ADD_NODE(percentage-label);
+        ADD_NODE(mat.run-info/RunInfoWidget);
         ADD_NODE(progress-bar);
     }
     if (hidePL) {
@@ -144,7 +145,10 @@ void ScreenshotPopup::onScreenshot(CCObject*) {
     Screenshot ss = Screenshot(Manager::get()->width, Manager::get()->height, pl);
     if (hideUI) {
         RES_NODE(UILayer);
+        RES_NODE(debug-text);
+        RES_NODE(testmode-label);
         RES_NODE(percentage-label);
+        RES_NODE(mat.run-info/RunInfoWidget);
         RES_NODE(progress-bar);
     }
     if (hidePL) {

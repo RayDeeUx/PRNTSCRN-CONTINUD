@@ -57,7 +57,10 @@ void screenshot(CCNode* node) {
 	Screenshot ss = Screenshot(Manager::get()->width, Manager::get()->height, node);
 	if (hideUI && pl) {
 		RES_NODE(UILayer);
+		RES_NODE(debug-text);
+		RES_NODE(testmode-label);
 		RES_NODE(percentage-label);
+		RES_NODE(mat.run-info/RunInfoWidget);
 		RES_NODE(progress-bar);
 	}
 	if (hidePL && pl) {
