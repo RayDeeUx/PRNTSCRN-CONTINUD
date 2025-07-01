@@ -1,5 +1,6 @@
 #include "ScreenshotPopup.hpp"
 #include "Screenshot.hpp"
+#include "Manager.hpp"
 #include <UIBuilder.hpp>
 
 using namespace geode::prelude;
@@ -41,10 +42,7 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 
 bool ScreenshotPopup::setup() {
     this->setTitle("Screenshot");
-    this->setID("ScreenshotPopup");
-
-    float centerX = CCDirector::get()->getWinSize().width / 2;
-    float centerY = CCDirector::get()->getWinSize().height / 2;
+    this->setID("ScreenshotPopup"_spr);
 
     CCMenu* resolutionMenu = CCMenu::create();
     resolutionMenu->setPosition(ccp(75.f, 185.f));
@@ -69,8 +67,8 @@ bool ScreenshotPopup::setup() {
         .parent(resolutionMenu)
         .collect();
 
-    resolutionHeightInput->setString(std::to_string(Mod::get()->getSettingValue<int64_t>("resolution-height")));
-    resolutionHeightInput->getInputNode()->setID("resolution-height-input");
+    resolutionHeightInput->setString(numToString(Mod::get()->getSettingValue<int64_t>("resolution-height")));
+    resolutionHeightInput->getInputNode()->setID("resolution-height-input"_spr);
     resolutionHeightInput->getInputNode()->setDelegate(this);
 
     CCMenu* settingsMenu = CCMenu::create();
@@ -95,7 +93,7 @@ bool ScreenshotPopup::setup() {
         .parent(autoPercent)
         .collect();
 
-    autoPercentInput->setString(std::to_string(Mod::get()->getSettingValue<int64_t>("auto-percent")));
+    autoPercentInput->setString(numToString(Mod::get()->getSettingValue<int64_t>("auto-percent")));
     autoPercentInput->getInputNode()->setID("auto-percent-input");
     autoPercentInput->getInputNode()->setDelegate(this);
 
@@ -110,13 +108,12 @@ bool ScreenshotPopup::setup() {
     resolutionMenu->updateLayout();
     autoPercent->updateLayout();
 
-    CCMenuItemSpriteExtra* scrnshotBTN = CCMenuItemSpriteExtra::create(
+    CCMenuItemSpriteExtra* screenshotButton = CCMenuItemSpriteExtra::create(
         ButtonSprite::create("Screenshot!"),
-        this,
-        menu_selector(ScreenshotPopup::onScreenshot)
+        this, menu_selector(ScreenshotPopup::onScreenshot)
     );
-    scrnshotBTN->setPosition(ccp(170, 30));
-    m_buttonMenu->addChild(scrnshotBTN);
+    screenshotButton->setPosition(ccp(170, 30));
+    m_buttonMenu->addChild(screenshotButton);
 
     return true;
 }
@@ -132,6 +129,8 @@ void ScreenshotPopup::onScreenshot(CCObject*) {
 
     if (hideUI) {
         ADD_NODE(UILayer);
+        ADD_NODE(debug-text);
+        ADD_NODE(testmode-label);
         ADD_NODE(percentage-label);
         ADD_NODE(progress-bar);
     }
@@ -139,7 +138,7 @@ void ScreenshotPopup::onScreenshot(CCObject*) {
         ADD_MEM(m_player1);
         ADD_MEM(m_player2);
     }
-    Screenshot ss = Screenshot(Mod::get()->getSettingValue<int64_t>("resolution-width"), Mod::get()->getSettingValue<int64_t>("resolution-height"), pl);
+    Screenshot ss = Screenshot(Manager::get()->width, Manager::get()->height, pl);
     if (hideUI) {
         RES_NODE(UILayer);
         RES_NODE(percentage-label);
@@ -167,11 +166,14 @@ void ScreenshotPopup::onScreenshot(CCObject*) {
 }
 
 void ScreenshotPopup::textChanged(CCTextInputNode* p0) {
-    if (p0->getString().length() < 1) return;
-    std::string inputID = p0->getID();
-    if (inputID == "auto-percent-input") Mod::get()->setSettingValue<int64_t>("auto-percent", std::stoi(p0->getString()));
-    if (inputID == "resolution-width-input") Mod::get()->setSettingValue<int64_t>("resolution-width", std::stoi(p0->getString()));
-    if (inputID == "resolution-height-input") Mod::get()->setSettingValue<int64_t>("resolution-height", std::stoi(p0->getString()));
+    const std::string& inputString = p0->getString();
+    if (inputString.empty()) return;
+
+    const std::string& inputID = p0->getID();
+    int parsedInteger = geode::utils::numFromString<int>(inputString).unwrapOr(0);
+    if (inputID == "auto-percent-input") Mod::get()->setSettingValue<int64_t>("auto-percent", parsedInteger);
+    if (inputID == "resolution-width-input") Mod::get()->setSettingValue<int64_t>("resolution-width", parsedInteger);
+    if (inputID == "resolution-height-input") Mod::get()->setSettingValue<int64_t>("resolution-height", parsedInteger);
 }
 
 ScreenshotPopup* ScreenshotPopup::create() {
