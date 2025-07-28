@@ -22,7 +22,7 @@ endif()
 
 add_subdirectory($ENV{GEODE_SDK} ${CMAKE_CURRENT_BINARY_DIR}/geode)
 
-CPMAddPackage("gh:camila314/uibuilder#c662f54")
+CPMAddPackage("gh:camila314/uibuilder#04d0075")
 target_link_libraries(${PROJECT_NAME} UIBuilder)
 
 setup_geode_mod(${PROJECT_NAME})
