@@ -4,15 +4,21 @@
 
 using namespace geode::prelude;
 
-#define SET_WIDTH(value)\
-	int& width = Manager::get()->width;\
-	width = value;\
-	if (width < 1 || Mod::get()->getSettingValue<bool>("use-window-width")) width = CCDirector::get()->getWinSizeInPixels().width;
+void setWidth() {
+	int& width = Manager::get()->width;
+	width = static_cast<int>(Mod::get()->getSettingValue<int64_t>("resolution-width"));
+	if (width < 1 || Mod::get()->getSettingValue<bool>("use-window-width")) {
+		width = static_cast<int>(CCDirector::get()->getWinSizeInPixels().width);
+	}
+}
 
-#define SET_HEIGHT(value)\
-	int& height = Manager::get()->height;\
-	height = value;\
-	if (height < 1 || Mod::get()->getSettingValue<bool>("use-window-height")) height = CCDirector::get()->getWinSizeInPixels().height;
+void setHeight() {
+	int &height = Manager::get()->height;
+	height = static_cast<int>(Mod::get()->getSettingValue<int64_t>("resolution-height"));
+	if (height < 1 || Mod::get()->getSettingValue<bool>("use-window-height")) {
+		height = static_cast<int>(CCDirector::get()->getWinSizeInPixels().height);
+	}
+}
 
 constexpr std::array monthNames = {
 	"Unknown",
@@ -98,14 +104,12 @@ $on_mod(Loaded) {
 		else screenshot(CCScene::get());
 		return ListenerResult::Propagate;
 	}, InvokeBindFilter(nullptr, "screenshot"_spr));
-	SET_WIDTH(Mod::get()->getSettingValue<int64_t>("resolution-width"));
-	SET_HEIGHT(Mod::get()->getSettingValue<int64_t>("resolution-height"));
-	listenForSettingChanges("resolution-width", [](int64_t newWidth) {
-		SET_WIDTH(newWidth);
-	});
-	listenForSettingChanges("resolution-height", [](int64_t newHeight) {
-		SET_HEIGHT(newHeight);
-	});
+	setWidth();
+	setHeight();
+	listenForSettingChanges("resolution-width", [](int64_t unsused) { setWidth(); });
+	listenForSettingChanges("resolution-height", [](int64_t unsused) { setHeight(); });
+	listenForSettingChanges("use-window-width", [](bool unsused) { setWidth(); });
+	listenForSettingChanges("use-window-height", [](bool unsused) { setHeight(); });
 }
 
 #include <Geode/modify/PlayLayer.hpp>
@@ -163,6 +167,7 @@ class $modify(NewPauseLayer, PauseLayer) {
 			CircleButtonSprite::createWithSprite("screenshot.png"_spr),
 			this, menu_selector(NewPauseLayer::onScreenshotPopup)
 		);
+		btn->setID("screenshot-button"_spr);
 		leftMenu->addChild(btn);
 		leftMenu->updateLayout();
 	}
