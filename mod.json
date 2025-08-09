@@ -32,19 +32,29 @@
 			"name": "Hide UI",
 			"default": true
 		},
+		"use-window-width": {
+			"type": "bool",
+			"name": "Use Window Width",
+			"default": true
+		},
 		"resolution-width": {
 			"type": "int",
-			"name": "Resolution Width (If 0, Uses Window Width)",
-			"description": "The width of the image. Set to 0 to use window width.",
-			"default": 0,
-			"min": 0
+			"name": "Resolution Width",
+			"description": "The width of the image, if not using the window's width.",
+			"default": 1920,
+			"min": 1
+		},
+		"use-window-height": {
+			"type": "bool",
+			"name": "Use Window Height",
+			"default": true
 		},
 		"resolution-height": {
 			"type": "int",
-			"name": "Resolution Height (If 0, Uses Window Height)",
-			"description": "The height of the image. Set to 0 to use window height.",
-			"default": 0,
-			"min": 0
+			"name": "Resolution Height",
+			"description": "The height of the image, if not using the window's height.",
+			"default": 1080,
+			"min": 1
 		},
 		"jpeg-mafia": {
 			"type": "bool",
@@ -55,14 +65,23 @@
 		"auto-screenshot": {
 			"type": "bool",
 			"name": "Auto Screenshot",
-			"description": "Automatically take a screenshot with a given percentage interval.",
+			"description": "Automatically take a screenshot with a given percentage interval (for Classic levels) or a timed interval in seconds (for Platformer levels).",
 			"default": false
 		},
 		"auto-percent": {
 			"type": "int",
-			"name": "Auto Screenshot Percentage Interval",
-			"description": "Set the percentage interval for automatic screenshots.",
-			"default": 10
+			"name": "Auto Screenshot Percentage Interval (Classic levels)",
+			"description": "Set the percentage interval for automatic screenshots in Classic levels.",
+			"default": 10,
+			"min": 5,
+			"max": 100
+		},
+		"auto-seconds": {
+			"type": "int",
+			"name": "Auto Screenshot Seconds Interval (Platformer levels)",
+			"description": "Set the timed interval in seconds for automatic screenshots in Platformer levels.",
+			"default": 30,
+			"min": 5
 		}
 	},
 	"dependencies": {

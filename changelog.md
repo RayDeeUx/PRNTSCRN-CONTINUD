@@ -1,2 +1,4 @@
-# 1.0.0
-- Edit this file to change your mod's changelog.
+# PRNTSCRN Changelog
+
+## v1.0.0
+- Initial release (on GitHub).
