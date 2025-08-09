@@ -1,21 +1,21 @@
 {
-	"geode": "4.2.0",
+	"geode": "4.4.0",
 	"gd": {
 		"win": "2.2074",
-		"android": "2.2074",
 		"mac": "2.2074",
-		"ios": "2.2074"
+		"ios": "2.2074",
+		"android": "2.2074"
 	},
 	"id": "ninxout.prntscrn",
 	"name": "PRNTSCRN",
 	"version": "v1.0.0",
-	"developers": ["ninXout", "mat"],
+	"developers": ["ninXout", "mat", "RayDeeUx"],
 	"description": "Quick and easy screenshot tool!",
 	"resources": {
-        "sprites": [
-            "resources/screenshot.png"
-        ]
-    },
+		"sprites": [
+			"resources/screenshot.png"
+		]
+	},
 	"settings": {
 		"copy-clipboard": {
 			"type": "bool",
@@ -34,15 +34,17 @@
 		},
 		"resolution-width": {
 			"type": "int",
-			"name": "Resolution Width",
-			"description": "The width of the image",
-			"default": 1920
+			"name": "Resolution Width (If 0, Uses Window Width)",
+			"description": "The width of the image. Set to 0 to use window width.",
+			"default": 0,
+			"min": 0
 		},
 		"resolution-height": {
 			"type": "int",
-			"name": "Resolution Height",
-			"description": "The height of the image",
-			"default": 1080
+			"name": "Resolution Height (If 0, Uses Window Height)",
+			"description": "The height of the image. Set to 0 to use window height.",
+			"default": 0,
+			"min": 0
 		},
 		"jpeg-mafia": {
 			"type": "bool",
@@ -53,14 +55,18 @@
 		"auto-screenshot": {
 			"type": "bool",
 			"name": "Auto Screenshot",
-			"description": "Automatically at every percentage interval",
+			"description": "Automatically take a screenshot with a given percentage interval.",
 			"default": false
 		},
 		"auto-percent": {
 			"type": "int",
-			"name": "Auto Screenshot Percentage",
-			"description": "Automatically at every percentage interval",
+			"name": "Auto Screenshot Percentage Interval",
+			"description": "Set the percentage interval for automatic screenshots.",
 			"default": 10
 		}
+	},
+	"dependencies": {
+		"geode.node-ids": ">=1.20.0",
+		"geode.custom-keybinds": ">=1.10.3"
 	}
 }

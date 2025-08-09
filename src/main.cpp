@@ -1,44 +1,56 @@
 #include "Screenshot.hpp"
+#include "Manager.hpp"
 #include <Geode/Geode.hpp>
 
 using namespace geode::prelude;
 
-#define ADD_NODE(val) uiNodes[#val] = pl->getChildByID(#val)->isVisible(); \
-pl->getChildByID(#val)->setVisible(false);
+#define SET_WIDTH(value)\
+	int& width = Manager::get()->width;\
+	width = value;\
+	if (width < 1) width = CCDirector::get()->getWinSizeInPixels().width;
 
-#define ADD_MEM(val) uiNodes[#val] = pl->val->isVisible(); \
-pl->val->setVisible(false);
+#define SET_HEIGHT(value)\
+	int& height = Manager::get()->height;\
+	height = value;\
+	if (height < 1) height = CCDirector::get()->getWinSizeInPixels().height;
 
-#define RES_NODE(val) pl->getChildByID(#val)->setVisible(uiNodes[#val]);
+constexpr std::array monthNames = {
+	"Unknown",
+	"January", "February", "March", "April", "May",
+	"June", "July", "August", "September", "October", "November", "December",
+	"Unknown"
+};
 
-#define RES_MEM(val) pl->val->setVisible(uiNodes[#val]);
-
-void screenshot(PlayLayer* pl) {
-	auto director = CCDirector::sharedDirector();
-	auto winSize = director->getWinSize();
-	auto scene = director->getRunningScene();
-
+void screenshot(CCNode* node) {
 	std::unordered_map<const char*, bool> uiNodes = {};
 	
 	bool hideUI = Mod::get()->getSettingValue<bool>("hide-ui");
 	bool hidePL = Mod::get()->getSettingValue<bool>("hide-player");
 
-	if (hideUI) {
+	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
+
+	if (hideUI && pl) {
 		ADD_NODE(UILayer);
+		ADD_NODE(debug-text);
+		ADD_NODE(testmode-label);
 		ADD_NODE(percentage-label);
+		ADD_NODE(mat.run-info/RunInfoWidget);
 		ADD_NODE(progress-bar);
 	}
-	if (hidePL) {
+	if (hidePL && pl) {
 		ADD_MEM(m_player1);
 		ADD_MEM(m_player2);
 	}
-	Screenshot ss = Screenshot(Mod::get()->getSettingValue<int64_t>("resolution-width"), Mod::get()->getSettingValue<int64_t>("resolution-height"), pl);
-	if (hideUI) {
+	Screenshot ss = Screenshot(Manager::get()->width, Manager::get()->height, node);
+	if (hideUI && pl) {
 		RES_NODE(UILayer);
+		RES_NODE(debug-text);
+		RES_NODE(testmode-label);
 		RES_NODE(percentage-label);
+		RES_NODE(mat.run-info/RunInfoWidget);
 		RES_NODE(progress-bar);
 	}
-	if (hidePL) {
+	if (hidePL && pl) {
 		RES_MEM(m_player1);
 		RES_MEM(m_player2);
 	}
@@ -46,7 +58,18 @@ void screenshot(PlayLayer* pl) {
 	bool jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");
 	std::string extension = jpeg ? ".jpg" : ".png";
 
-	std::filesystem::path folder = Mod::get()->getConfigDir() / (std::to_string(PlayLayer::get()->m_level->m_levelID));
+	auto now = std::chrono::system_clock::now();
+	auto floored = std::chrono::floor<std::chrono::days>(now);
+	std::chrono::year_month_day ymd = {floored};
+	auto humanReadableMonth = monthNames[static_cast<unsigned int>(ymd.month())];
+	auto day = static_cast<unsigned int>(ymd.day());
+	auto year = static_cast<int>(ymd.year());
+	auto formattedDate = fmt::format("{} {}, {}", humanReadableMonth, day, year);
+
+	auto level = pl ? pl->m_level : nullptr;
+	std::string suffix = level ? fmt::format("{} - {} ({})", numToString(level->m_levelID.value()), level->m_levelName, formattedDate) : formattedDate;
+	std::filesystem::path folder = Mod::get()->getConfigDir() / suffix;
+
 	if (!std::filesystem::exists(folder)) std::filesystem::create_directory(folder);
 
 	int index = 1;
@@ -56,19 +79,34 @@ void screenshot(PlayLayer* pl) {
 
 	std::string filename = fmt::format("{}/{}{}", folder.string(), index, extension);
 
-	Mod::get()->getSettingValue<bool>("copy-clipboard") ? ss.intoClipboard() : ss.intoFile(filename, jpeg);
+	ss.intoFile(filename, jpeg);
+	if (Mod::get()->getSettingValue<bool>("copy-clipboard")) ss.intoClipboard();
 }
 
-#include <Geode/modify/CCKeyboardDispatcher.hpp>
-class $modify(CCKeyboardDispatcher) {
-	bool dispatchKeyboardMSG(enumKeyCodes key, bool down, bool repeat) {
-		PlayLayer* pl = PlayLayer::get();
-		if (down && key == enumKeyCodes::KEY_F2 && pl) {
-			screenshot(pl);
-		}
-		return CCKeyboardDispatcher::dispatchKeyboardMSG(key, down, repeat);
-	}
-};
+#include <geode.custom-keybinds/include/Keybinds.hpp>
+using namespace keybinds;
+$on_mod(Loaded) {
+	BindManager::get()->registerBindable({
+		"screenshot"_spr,
+		"Take a Screenshot!", "Take a screenshot.",
+		{ Keybind::create(KEY_F2, Modifier::None) },
+		"PRNTSCRN", false
+	});
+	new EventListener([=](InvokeBindEvent* event) {
+		if (!event->isDown()) return ListenerResult::Propagate;
+		if (auto pl = PlayLayer::get()) screenshot(pl);
+		else screenshot(CCScene::get());
+		return ListenerResult::Propagate;
+	}, InvokeBindFilter(nullptr, "screenshot"_spr));
+	SET_WIDTH(Mod::get()->getSettingValue<int64_t>("resolution-width"));
+	SET_HEIGHT(Mod::get()->getSettingValue<int64_t>("resolution-height"));
+	listenForSettingChanges("resolution-width", [](int64_t newWidth) {
+		SET_WIDTH(newWidth);
+	});
+	listenForSettingChanges("resolution-height", [](int64_t newHeight) {
+		SET_HEIGHT(newHeight);
+	});
+}
 
 #include <Geode/modify/PlayLayer.hpp>
 class $modify(PlayLayer) {
@@ -90,10 +128,11 @@ class $modify(PlayLayer) {
 	void postUpdate(float dt) {
 		PlayLayer::postUpdate(dt);
 		int currentPercent = getCurrentPercentInt();
+		Fields* fields = m_fields.self();
 
-		if (m_fields->autoScreenshot && currentPercent % m_fields->autoPercent == 0 && m_fields->lastScreenshot != currentPercent) {
+		if (fields->autoScreenshot && currentPercent % fields->autoPercent == 0 && fields->lastScreenshot != currentPercent) {
 			screenshot(this);
-			m_fields->lastScreenshot = currentPercent;
+			fields->lastScreenshot = currentPercent;
 		}
 	}
 };
@@ -103,14 +142,15 @@ class $modify(PlayLayer) {
 class $modify(NewPauseLayer, PauseLayer) {
 	void customSetup() {
 		PauseLayer::customSetup();
+		auto leftMenu = getChildByID("left-button-menu");
+		if (!leftMenu) return;
 
 		auto btn = CCMenuItemSpriteExtra::create(
 			CircleButtonSprite::createWithSprite("screenshot.png"_spr),
-			this,
-			menu_selector(NewPauseLayer::onScreenshotPopup)
+			this, menu_selector(NewPauseLayer::onScreenshotPopup)
 		);
-		static_cast<CCMenu*>(getChildByID("left-button-menu"))->addChild(btn);
-		static_cast<CCMenu*>(getChildByID("left-button-menu"))->updateLayout();
+		leftMenu->addChild(btn);
+		leftMenu->updateLayout();
 	}
 
 	void onScreenshotPopup(CCObject*) {
