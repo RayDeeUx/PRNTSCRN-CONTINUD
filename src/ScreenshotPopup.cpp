@@ -83,17 +83,19 @@ bool ScreenshotPopup::setup() {
 	settingsMenu->addChild(createSetting("JPEG", "jpeg-mafia"));
 	settingsMenu->addChild(createSetting("Auto Screenshot", "auto-screenshot"));
 
+	int64_t selectedSetting = isPlatformerLevel ? Mod::get()->getSettingValue<int64_t>("auto-seconds") : Mod::get()->getSettingValue<int64_t>("auto-percent");
+	std::string selectedPlaceholderString = isPlatformerLevel ? "s" : "%";
+	std::string selectedInputNodeID = isPlatformerLevel ? "auto-seconds-input"_spr : "auto-percent-input"_spr;
+	std::string selectedGeodeInputNodeID = isPlatformerLevel ? "seconds-geode-input"_spr : "percent-geode-input"_spr;
+	std::string selectedLabel = isPlatformerLevel ? "Auto Seconds" : "Auto Percent";
+
 	CCMenu* autoPercent = Build<CCMenu>::create()
 		.layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(4.f)->setAxisReverse(true))
+		.id("auto-screenshot"_spr)
 		.pos(75, 150)
 		.width(125.f)
 		.collect();
 
-	std::string selectedPlaceholderString = isPlatformerLevel ? "s" : "%";
-	int64_t selectedSetting = isPlatformerLevel ? Mod::get()->getSettingValue<int64_t>("auto-seconds") : Mod::get()->getSettingValue<int64_t>("auto-percent");
-	std::string selectedInputNodeID = isPlatformerLevel ? "auto-seconds-input"_spr : "auto-percent-input"_spr;
-	std::string selectedGeodeInputNodeID = isPlatformerLevel ? "seconds-geode-input"_spr : "percent-geode-input"_spr;
-	std::string selectedLabel = isPlatformerLevel ? "Auto Seconds" : "Auto Percent";
 	autoPercentInput = Build<TextInput>::create(35.f, selectedPlaceholderString, "bigFont.fnt")
 		.id(selectedGeodeInputNodeID)
 		.scale(0.75f)
@@ -123,6 +125,7 @@ bool ScreenshotPopup::setup() {
 	screenshotButton->setPosition(ccp(170, 30));
 	m_buttonMenu->addChild(screenshotButton);
 
+	m_buttonMenu->setID("button-menu"_spr);
 	m_closeBtn->setID("close-button"_spr);
 	m_mainLayer->setID("main-layer"_spr);
 	m_bgSprite->setID("background"_spr);
