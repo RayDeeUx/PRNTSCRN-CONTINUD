@@ -8,7 +8,7 @@ using namespace geode::prelude;
 CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::string& key) {
 	CCMenu* thing = Build<CCMenu>(CCMenu::create())
 		.layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(5.f))
-		.width(235.f)
+		.width(180.f)
 		.collect();
 
 	CCMenuItemToggler* toggler = Build<CCMenuItemToggler>::createToggle(CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png"), CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png"),
@@ -20,13 +20,13 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 		.parent(thing)
 		.collect();
 
-	toggler->toggle(Mod::get()->getSettingValue<bool>(key));
-
 	Build<CCLabelBMFont>::create(title.c_str(), "bigFont.fnt")
 		.scale(0.4f)
 		.parent(thing);
 
 	thing->updateLayout();
+
+	toggler->toggle(Mod::get()->getSettingValue<bool>(key)); // this line needs to be called AFTER updatelayout to avoid x-position inconsistencies --raydeeux
 	return thing;
 }
 
@@ -36,7 +36,7 @@ bool ScreenshotPopup::setup() {
 
 	CCMenu* resolutionMenu = CCMenu::create();
 	resolutionMenu->setPosition(ccp(75.f, 185.f));
-	resolutionMenu->setContentWidth(240.f);
+	resolutionMenu->setContentWidth(110.f);
 	resolutionMenu->setLayout(RowLayout::create()->setAutoScale(false));
 
 	resolutionWidthInput = Build<TextInput>::create(55.f, "Width", "bigFont.fnt")
@@ -62,8 +62,8 @@ bool ScreenshotPopup::setup() {
 	resolutionHeightInput->getInputNode()->setDelegate(this);
 
 	CCMenu* settingsMenu = CCMenu::create();
-	settingsMenu->setPosition(ccp(265.f, 110.f));
-	settingsMenu->setContentSize({240.f, 175.f});
+	settingsMenu->setPosition(ccp(235.f, 130.f));
+	settingsMenu->setContentSize({180.f, 145.f});
 	settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(false)->setAxisReverse(true)->setAxisAlignment(AxisAlignment::End));
 
 	settingsMenu->addChild(createSetting("Copy To Clipboard", "copy-clipboard"));
@@ -74,8 +74,8 @@ bool ScreenshotPopup::setup() {
 
 	CCMenu* autoPercent = Build<CCMenu>::create()
 		.layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(4.f)->setAxisReverse(true))
-		.pos(130, 150)
-		.width(230.f)
+		.pos(75, 150)
+		.width(125.f)
 		.collect();
 
 	autoPercentInput = Build<TextInput>::create(35.f, "%", "bigFont.fnt")
