@@ -1,18 +1,18 @@
 #pragma once
 
-#define ADD_NODE(val) \
-	if (auto node = pl->getChildByID(#val)) { \
+#define ADD_NODE(parent, val) \
+	if (auto node = parent->getChildByID(#val)) { \
 		uiNodes[#val] = node->isVisible(); \
 		node->setVisible(false); \
 	}
 
-#define ADD_MEM(val) \
-	uiNodes[#val] = pl->val->isVisible(); \
-	pl->val->setVisible(false);
+#define ADD_MEM(parent, val) \
+	uiNodes[#val] = parent->val->isVisible(); \
+	parent->val->setVisible(false);
 
-#define RES_NODE(val) if (auto node = pl->getChildByID(#val)) pl->getChildByID(#val)->setVisible(uiNodes[#val]);
+#define RES_NODE(parent, val) if (auto node = parent->getChildByID(#val)) parent->getChildByID(#val)->setVisible(uiNodes[#val]);
 
-#define RES_MEM(val) pl->val->setVisible(uiNodes[#val]);
+#define RES_MEM(parent, val) parent->val->setVisible(uiNodes[#val]);
 
 class Manager {
 protected:

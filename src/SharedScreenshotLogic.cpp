@@ -11,33 +11,48 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	bool hidePL = Mod::get()->getSettingValue<bool>("hide-player");
 
 	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
+	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
 
 	if (hideUI && pl) {
-		ADD_NODE(UILayer);
-		ADD_NODE(debug-text);
-		ADD_NODE(testmode-label);
-		ADD_NODE(percentage-label);
-		ADD_NODE(mat.run-info/RunInfoWidget);
-		ADD_NODE(cheeseworks.speedruntimer/timer);
-		ADD_NODE(progress-bar);
+		ADD_NODE(pl, UILayer);
+		ADD_NODE(pl, debug-text);
+		ADD_NODE(pl, testmode-label);
+		ADD_NODE(pl, percentage-label);
+		ADD_NODE(pl, mat.run-info/RunInfoWidget);
+		ADD_NODE(pl, cheeseworks.speedruntimer/timer);
+		ADD_NODE(pl, progress-bar);
+	}
+	if (hideUI && lel) {
+		ADD_NODE(lel, EditorUI);
 	}
 	if (hidePL && pl) {
-		ADD_MEM(m_player1);
-		ADD_MEM(m_player2);
+		ADD_MEM(pl, m_player1);
+		ADD_MEM(pl, m_player2);
+	}
+	if (hidePL && lel) {
+		ADD_MEM(lel, m_player1);
+		ADD_MEM(lel, m_player2);
 	}
 	Screenshot ss = Screenshot(Manager::get()->width, Manager::get()->height, node);
 	if (hideUI && pl) {
-		RES_NODE(UILayer);
-		RES_NODE(debug-text);
-		RES_NODE(testmode-label);
-		RES_NODE(percentage-label);
-		RES_NODE(mat.run-info/RunInfoWidget);
-		RES_NODE(cheeseworks.speedruntimer/timer);
-		RES_NODE(progress-bar);
+		RES_NODE(pl, UILayer);
+		RES_NODE(pl, debug-text);
+		RES_NODE(pl, testmode-label);
+		RES_NODE(pl, percentage-label);
+		RES_NODE(pl, mat.run-info/RunInfoWidget);
+		RES_NODE(pl, cheeseworks.speedruntimer/timer);
+		RES_NODE(pl, progress-bar);
+	}
+	if (hideUI && lel) {
+		RES_NODE(lel, EditorUI);
 	}
 	if (hidePL && pl) {
-		RES_MEM(m_player1);
-		RES_MEM(m_player2);
+		RES_MEM(pl, m_player1);
+		RES_MEM(pl, m_player2);
+	}
+	if (hidePL && lel) {
+		RES_MEM(lel, m_player1);
+		RES_MEM(lel, m_player2);
 	}
 
 	bool jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");
