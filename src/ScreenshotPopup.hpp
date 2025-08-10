@@ -25,7 +25,7 @@ protected:
 	cocos2d::CCMenu* createSetting(const std::string& title, const std::string& key);
 
 	void onScreenshot(cocos2d::CCObject*);
-	void onCopyClipboard(cocos2d::CCObject*);
+	void onConfigDir(cocos2d::CCObject*);
 
 	void textChanged(CCTextInputNode* p0) override;
 };

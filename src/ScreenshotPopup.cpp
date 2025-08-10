@@ -144,6 +144,14 @@ bool ScreenshotPopup::setup() {
 	screenshotButton->setPosition(ccp(170, 30));
 	m_buttonMenu->addChild(screenshotButton);
 
+	CCMenuItemSpriteExtra* configDirButton = CCMenuItemSpriteExtra::create(
+		CircleButtonSprite::createWithSpriteFrameName("gj_folderBtn_001.png"),
+		this, menu_selector(ScreenshotPopup::onConfigDir)
+	);
+	configDirButton->setID("screenshots-folder-button"_spr);
+	configDirButton->setPosition(ccp(80, 80));
+	m_buttonMenu->addChild(configDirButton);
+
 	m_buttonMenu->setID("button-menu"_spr);
 	m_closeBtn->setID("close-button"_spr);
 	m_mainLayer->setID("main-layer"_spr);
@@ -157,6 +165,10 @@ bool ScreenshotPopup::setup() {
 
 void ScreenshotPopup::onScreenshot(CCObject*) {
 	if (PlayLayer* pl = PlayLayer::get()) SharedScreenshotLogic::screenshot(pl);
+}
+
+void ScreenshotPopup::onConfigDir(CCObject*) {
+	geode::utils::file::openFolder(Mod::get()->getConfigDir());
 }
 
 void ScreenshotPopup::textChanged(CCTextInputNode* p0) {
