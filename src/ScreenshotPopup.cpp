@@ -33,6 +33,8 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 bool ScreenshotPopup::setup() {
 	this->setTitle("Screenshot");
 	this->setID("ScreenshotPopup"_spr);
+	PlayLayer* pl = PlayLayer::get();
+	bool isPlatformerLevel = pl && pl->m_level && pl->m_level->isPlatformer();
 
 	CCMenu* resolutionMenu = CCMenu::create();
 	resolutionMenu->setPosition(ccp(75.f, 185.f));
@@ -78,16 +80,20 @@ bool ScreenshotPopup::setup() {
 		.width(125.f)
 		.collect();
 
-	autoPercentInput = Build<TextInput>::create(35.f, "%", "bigFont.fnt")
+	std::string selectedPlaceholderString = isPlatformerLevel ? "s" : "%";
+	int64_t selectedSetting = isPlatformerLevel ? Mod::get()->getSettingValue<int64_t>("auto-seconds") : Mod::get()->getSettingValue<int64_t>("auto-percent");
+	std::string selectedNodeID = isPlatformerLevel ? "auto-seconds-input" : "auto-percent-input";
+	std::string selectedLabel = isPlatformerLevel ? "Auto Seconds" : "Auto Percent";
+	autoPercentInput = Build<TextInput>::create(35.f, selectedPlaceholderString, "bigFont.fnt")
 		.scale(0.75f)
 		.parent(autoPercent)
 		.collect();
 
-	autoPercentInput->setString(numToString(Mod::get()->getSettingValue<int64_t>("auto-percent")));
-	autoPercentInput->getInputNode()->setID("auto-percent-input");
+	autoPercentInput->setString(numToString(selectedSetting));
+	autoPercentInput->getInputNode()->setID(selectedNodeID);
 	autoPercentInput->getInputNode()->setDelegate(this);
 
-	Build<CCLabelBMFont>::create("Auto Percent", "bigFont.fnt")
+	Build<CCLabelBMFont>::create(selectedLabel.c_str(), "bigFont.fnt")
 		.scale(0.4f)
 		.parent(autoPercent);
 
@@ -119,6 +125,7 @@ void ScreenshotPopup::textChanged(CCTextInputNode* p0) {
 	const std::string& inputID = p0->getID();
 	int parsedInteger = geode::utils::numFromString<int>(inputString).unwrapOr(0);
 	if (inputID == "auto-percent-input") Mod::get()->setSettingValue<int64_t>("auto-percent", parsedInteger);
+	if (inputID == "auto-seconds-input") Mod::get()->setSettingValue<int64_t>("auto-seconds", parsedInteger);
 	if (inputID == "resolution-width-input") Mod::get()->setSettingValue<int64_t>("resolution-width", parsedInteger);
 	if (inputID == "resolution-height-input") Mod::get()->setSettingValue<int64_t>("resolution-height", parsedInteger);
 }
