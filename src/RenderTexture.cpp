@@ -53,8 +53,8 @@ void RenderTexture::begin() {
 	m_oldScaleX = glview->m_fScaleX;
 	m_oldScaleY = glview->m_fScaleY;
 	// this is used for scissoring, so otherwise clipping nodes would be wrong
-	glview->m_fScaleX = m_width / director->getWinSize().width;
-	glview->m_fScaleY = m_height / director->getWinSize().height;
+	glview->m_fScaleX = m_width / director->getWinSize().width / geode::utils::getDisplayFactor();
+	glview->m_fScaleY = m_height / director->getWinSize().height / geode::utils::getDisplayFactor();
 	
 	glViewport(0, 0, m_width, m_height);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
