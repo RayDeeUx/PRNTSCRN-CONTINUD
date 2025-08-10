@@ -70,7 +70,7 @@ bool ScreenshotPopup::setup() {
 	resolutionWidthInput->setString(numToString(Manager::get()->width));
 	resolutionWidthInput->getInputNode()->setID("resolution-width-input"_spr);
 	resolutionWidthInput->getInputNode()->setDelegate(this);
-	resolutionWidthInput->setEnabled(Mod::get()->getSettingValue<bool>("use-window-width"));
+	resolutionWidthInput->setEnabled(!Mod::get()->getSettingValue<bool>("use-window-width"));
 
 	CCLabelBMFont* xLabel = CCLabelBMFont::create("x", "bigFont.fnt");
 	xLabel->setScale(0.7f);
@@ -85,7 +85,7 @@ bool ScreenshotPopup::setup() {
 	resolutionHeightInput->setString(numToString(Manager::get()->height));
 	resolutionHeightInput->getInputNode()->setID("resolution-height-input"_spr);
 	resolutionHeightInput->getInputNode()->setDelegate(this);
-	resolutionHeightInput->setEnabled(Mod::get()->getSettingValue<bool>("use-window-height"));
+	resolutionHeightInput->setEnabled(!Mod::get()->getSettingValue<bool>("use-window-height"));
 
 	CCMenu* settingsMenu = CCMenu::create();
 	settingsMenu->setID("quick-settings"_spr);
