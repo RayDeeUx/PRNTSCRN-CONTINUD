@@ -107,6 +107,7 @@ bool ScreenshotPopup::setup() {
 	autoPercentInput->getInputNode()->setDelegate(this);
 
 	Build<CCLabelBMFont>::create(selectedLabel.c_str(), "bigFont.fnt")
+		.id("auto-screenshot-label"_spr)
 		.scale(0.4f)
 		.parent(autoPercent);
 
