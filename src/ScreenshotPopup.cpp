@@ -7,6 +7,7 @@ using namespace geode::prelude;
 
 CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::string& key) {
 	CCMenu* thing = Build<CCMenu>(CCMenu::create())
+		.id(fmt::format("{}-quick-toggle-setting"_spr, key))
 		.layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(5.f))
 		.width(180.f)
 		.collect();
@@ -16,11 +17,13 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 		toggler->toggle(mod->getSettingValue<bool>(key));
 		mod->setSettingValue<bool>(key, !mod->getSettingValue<bool>(key));
 	})
+		.id(fmt::format("{}-toggler"_spr, key))
 		.scale(0.75f)
 		.parent(thing)
 		.collect();
 
 	Build<CCLabelBMFont>::create(title.c_str(), "bigFont.fnt")
+		.id(fmt::format("{}-label"_spr, key))
 		.scale(0.4f)
 		.parent(thing);
 
@@ -33,6 +36,8 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 bool ScreenshotPopup::setup() {
 	this->setTitle("Screenshot");
 	this->setID("ScreenshotPopup"_spr);
+	this->m_title->setID("title"_spr);
+
 	PlayLayer* pl = PlayLayer::get();
 	bool isPlatformerLevel = pl && pl->m_level && pl->m_level->isPlatformer();
 
@@ -40,14 +45,16 @@ bool ScreenshotPopup::setup() {
 	resolutionMenu->setPosition(ccp(75.f, 185.f));
 	resolutionMenu->setContentWidth(110.f);
 	resolutionMenu->setLayout(RowLayout::create()->setAutoScale(false));
+	resolutionMenu->setID("resolution-menu"_spr);
 
 	resolutionWidthInput = Build<TextInput>::create(55.f, "Width", "bigFont.fnt")
+		.id("width-geode-input"_spr)
 		.scale(0.75f)
 		.parent(resolutionMenu)
 		.collect();
 
 	resolutionWidthInput->setString(numToString(Manager::get()->width));
-	resolutionWidthInput->getInputNode()->setID("resolution-width-input");
+	resolutionWidthInput->getInputNode()->setID("resolution-width-input"_spr);
 	resolutionWidthInput->getInputNode()->setDelegate(this);
 
 	CCLabelBMFont* xLabel = CCLabelBMFont::create("x", "bigFont.fnt");
@@ -55,6 +62,7 @@ bool ScreenshotPopup::setup() {
 	resolutionMenu->addChild(xLabel);
 
 	resolutionHeightInput = Build<TextInput>::create(55.f, "Height", "bigFont.fnt")
+		.id("height-geode-input"_spr)
 		.scale(0.75f)
 		.parent(resolutionMenu)
 		.collect();
@@ -64,7 +72,8 @@ bool ScreenshotPopup::setup() {
 	resolutionHeightInput->getInputNode()->setDelegate(this);
 
 	CCMenu* settingsMenu = CCMenu::create();
-	settingsMenu->setPosition(ccp(235.f, 130.f));
+	settingsMenu->setID("quick-settings"_spr);
+	settingsMenu->setPosition(ccp(235.f, 125.f));
 	settingsMenu->setContentSize({180.f, 145.f});
 	settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(false)->setAxisReverse(true)->setAxisAlignment(AxisAlignment::End));
 
@@ -82,15 +91,17 @@ bool ScreenshotPopup::setup() {
 
 	std::string selectedPlaceholderString = isPlatformerLevel ? "s" : "%";
 	int64_t selectedSetting = isPlatformerLevel ? Mod::get()->getSettingValue<int64_t>("auto-seconds") : Mod::get()->getSettingValue<int64_t>("auto-percent");
-	std::string selectedNodeID = isPlatformerLevel ? "auto-seconds-input" : "auto-percent-input";
+	std::string selectedInputNodeID = isPlatformerLevel ? "auto-seconds-input"_spr : "auto-percent-input"_spr;
+	std::string selectedGeodeInputNodeID = isPlatformerLevel ? "seconds-geode-input"_spr : "percent-geode-input"_spr;
 	std::string selectedLabel = isPlatformerLevel ? "Auto Seconds" : "Auto Percent";
 	autoPercentInput = Build<TextInput>::create(35.f, selectedPlaceholderString, "bigFont.fnt")
+		.id(selectedGeodeInputNodeID)
 		.scale(0.75f)
 		.parent(autoPercent)
 		.collect();
 
 	autoPercentInput->setString(numToString(selectedSetting));
-	autoPercentInput->getInputNode()->setID(selectedNodeID);
+	autoPercentInput->getInputNode()->setID(selectedInputNodeID);
 	autoPercentInput->getInputNode()->setDelegate(this);
 
 	Build<CCLabelBMFont>::create(selectedLabel.c_str(), "bigFont.fnt")
@@ -108,8 +119,13 @@ bool ScreenshotPopup::setup() {
 		ButtonSprite::create("Screenshot!"),
 		this, menu_selector(ScreenshotPopup::onScreenshot)
 	);
+	screenshotButton->setID("screenshot-button"_spr);
 	screenshotButton->setPosition(ccp(170, 30));
 	m_buttonMenu->addChild(screenshotButton);
+
+	m_closeBtn->setID("close-button"_spr);
+	m_mainLayer->setID("main-layer"_spr);
+	m_bgSprite->setID("background"_spr);
 
 	return true;
 }
@@ -124,10 +140,10 @@ void ScreenshotPopup::textChanged(CCTextInputNode* p0) {
 
 	const std::string& inputID = p0->getID();
 	int parsedInteger = geode::utils::numFromString<int>(inputString).unwrapOr(0);
-	if (inputID == "auto-percent-input") Mod::get()->setSettingValue<int64_t>("auto-percent", parsedInteger);
-	if (inputID == "auto-seconds-input") Mod::get()->setSettingValue<int64_t>("auto-seconds", parsedInteger);
-	if (inputID == "resolution-width-input") Mod::get()->setSettingValue<int64_t>("resolution-width", parsedInteger);
-	if (inputID == "resolution-height-input") Mod::get()->setSettingValue<int64_t>("resolution-height", parsedInteger);
+	if (inputID == "auto-percent-input"_spr) Mod::get()->setSettingValue<int64_t>("auto-percent", parsedInteger);
+	if (inputID == "auto-seconds-input"_spr) Mod::get()->setSettingValue<int64_t>("auto-seconds", parsedInteger);
+	if (inputID == "resolution-width-input"_spr) Mod::get()->setSettingValue<int64_t>("resolution-width", parsedInteger);
+	if (inputID == "resolution-height-input"_spr) Mod::get()->setSettingValue<int64_t>("resolution-height", parsedInteger);
 }
 
 ScreenshotPopup* ScreenshotPopup::create() {
