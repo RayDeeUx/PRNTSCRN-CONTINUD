@@ -44,7 +44,7 @@ $on_mod(Loaded) {
 		if (!event->isDown()) return ListenerResult::Propagate;
 		CCNode* nodeToScreenshot = CCScene::get();
 		if (PlayLayer* pl = PlayLayer::get(); pl) nodeToScreenshot = pl;
-		else if (LevelEditorLayer* lel = LevelEditorLayer::get(); pl) nodeToScreenshot = lel;
+		else if (LevelEditorLayer* lel = LevelEditorLayer::get(); lel) nodeToScreenshot = lel;
 		SharedScreenshotLogic::screenshot(nodeToScreenshot);
 		return ListenerResult::Propagate;
 	}, InvokeBindFilter(nullptr, "screenshot"_spr));
