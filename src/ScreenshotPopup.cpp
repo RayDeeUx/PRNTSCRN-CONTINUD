@@ -149,6 +149,7 @@ bool ScreenshotPopup::setup() {
 	m_mainLayer->setID("main-layer"_spr);
 	m_bgSprite->setID("background"_spr);
 
+	xLabel->setID("finicky-multiplication-sign"_spr);
 	xLabel->setAnchorPoint({.5f, .4f}); // to avoid visual off-center illusion on the y-axis
 
 	return true;
