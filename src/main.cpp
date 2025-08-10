@@ -10,7 +10,7 @@ void setWidth() {
 		width = widthPixel;
 	} else {
 		int widthSetting = static_cast<int>(Mod::get()->getSettingValue<int64_t>("resolution-width"));
-		width = std::clamp(widthSetting, 1, widthPixel);
+		width = std::clamp(widthSetting, 1, widthPixel * 4); // if anyone wants to do higher resolutions than 4x their window dimensions wnat are you doing with your life --raydeeux
 	}
 }
 
@@ -21,7 +21,7 @@ void setHeight() {
 		height = heightPixel;
 	} else {
 		int heightSetting = static_cast<int>(Mod::get()->getSettingValue<int64_t>("resolution-height"));
-		height = std::clamp(heightSetting, 1, heightPixel);
+		height = std::clamp(heightSetting, 1, heightPixel * 4); // if anyone wants to do higher resolutions than 4x their window dimensions wnat are you doing with your life --raydeeux
 	}
 }
 
@@ -36,7 +36,7 @@ $on_mod(Loaded) {
 	});
 	BindManager::get()->registerBindable({
 		"plain-screenshot"_spr,
-		"Take a Plain Screenshot!", "Takes a screenshot of the screen itself, even if there's a level on screen.",
+		"Take a Plain Screenshot!", "Takes a screenshot of the screen itself, even if there's a level on screen. Useful for taking a screenshot of the pause menu.",
 		{ Keybind::create(KEY_F2, Modifier::Shift), Keybind::create(KEY_GraveAccent, Modifier::Shift) }, // added GraveAccent as a default for any macOS users with the Touch Bar --raydeeux
 		"PRNTSCRN", false
 	}); // y'know, in case anyone wants to take a screenshot of the pause layer --raydeeux
