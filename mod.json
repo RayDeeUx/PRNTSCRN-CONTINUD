@@ -34,7 +34,7 @@
 		},
 		"use-window-width": {
 			"type": "bool",
-			"name": "Use Window Width",
+			"name": "Use Window Width For Resolution Width",
 			"default": true
 		},
 		"resolution-width": {
@@ -46,7 +46,7 @@
 		},
 		"use-window-height": {
 			"type": "bool",
-			"name": "Use Window Height",
+			"name": "Use Window Height For Resolution Height",
 			"default": true
 		},
 		"resolution-height": {

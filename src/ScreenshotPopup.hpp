@@ -13,12 +13,12 @@ public:
 protected:
 	bool copyToClipboard = false;
 
-	CCMenuItemToggler* copyClipboardToggle;
-	CCMenuItemToggler* hidePlayerToggle;
-	CCMenuItemToggler* hideUIToggle;
-	geode::TextInput* autoPercentInput;
-	geode::TextInput* resolutionWidthInput;
-	geode::TextInput* resolutionHeightInput;
+	CCMenuItemToggler* copyClipboardToggle {};
+	CCMenuItemToggler* hidePlayerToggle {};
+	CCMenuItemToggler* hideUIToggle {};
+	geode::TextInput* autoPercentInput {};
+	geode::TextInput* resolutionWidthInput {};
+	geode::TextInput* resolutionHeightInput {};
 
 	bool setup() override;
 

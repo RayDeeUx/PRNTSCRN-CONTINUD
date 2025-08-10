@@ -13,9 +13,23 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 		.collect();
 
 	CCMenuItemToggler* toggler = Build<CCMenuItemToggler>::createToggle(CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png"), CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png"),
-	[key, mod = Mod::get()](CCMenuItemToggler* toggler) {
+	[this, key, mod = Mod::get()](CCMenuItemToggler* toggler) {
 		toggler->toggle(mod->getSettingValue<bool>(key));
 		mod->setSettingValue<bool>(key, !mod->getSettingValue<bool>(key));
+		if (key == "use-window-width") {
+			int pixelWinSize = static_cast<int>(CCDirector::get()->getWinSizeInPixels().width);
+			bool isKeyEnabled = mod->getSettingValue<bool>(key);
+			std::string numericString = isKeyEnabled ? numToString(pixelWinSize) : numToString(mod->getSettingValue<int64_t>("resolution-width"));
+			resolutionWidthInput->setString(numericString);
+			resolutionWidthInput->setEnabled(!isKeyEnabled);
+		}
+		if (key == "use-window-height") {
+			int pixelWinSize = static_cast<int>(CCDirector::get()->getWinSizeInPixels().height);
+			bool isKeyEnabled = mod->getSettingValue<bool>(key);
+			std::string numericString = isKeyEnabled ? numToString(pixelWinSize) : numToString(mod->getSettingValue<int64_t>("resolution-height"));
+			resolutionHeightInput->setString(numericString);
+			resolutionHeightInput->setEnabled(!isKeyEnabled);
+		}
 	})
 		.id(fmt::format("{}-toggler"_spr, key))
 		.scale(0.75f)
@@ -56,6 +70,7 @@ bool ScreenshotPopup::setup() {
 	resolutionWidthInput->setString(numToString(Manager::get()->width));
 	resolutionWidthInput->getInputNode()->setID("resolution-width-input"_spr);
 	resolutionWidthInput->getInputNode()->setDelegate(this);
+	resolutionWidthInput->setEnabled(Mod::get()->getSettingValue<bool>("use-window-width"));
 
 	CCLabelBMFont* xLabel = CCLabelBMFont::create("x", "bigFont.fnt");
 	xLabel->setScale(0.7f);
@@ -70,18 +85,21 @@ bool ScreenshotPopup::setup() {
 	resolutionHeightInput->setString(numToString(Manager::get()->height));
 	resolutionHeightInput->getInputNode()->setID("resolution-height-input"_spr);
 	resolutionHeightInput->getInputNode()->setDelegate(this);
+	resolutionHeightInput->setEnabled(Mod::get()->getSettingValue<bool>("use-window-height"));
 
 	CCMenu* settingsMenu = CCMenu::create();
 	settingsMenu->setID("quick-settings"_spr);
 	settingsMenu->setPosition(ccp(235.f, 125.f));
 	settingsMenu->setContentSize({180.f, 145.f});
-	settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(false)->setAxisReverse(true)->setAxisAlignment(AxisAlignment::End));
+	settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(true)->setAxisReverse(true)->setAxisAlignment(AxisAlignment::End));
 
 	settingsMenu->addChild(createSetting("Copy To Clipboard", "copy-clipboard"));
 	settingsMenu->addChild(createSetting("Hide UI Layer", "hide-ui"));
 	settingsMenu->addChild(createSetting("Hide Player", "hide-player"));
 	settingsMenu->addChild(createSetting("JPEG", "jpeg-mafia"));
 	settingsMenu->addChild(createSetting("Auto Screenshot", "auto-screenshot"));
+	settingsMenu->addChild(createSetting("Use Window Width", "use-window-width"));
+	settingsMenu->addChild(createSetting("Use Window Height", "use-window-height"));
 
 	int64_t selectedSetting = isPlatformerLevel ? Mod::get()->getSettingValue<int64_t>("auto-seconds") : Mod::get()->getSettingValue<int64_t>("auto-percent");
 	std::string selectedPlaceholderString = isPlatformerLevel ? "s" : "%";
