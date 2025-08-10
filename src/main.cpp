@@ -60,7 +60,7 @@ $on_mod(Loaded) {
 }
 
 #include <Geode/modify/PlayLayer.hpp>
-class $modify(AutoScreenshotPlayLayer, PlayLayer) {
+class $modify(AutoScreenshotPlayLsoayer, PlayLayer) {
 	struct Fields {
 		int lastScreenshot = 0;
 		bool autoScreenshot = false;
@@ -81,7 +81,7 @@ class $modify(AutoScreenshotPlayLayer, PlayLayer) {
 		PlayLayer::resetLevel();
 		m_fields->autoScreenshot = Mod::get()->getSettingValue<bool>("auto-screenshot");
 		m_fields->autoPercent = std::clamp(static_cast<int>(Mod::get()->getSettingValue<int64_t>("auto-percent")), 5, 100);
-		m_fields->autoSeconds = std::clamp(static_cast<int>(Mod::get()->getSettingValue<int64_t>("auto-seconds")), 5, 65536); // 1 week == 604800 seconds
+		m_fields->autoSeconds = std::clamp(static_cast<int>(Mod::get()->getSettingValue<int64_t>("auto-seconds")), 5, 604800); // 1 week == 604800 seconds
 		m_fields->lastScreenshot = 0;
 	}
 
