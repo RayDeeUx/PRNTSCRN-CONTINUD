@@ -74,7 +74,6 @@ bool ScreenshotPopup::setup() {
 
 	CCLabelBMFont* xLabel = CCLabelBMFont::create("x", "bigFont.fnt");
 	xLabel->setScale(0.7f);
-	xLabel->setAnchorPoint({.5f, .4f}); // to avoid visual off-center illusion on the y-axis
 	resolutionMenu->addChild(xLabel);
 
 	resolutionHeightInput = Build<TextInput>::create(55.f, "Height", "bigFont.fnt")
@@ -149,6 +148,8 @@ bool ScreenshotPopup::setup() {
 	m_closeBtn->setID("close-button"_spr);
 	m_mainLayer->setID("main-layer"_spr);
 	m_bgSprite->setID("background"_spr);
+
+	xLabel->setAnchorPoint({.5f, .4f}); // to avoid visual off-center illusion on the y-axis
 
 	return true;
 }
