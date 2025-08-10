@@ -5,17 +5,23 @@ using namespace geode::prelude;
 
 void setWidth() {
 	int& width = Manager::get()->width;
-	width = static_cast<int>(Mod::get()->getSettingValue<int64_t>("resolution-width"));
-	if (width < 1 || Mod::get()->getSettingValue<bool>("use-window-width")) {
-		width = static_cast<int>(CCDirector::get()->getWinSizeInPixels().width);
+	int widthPixel = static_cast<int>(CCDirector::get()->getWinSizeInPixels().width);
+	if (Mod::get()->getSettingValue<bool>("use-window-width")) {
+		width = widthPixel;
+	} else {
+		int widthSetting = static_cast<int>(Mod::get()->getSettingValue<int64_t>("resolution-width"));
+		width = std::clamp(widthSetting, 1, widthPixel);
 	}
 }
 
 void setHeight() {
 	int &height = Manager::get()->height;
-	height = static_cast<int>(Mod::get()->getSettingValue<int64_t>("resolution-height"));
-	if (height < 1 || Mod::get()->getSettingValue<bool>("use-window-height")) {
-		height = static_cast<int>(CCDirector::get()->getWinSizeInPixels().height);
+	int heightPixel = static_cast<int>(CCDirector::get()->getWinSizeInPixels().height);
+	if (Mod::get()->getSettingValue<bool>("use-window-height")) {
+		height = heightPixel;
+	} else {
+		int heightSetting = static_cast<int>(Mod::get()->getSettingValue<int64_t>("resolution-height"));
+		height = std::clamp(heightSetting, 1, heightPixel);
 	}
 }
 
@@ -47,34 +53,35 @@ $on_mod(Loaded) {
 	}, InvokeBindFilter(nullptr, "plain-screenshot"_spr));
 	setWidth();
 	setHeight();
-	listenForSettingChanges("resolution-width", [](int64_t unsused) { setWidth(); });
-	listenForSettingChanges("resolution-height", [](int64_t unsused) { setHeight(); });
-	listenForSettingChanges("use-window-width", [](bool unsused) { setWidth(); });
-	listenForSettingChanges("use-window-height", [](bool unsused) { setHeight(); });
+	listenForSettingChanges("resolution-width", [](int64_t unused) { setWidth(); });
+	listenForSettingChanges("resolution-height", [](int64_t unused) { setHeight(); });
+	listenForSettingChanges("use-window-width", [](bool unused) { setWidth(); });
+	listenForSettingChanges("use-window-height", [](bool unused) { setHeight(); });
 }
 
 #include <Geode/modify/PlayLayer.hpp>
-class $modify(PlayLayer) {
+class $modify(AutoScreenshotPlayLayer, PlayLayer) {
 	struct Fields {
 		int lastScreenshot = 0;
 		bool autoScreenshot = false;
 		int autoPercent = 10;
 		int autoSeconds = 10;
-		bool hideUI = false;
 	};
 
 	bool canAutoScreenshot(int currentPercentOrTime) {
 		Fields* fields = m_fields.self();
 		if (!m_level || !fields->autoScreenshot) return false;
-		return currentPercentOrTime % fields->lastScreenshot == 0 && fields->lastScreenshot != currentPercentOrTime;
+		if (fields->lastScreenshot == currentPercentOrTime) return false;
+		if (m_level->isPlatformer()) return currentPercentOrTime % fields->autoSeconds == 0;
+		if (!m_level->isPlatformer()) return currentPercentOrTime % fields->autoPercent == 0;
+		return false;
 	}
 
 	void resetLevel() {
 		PlayLayer::resetLevel();
 		m_fields->autoScreenshot = Mod::get()->getSettingValue<bool>("auto-screenshot");
 		m_fields->autoPercent = std::clamp(static_cast<int>(Mod::get()->getSettingValue<int64_t>("auto-percent")), 5, 100);
-		m_fields->autoSeconds = std::clamp(static_cast<int>(Mod::get()->getSettingValue<int64_t>("auto-seconds")), 5, 604800); // 1 week == 604800 seconds
-		m_fields->hideUI = Mod::get()->getSettingValue<bool>("hide-ui");
+		m_fields->autoSeconds = std::clamp(static_cast<int>(Mod::get()->getSettingValue<int64_t>("auto-seconds")), 5, 65536); // 1 week == 604800 seconds
 		m_fields->lastScreenshot = 0;
 	}
 
