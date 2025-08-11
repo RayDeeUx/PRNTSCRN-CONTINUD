@@ -125,3 +125,25 @@ class $modify(NewPauseLayer, PauseLayer) {
 		ScreenshotPopup::create()->show();
 	}
 };
+
+#include <Geode/modify/EditorPauseLayer.hpp>
+class $modify(NewEditorPauseLayer, EditorPauseLayer) {
+	bool init(LevelEditorLayer* lel) {
+		if (!EditorPauseLayer::init(lel)) return false;
+		auto settingsMenu = getChildByID("settings-menu");
+		if (!settingsMenu) return true;
+
+		auto btn = CCMenuItemSpriteExtra::create(
+			CircleButtonSprite::createWithSprite("screenshot.png"_spr, 1, CircleBaseColor::Green, CircleBaseSize::Tiny),
+			this, menu_selector(NewEditorPauseLayer::onScreenshotPopup)
+		);
+		btn->setID("screenshot-button"_spr);
+		settingsMenu->addChild(btn);
+		settingsMenu->updateLayout();
+		return true;
+	}
+
+	void onScreenshotPopup(CCObject*) {
+		ScreenshotPopup::create()->show();
+	}
+};

@@ -101,40 +101,43 @@ bool ScreenshotPopup::setup() {
 	settingsMenu->addChild(createSetting("Use Window Width", "use-window-width"));
 	settingsMenu->addChild(createSetting("Use Window Height", "use-window-height"));
 
+	if (pl) {
 	int64_t selectedSetting = isPlatformerLevel ? Mod::get()->getSettingValue<int64_t>("auto-seconds") : Mod::get()->getSettingValue<int64_t>("auto-percent");
 	std::string selectedPlaceholderString = isPlatformerLevel ? "s" : "%";
 	std::string selectedInputNodeID = isPlatformerLevel ? "auto-seconds-input"_spr : "auto-percent-input"_spr;
 	std::string selectedGeodeInputNodeID = isPlatformerLevel ? "seconds-geode-input"_spr : "percent-geode-input"_spr;
 	std::string selectedLabel = isPlatformerLevel ? "Auto Seconds" : "Auto Percent";
 
-	CCMenu* autoPercent = Build<CCMenu>::create()
+		CCMenu* autoPercent = Build<CCMenu>::create()
 		.layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(4.f)->setAxisReverse(true))
 		.id("auto-screenshot"_spr)
 		.pos(75, 150)
 		.width(125.f)
 		.collect();
 
-	autoPercentInput = Build<TextInput>::create(35.f, selectedPlaceholderString, "bigFont.fnt")
-		.id(selectedGeodeInputNodeID)
-		.scale(0.75f)
-		.parent(autoPercent)
-		.collect();
+		autoPercentInput = Build<TextInput>::create(35.f, selectedPlaceholderString, "bigFont.fnt")
+			.id(selectedGeodeInputNodeID)
+			.scale(0.75f)
+			.parent(autoPercent)
+			.collect();
 
-	autoPercentInput->setString(numToString(selectedSetting));
-	autoPercentInput->getInputNode()->setID(selectedInputNodeID);
-	autoPercentInput->getInputNode()->setDelegate(this);
+		autoPercentInput->setString(numToString(selectedSetting));
+		autoPercentInput->getInputNode()->setID(selectedInputNodeID);
+		autoPercentInput->getInputNode()->setDelegate(this);
 
-	Build<CCLabelBMFont>::create(selectedLabel.c_str(), "bigFont.fnt")
-		.id("auto-screenshot-label"_spr)
-		.scale(0.4f)
-		.parent(autoPercent);
+		Build<CCLabelBMFont>::create(selectedLabel.c_str(), "bigFont.fnt")
+			.id("auto-screenshot-label"_spr)
+			.scale(0.4f)
+			.parent(autoPercent);
+
+		m_mainLayer->addChild(autoPercent);
+		autoPercent->updateLayout();
+	}
 
 	m_mainLayer->addChild(settingsMenu);
 	m_mainLayer->addChild(resolutionMenu);
-	m_mainLayer->addChild(autoPercent);
 	settingsMenu->updateLayout();
 	resolutionMenu->updateLayout();
-	autoPercent->updateLayout();
 
 	CCMenuItemSpriteExtra* screenshotButton = CCMenuItemSpriteExtra::create(
 		ButtonSprite::create("Screenshot!"),

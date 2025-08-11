@@ -23,6 +23,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(pl, progress-bar);
 	}
 	if (hideUI && lel) {
+		ADD_NODE(lel, UILayer);
 		ADD_NODE(lel, EditorUI);
 	}
 	if (hidePL && pl) {
@@ -44,6 +45,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(pl, progress-bar);
 	}
 	if (hideUI && lel) {
+		RES_NODE(lel, UILayer);
 		RES_NODE(lel, EditorUI);
 	}
 	if (hidePL && pl) {
