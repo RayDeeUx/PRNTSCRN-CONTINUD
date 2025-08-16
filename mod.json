@@ -11,9 +11,21 @@
 	"version": "v1.0.0",
 	"developers": ["ninXout", "mat", "RayDeeUx"],
 	"description": "Quick and easy screenshot tool!",
+	"links": {
+		"source": "https://github.com/RayDeeUx/PRNTSCRN-CONTINUD/tree/CONTINUD"
+	},
 	"resources": {
 		"sprites": [
 			"resources/screenshot.png"
+		]
+	},
+	"dependencies": {
+		"geode.node-ids": ">=1.20.0",
+		"geode.custom-keybinds": ">=1.10.3"
+	},
+	"api": {
+		"include": [
+			"include/*.hpp"
 		]
 	},
 	"settings": {
@@ -25,11 +37,13 @@
 		"hide-player": {
 			"type": "bool",
 			"name": "Hide Player",
+			"description": "Hides both players when taking a screenshot while playing a level or while inside the level editor.",
 			"default": false
 		},
 		"hide-ui": {
 			"type": "bool",
 			"name": "Hide UI",
+			"description": "Hides the UI when taking a screenshot while playing a level or while inside the level editor.",
 			"default": true
 		},
 		"use-window-width": {
@@ -40,7 +54,7 @@
 		"resolution-width": {
 			"type": "int",
 			"name": "Resolution Width",
-			"description": "The width of the image, if not using the window's width.",
+			"description": "The width of your screenshot, if not using the window's width.",
 			"default": 1920,
 			"min": 1
 		},
@@ -52,20 +66,20 @@
 		"resolution-height": {
 			"type": "int",
 			"name": "Resolution Height",
-			"description": "The height of the image, if not using the window's height.",
+			"description": "The height of your screenshot, if not using the window's height.",
 			"default": 1080,
 			"min": 1
 		},
 		"jpeg-mafia": {
 			"type": "bool",
-			"name": "Output to JPEG",
-			"description": "Use JPEG for images instead of PNG",
+			"name": "Save Screenshots as JPEG",
+			"description": "Use JPEG for images instead of PNG.",
 			"default": false
 		},
 		"auto-screenshot": {
 			"type": "bool",
 			"name": "Auto Screenshot",
-			"description": "Automatically take a screenshot with a given percentage interval (for Classic levels) or a timed interval in seconds (for Platformer levels).",
+			"description": "Automatically take a screenshot with a given percentage interval (for Classic levels) or a timed interval in seconds (for Platformer levels).\n\n<cy>Might cause occasional FPS drops.</c>",
 			"default": false
 		},
 		"auto-percent": {
@@ -83,14 +97,5 @@
 			"default": 30,
 			"min": 5
 		}
-	},
-	"dependencies": {
-		"geode.node-ids": ">=1.20.0",
-		"geode.custom-keybinds": ">=1.10.3"
-	},
-	"api": {
-		"include": [
-			"include/*.hpp"
-		]
 	}
 }
