@@ -38,7 +38,7 @@ $on_mod(Loaded) {
 	BindManager::get()->registerBindable({
 		"plain-screenshot"_spr,
 		"Take a Plain Screenshot!", "Takes a screenshot of the screen itself, even if there's a level on screen. Useful for taking a screenshot of the pause menu.",
-		{ Keybind::create(KEY_F2, Modifier::Shift), Keybind::create(KEY_GraveAccent, Modifier::Shift) }, // added GraveAccent as a default for any macOS users with the Touch Bar --raydeeux
+		{ Keybind::create(KEY_F2, Modifier::Control), Keybind::create(KEY_GraveAccent, Modifier::Control) }, // added GraveAccent as a default for any macOS users with the Touch Bar --raydeeux
 		"PRNTSCRN", false
 	}); // y'know, in case anyone wants to take a screenshot of the pause layer --raydeeux
 	new EventListener([=](InvokeBindEvent* event) {
