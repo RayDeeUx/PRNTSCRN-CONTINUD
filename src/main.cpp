@@ -26,14 +26,6 @@ void setHeight() {
 	}
 }
 
-$execute {
-	new EventListener<EventFilter<PRNTSCRN::ScreenshotEvent>>(+[](PRNTSCRN::ScreenshotEvent* ev) {
-		if (ev->getNode()) SharedScreenshotLogic::screenshot(ev->getNode());
-		else log::error("[PRNTSCRN API] THE NODE WAS NULLPTR.");
-		return ListenerResult::Stop;
-	});
-}
-
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 using namespace keybinds;
 $on_mod(Loaded) {
@@ -67,6 +59,11 @@ $on_mod(Loaded) {
 	listenForSettingChanges("resolution-height", [](int64_t unused) { setHeight(); });
 	listenForSettingChanges("use-window-width", [](bool unused) { setWidth(); });
 	listenForSettingChanges("use-window-height", [](bool unused) { setHeight(); });
+	new EventListener<EventFilter<PRNTSCRN::ScreenshotEvent>>(+[](PRNTSCRN::ScreenshotEvent* ev) {
+		if (ev->getNode()) SharedScreenshotLogic::screenshot(ev->getNode());
+		else log::error("[PRNTSCRN API] THE NODE WAS NULLPTR.");
+		return ListenerResult::Stop;
+	});
 }
 
 #include <Geode/modify/PlayLayer.hpp>
