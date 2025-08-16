@@ -27,7 +27,7 @@ void setHeight() {
 }
 
 $execute {
-	new EventListener<EventFilter<ScreenshotEvent>>(+[](ScreenshotEvent* ev) {
+	new EventListener<EventFilter<PRNTSCRN::ScreenshotEvent>>(+[](PRNTSCRN::ScreenshotEvent* ev) {
 		if (ev->getNode()) SharedScreenshotLogic::screenshot(ev->getNode());
 		else log::error("[PRNTSCRN API] THE NODE WAS NULLPTR.");
 		return ListenerResult::Stop;
