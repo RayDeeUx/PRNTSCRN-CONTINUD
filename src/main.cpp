@@ -1,5 +1,6 @@
 #include "SharedScreenshotLogic.hpp"
 #include "Manager.hpp"
+#include <api.hpp>
 
 using namespace geode::prelude;
 
@@ -23,6 +24,14 @@ void setHeight() {
 		int heightSetting = static_cast<int>(Mod::get()->getSettingValue<int64_t>("resolution-height"));
 		height = std::clamp(heightSetting, 1, heightPixel * 4); // if anyone wants to do higher resolutions than 4x their window dimensions wnat are you doing with your life --raydeeux
 	}
+}
+
+$execute {
+	new EventListener<EventFilter<ScreenshotEvent>>(+[](ScreenshotEvent* ev) {
+		if (ev->getNode()) SharedScreenshotLogic::screenshot(ev->getNode());
+		else log::error("[PRNTSCRN API] THE NODE WAS NULLPTR.");
+		return ListenerResult::Stop;
+	});
 }
 
 #include <geode.custom-keybinds/include/Keybinds.hpp>

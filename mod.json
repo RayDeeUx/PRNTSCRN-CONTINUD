@@ -87,5 +87,11 @@
 	"dependencies": {
 		"geode.node-ids": ">=1.20.0",
 		"geode.custom-keybinds": ">=1.10.3"
+	},
+	"early-load": true,
+	"api": {
+		"include": [
+			"include/*.hpp"
+		]
 	}
 }
