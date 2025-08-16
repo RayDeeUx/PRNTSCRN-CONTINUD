@@ -38,13 +38,20 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
         #endif
 	}
 
-	inline void screenshotNode(CCNode* node) {
-		if (!node) return log::error("[PRNTSCRN API] unable to reference node from screenshotNode");
+	inline geode::Result<> screenshotNode(CCNode* node) {
+		if (!node) {
+		    log::error("[PRNTSCRN API] unable to reference node from screenshotNode");
+		    return Err(fmt::format("[PRNTSCRN API] unable to reference node from screenshotNode"));
+		}
 		ScreenshotEvent(node).post();
+		return Ok();
 	}
 
-	inline void screenshotNodeUsingStringFrom(CCNode* parent, const std::string_view querySelectorOrIDOrRecursive, ReferenceType fetchType) {
-		if (!parent) return log::error("[PRNTSCRN API] unable to reference parent node");
+	inline geode::Result<> screenshotNodeUsingStringFrom(CCNode* parent, const std::string_view querySelectorOrIDOrRecursive, ReferenceType fetchType) {
+		if (!parent) {
+		    log::error("[PRNTSCRN API] unable to reference parent node");
+		    return Err(fmt::format("[PRNTSCRN API] unable to reference parent node"));
+		}
 		CCNode* node = nullptr;
 		switch (fetchType) {
 			default: break;
@@ -58,23 +65,41 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 				node = parent->querySelector(querySelectorOrIDOrRecursive);
 				break;
 		}
-		if (!node) return log::error("[PRNTSCRN API] unable to reference node with string {} using ReferenceType mode {}", querySelectorOrIDOrRecursive, static_cast<int>(fetchType));
-		PRNTSCRN::screenshotNode(node);
+		if (!node) {
+		    log::error("[PRNTSCRN API] unable to reference node with string {} using ReferenceType mode {}", querySelectorOrIDOrRecursive, static_cast<int>(fetchType));
+		    return Err(fmt::format("[PRNTSCRN API] unable to reference node with string {} using ReferenceType mode {}", querySelectorOrIDOrRecursive, static_cast<int>(fetchType)));
+		}
+		return PRNTSCRN::screenshotNode(node);
 	}
 
-	inline void screenshotNodeUsingTagFrom(CCNode* parent, int tag) {
-		if (!parent) return log::error("[PRNTSCRN API] unable to reference parent node");
-		if (tag < 0) return log::error("[PRNTSCRN API] unable to fetch child by tag, tag {} is less than 0", tag);
+	inline geode::Result<> screenshotNodeUsingTagFrom(CCNode* parent, int tag) {
+		if (!parent) {
+		    log::error("[PRNTSCRN API] unable to reference parent node");
+		    return Err(fmt::format("[PRNTSCRN API] unable to reference parent node"));
+		}
+		if (tag < 0) {
+		    log::error("[PRNTSCRN API] unable to fetch child by tag, tag {} is less than 0", tag);
+		    return Err(fmt::format("[PRNTSCRN API] unable to fetch child by tag, tag {} is less than 0", tag));
+		}
 		CCNode* node = parent->getChildByTag(tag);
-		if (!node) return log::error("[PRNTSCRN API] unable to reference node using screenshotNodeUsingTagFrom with tag {}", tag);
-		PRNTSCRN::screenshotNode(node);
+		if (!node) {
+		    log::error("[PRNTSCRN API] unable to reference node using screenshotNodeUsingTagFrom with tag {}", tag);
+		    return Err(fmt::format("[PRNTSCRN API] unable to reference node using screenshotNodeUsingTagFrom with tag {}", tag));
+		}
+		return PRNTSCRN::screenshotNode(node);
 	}
 
 	template<class T>
-	void screenshotNodeByTypeFrom(CCNode* parent, int index) {
-		if (!parent) return log::error("[PRNTSCRN API] unable to reference parent node using screenshotNodeByTypeFrom");
+	geode::Result<> screenshotNodeByTypeFrom(CCNode* parent, int index) {
+		if (!parent) {
+		    log::error("[PRNTSCRN API] unable to reference parent node using screenshotNodeByTypeFrom");
+		    return Err(fmt::format("[PRNTSCRN API] unable to reference parent node using screenshotNodeByTypeFrom"));
+		}
 		CCNode* node = parent->getChildByType<T>(index);
-		if (!node) return log::error("[PRNTSCRN API] unable to reference node of type {} and index {} using screenshotNodeByTypeFrom", PRNTSCRN::__demangle__(typeid(T).name()), index);
-		PRNTSCRN::screenshotNode(node);
+		if (!node) {
+		    log::error("[PRNTSCRN API] unable to reference node of type {} and index {} using screenshotNodeByTypeFrom", PRNTSCRN::__demangle__(typeid(T).name()), index);
+		    return Err(fmt::format("[PRNTSCRN API] unable to reference node of type {} and index {} using screenshotNodeByTypeFrom", PRNTSCRN::__demangle__(typeid(T).name()), index));
+		}
+		return PRNTSCRN::screenshotNode(node);
 	}
 }
