@@ -4,12 +4,27 @@
 
 using namespace geode::prelude;
 
+std::string SharedScreenshotLogic::getFormattedDate() {
+	auto now = std::chrono::system_clock::now();
+	auto floored = std::chrono::floor<std::chrono::days>(now);
+	std::chrono::year_month_day ymd = {floored};
+	auto humanReadableMonth = SharedScreenshotLogic::monthNames[static_cast<unsigned int>(ymd.month())];
+	auto day = static_cast<unsigned int>(ymd.day());
+	auto year = static_cast<int>(ymd.year());
+	return fmt::format("{} {}, {}", humanReadableMonth, day, year);
+}
+
 void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (!node) return log::error("invalid node!");
-	std::unordered_map<const char*, bool> uiNodes = {};
+	bool hasCustomNodesToHide = false;
+	if (CCBool* obj = typeinfo_cast<CCBool*>(node->getUserObject("has-custom-nodes-to-hide"_spr)); obj) {
+		hasCustomNodesToHide = obj->getValue();
+	}
 
-	bool hideUI = Mod::get()->getSettingValue<bool>("hide-ui");
-	bool hidePL = Mod::get()->getSettingValue<bool>("hide-player");
+	// event filter from main.cpp will have already hidden the nodes by this point
+	std::unordered_map<const char*, bool> uiNodes = {};
+	bool hideUI = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-ui");
+	bool hidePL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-player");
 
 	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
 	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
@@ -68,16 +83,12 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	bool jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");
 	std::string extension = jpeg ? ".jpg" : ".png";
 
-	auto now = std::chrono::system_clock::now();
-	auto floored = std::chrono::floor<std::chrono::days>(now);
-	std::chrono::year_month_day ymd = {floored};
-	auto humanReadableMonth = monthNames[static_cast<unsigned int>(ymd.month())];
-	auto day = static_cast<unsigned int>(ymd.day());
-	auto year = static_cast<int>(ymd.year());
-	auto formattedDate = fmt::format("{} {}, {}", humanReadableMonth, day, year);
+	std::string formattedDate = SharedScreenshotLogic::getFormattedDate();
 
-	auto level = pl ? pl->m_level : nullptr;
+	GJGameLevel* level = nullptr;
+	if (pl) level = pl->m_level;
 	std::string suffix = level ? fmt::format("{} - {} ({})", numToString(level->m_levelID.value()), level->m_levelName, formattedDate) : formattedDate;
+
 	std::filesystem::path folder = Mod::get()->getConfigDir() / suffix;
 
 	if (!std::filesystem::exists(folder)) std::filesystem::create_directory(folder);

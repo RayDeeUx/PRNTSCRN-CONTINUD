@@ -6,9 +6,28 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
     class ScreenshotEvent final : public Event {
 	    protected:
 	        CCNode* nodeToScreenshot {};
+    		std::vector<CCNode*> nodePointersToHide {};
+    		std::vector<std::string> querySelectorsToHide  {};
 	    public:
-	        explicit ScreenshotEvent(CCNode* node) : nodeToScreenshot(node) {}
+    		explicit ScreenshotEvent(CCNode* node) : nodeToScreenshot(node) {
+    			nodePointersToHide = {};
+    			querySelectorsToHide = {};
+    		}
+    	    explicit ScreenshotEvent(CCNode* node, std::vector<CCNode*> pointers) : nodeToScreenshot(node) {
+    			nodePointersToHide = pointers;
+    			querySelectorsToHide = {};
+    		}
+    	    explicit ScreenshotEvent(CCNode* node, std::vector<std::string> querySelectors) : nodeToScreenshot(node) {
+    			nodePointersToHide = {};
+    			querySelectorsToHide = querySelectors;
+    		}
+    		explicit ScreenshotEvent(CCNode* node, std::vector<CCNode*> pointers, std::vector<std::string> querySelectors) : nodeToScreenshot(node) {
+    			nodePointersToHide = pointers;
+    			querySelectorsToHide = querySelectors;
+    		}
 	        [[nodiscard]] CCNode* getNode() const { return nodeToScreenshot; }
+    		[[nodiscard]] std::vector<CCNode*> getPointersToHide() const { return nodePointersToHide; }
+    		[[nodiscard]] std::vector<std::string> getQuerysToHide() const { return querySelectorsToHide; }
     };
 
 	enum ReferenceType {
@@ -38,10 +57,24 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
         #endif
 	}
 
+	// querySelectorsToHide are node IDs that are direct children of the node chosen as the screenshot's target.
+	// PRNTSCRN will call node->querySelector() to find the node you want to hide.
+	// if you do not feel comfortable using this, use PRNTSCRN::screenshotNode instead.
+	// for more info, see https://docs.geode-sdk.org/classes/cocos2d/CCNode#querySelector.
+	inline geode::Result<> screenshotNodeAdvanced(CCNode* node, std::vector<CCNode*> pointersToHide, std::vector<std::string> querySelectorsToHide) {
+		if (!node) {
+			log::error("[PRNTSCRN API] unable to reference node from screenshotNodeAdvanced");
+			return Err(fmt::format("[PRNTSCRN API] unable to reference node from screenshotNodeAdvanced"));
+		}
+		node->setUserObject("has-custom-nodes-to-hide"_spr, CCBool::create(true));
+		ScreenshotEvent(node, pointersToHide, querySelectorsToHide).post();
+		return Ok();
+	}
+
 	inline geode::Result<> screenshotNode(CCNode* node) {
 		if (!node) {
-		    log::error("[PRNTSCRN API] unable to reference node from screenshotNode");
-		    return Err(fmt::format("[PRNTSCRN API] unable to reference node from screenshotNode"));
+			log::error("[PRNTSCRN API] unable to reference node from screenshotNode");
+			return Err(fmt::format("[PRNTSCRN API] unable to reference node from screenshotNode"));
 		}
 		ScreenshotEvent(node).post();
 		return Ok();

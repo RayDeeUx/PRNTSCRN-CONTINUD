@@ -60,12 +60,48 @@ $on_mod(Loaded) {
 	listenForSettingChanges("use-window-width", [](bool unused) { setWidth(); });
 	listenForSettingChanges("use-window-height", [](bool unused) { setHeight(); });
 	new EventListener<EventFilter<PRNTSCRN::ScreenshotEvent>>(+[](PRNTSCRN::ScreenshotEvent* ev) {
-		if (!ev->getNode()) log::error("[PRNTSCRN API] THE NODE WAS NULLPTR.");
-		else {
-			// t0d0: hide nodes here
-			SharedScreenshotLogic::screenshot(ev->getNode());
-			// t0d0: restore nodes here
+		if (!ev) {
+			log::error("[PRNTSCRN API] THE EVENT WAS NULLPTR.");
+			return ListenerResult::Stop;
 		}
+		if (!ev->getNode()) {
+			log::error("[PRNTSCRN API] THE NODE WAS NULLPTR.");
+			return ListenerResult::Stop;
+		}
+		std::unordered_map<CCNode*, bool> formerNodePointersVisibilityStates = {};
+		std::unordered_map<std::string, bool> formerNodeIDsVisibilityStates = {};
+		CCNode* nodeBeingScreenshotted = ev->getNode();
+		std::vector<CCNode*> hideThesePointers = ev->getPointersToHide();
+		std::vector<std::string> hideTheseQuerySelectors = ev->getQuerysToHide();
+		if (!hideThesePointers.empty()) {
+			for (CCNode* nodeToHide : hideThesePointers) {
+				if (!nodeToHide) continue;
+				formerNodePointersVisibilityStates[nodeToHide] = nodeToHide->isVisible();
+				nodeToHide->setVisible(false);
+			}
+		}
+		if (!hideTheseQuerySelectors.empty()) {
+			for (std::string querySelectorToHide : hideTheseQuerySelectors) {
+				if (querySelectorToHide.empty()) continue;
+				CCNode* theNodeToHide = nodeBeingScreenshotted->querySelector(querySelectorToHide);
+				if (!theNodeToHide) continue;
+				formerNodePointersVisibilityStates[theNodeToHide] = theNodeToHide->isVisible();
+				theNodeToHide->setVisible(false);
+			}
+		}
+		SharedScreenshotLogic::screenshot(nodeBeingScreenshotted);
+		if (!hideThesePointers.empty() && !formerNodePointersVisibilityStates.empty()) {
+			for (auto [nodeToRestore, formerVisibility] : formerNodePointersVisibilityStates) {
+				if (nodeToRestore) nodeToRestore->setVisible(formerVisibility);
+			}
+		}
+		if (!hideTheseQuerySelectors.empty() && !formerNodeIDsVisibilityStates.empty()) {
+			for (auto [querySelectorToRestore, formerVisibility] : formerNodeIDsVisibilityStates) {
+				CCNode* theNodeToRestore = nodeBeingScreenshotted->querySelector(querySelectorToRestore);
+				if (theNodeToRestore) theNodeToRestore->setVisible(formerVisibility);
+			}
+		}
+		nodeBeingScreenshotted->setUserObject("has-custom-nodes-to-hide"_spr, CCBool::create(false));
 		return ListenerResult::Stop;
 	});
 }
