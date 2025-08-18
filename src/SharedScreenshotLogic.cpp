@@ -5,6 +5,7 @@
 using namespace geode::prelude;
 
 void SharedScreenshotLogic::screenshot(CCNode* node) {
+	if (!node) return log::error("invalid node!");
 	std::unordered_map<const char*, bool> uiNodes = {};
 
 	bool hideUI = Mod::get()->getSettingValue<bool>("hide-ui");
@@ -12,6 +13,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
 	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
+	CCScene* scene = typeinfo_cast<CCScene*>(node);
 
 	if (hideUI && pl) {
 		ADD_NODE(pl, UILayer);
@@ -34,7 +36,14 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_MEM(lel, m_player1);
 		ADD_MEM(lel, m_player2);
 	}
-	Screenshot ss = Screenshot(Manager::get()->width, Manager::get()->height, node);
+	CCSize size = CCSize{static_cast<float>(Manager::get()->width), static_cast<float>(Manager::get()->height)};
+	if (!pl && !lel && !scene) {
+		log::info("geode::utils::getDisplayFactor(): {}", geode::utils::getDisplayFactor());
+		const CCSize sceneSize = CCScene::get()->getContentSize();
+		const CCSize nodeSize = node->getContentSize();
+		size = node->getContentSize() * geode::utils::getDisplayFactor() * geode::utils::getDisplayFactor() * std::max(nodeSize.width / sceneSize.width, nodeSize.height / sceneSize.height);
+	}
+	Screenshot ss = Screenshot(size, node);
 	if (hideUI && pl) {
 		RES_NODE(pl, UILayer);
 		RES_NODE(pl, debug-text);

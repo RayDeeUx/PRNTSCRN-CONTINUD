@@ -7,10 +7,9 @@ Screenshot::Screenshot(unsigned int width, unsigned int height, CCNode* node) : 
 	m_data = m_tex.capture(node);
 }
 
-Screenshot::Screenshot(const CCSize& size, CCNode *node) : m_width(static_cast<int>(size.width)), m_height(static_cast<int>(size.height)), m_node(node), m_tex(RenderTexture(size.width, size.height))  {
+Screenshot::Screenshot(const CCSize& size, CCNode* node) : m_width(static_cast<int>(size.width)), m_height(static_cast<int>(size.height)), m_node(node), m_tex(RenderTexture(size.width, size.height))  {
 	m_data = m_tex.capture(node);
 }
-
 
 CCTexture2D* Screenshot::intoTexture() {
 	return m_tex.intoTexture();
