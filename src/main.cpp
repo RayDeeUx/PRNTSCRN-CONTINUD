@@ -60,8 +60,12 @@ $on_mod(Loaded) {
 	listenForSettingChanges("use-window-width", [](bool unused) { setWidth(); });
 	listenForSettingChanges("use-window-height", [](bool unused) { setHeight(); });
 	new EventListener<EventFilter<PRNTSCRN::ScreenshotEvent>>(+[](PRNTSCRN::ScreenshotEvent* ev) {
-		if (ev->getNode()) SharedScreenshotLogic::screenshot(ev->getNode());
-		else log::error("[PRNTSCRN API] THE NODE WAS NULLPTR.");
+		if (!ev->getNode()) log::error("[PRNTSCRN API] THE NODE WAS NULLPTR.");
+		else {
+			// t0d0: hide nodes here
+			SharedScreenshotLogic::screenshot(ev->getNode());
+			// t0d0: restore nodes here
+		}
 		return ListenerResult::Stop;
 	});
 }
