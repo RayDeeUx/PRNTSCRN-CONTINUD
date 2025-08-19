@@ -63,7 +63,8 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 
 	// screenshot a node of your choice with custom visibility filters.
 	// if the node being screenshotted is a PlayLayer or LevelEditorLayer node,
-	// you WILL need to specify your own nodes to hide--that is the whole purpose of this function!
+	// you WILL need to specify your own nodes to hide--the user's preferences in PRNTSCRN's settings
+	// for hiding PlayLayer/LevelEditor UI or the player will be ignored--that is the whole purpose of this function!
 	// pointersToHide are pointers to any variable that inherits CCNode*. one example is PlayLayer::get()->m_player1.
 	// querySelectorsToHide are node IDs that are direct decendants of the node chosen as the screenshot's target.
 	// PRNTSCRN will call node->querySelector() to find the node you want to hide.
@@ -160,6 +161,15 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 		return PRNTSCRN::screenshotNode(node);
 	}
 
+	// screenshot a node as seen on the screen. the syntax is similar to geode's CCNode::getChildByType<T>(index).
+	// if the node being screenshotted is a PlayLayer or LevelEditorLayer node,
+	// the user's personal preferences for hiding the UI or the player in PRNTSCRN's settings will apply.
+	// Examples:
+	/*
+	PRNTSCRN::screenshotNodeUsingStringFrom(PlayLayer::get(), 32);
+	PRNTSCRN::screenshotNodeUsingStringFrom(LevelEditorLayer::get(), 32);
+	PRNTSCRN::screenshotNodeUsingStringFrom(CCScene::get(), 32);
+	*/
 	template<class T>
 	geode::Result<> screenshotNodeByTypeFrom(CCNode* parent, int index) {
 		if (!parent) {
