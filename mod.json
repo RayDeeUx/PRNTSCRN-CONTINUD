@@ -9,7 +9,7 @@
 	"id": "ninxout.prntscrn",
 	"name": "PRNTSCRN",
 	"version": "v1.0.0",
-	"developers": ["ninXout", "mat", "RayDeeUx"],
+	"developers": ["RayDeeUx", "ninXout", "mat"],
 	"description": "Quick and easy screenshot tool!",
 	"links": {
 		"source": "https://github.com/RayDeeUx/PRNTSCRN-CONTINUD/tree/CONTINUD"
