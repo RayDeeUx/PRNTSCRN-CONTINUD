@@ -6,51 +6,49 @@
 using namespace geode::prelude;
 
 CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::string& key) {
-	CCMenu* thing = Build<CCMenu>(CCMenu::create())
+	Mod* mod = Mod::get();
+	CCMenu* quickToggleMenu = Build<CCMenu>(CCMenu::create())
 		.id(fmt::format("{}-quick-toggle-setting"_spr, key))
 		.layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(5.f))
 		.width(180.f)
 		.collect();
 
 	CCMenuItemToggler* toggler = Build<CCMenuItemToggler>::createToggle(CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png"), CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png"),
-	[this, key, mod = Mod::get()](CCMenuItemToggler* toggler) {
-		toggler->toggle(mod->getSettingValue<bool>(key));
-		mod->setSettingValue<bool>(key, !mod->getSettingValue<bool>(key));
-		if (key == "use-window-width") {
-			int pixelWinSize = static_cast<int>(CCDirector::get()->getWinSizeInPixels().width);
-			bool isKeyEnabled = mod->getSettingValue<bool>(key);
-			std::string numericString = isKeyEnabled ? numToString(pixelWinSize) : numToString(mod->getSettingValue<int64_t>("resolution-width"));
-			resolutionWidthInput->setString(numericString);
-			resolutionWidthInput->setEnabled(!isKeyEnabled);
-		}
-		if (key == "use-window-height") {
-			int pixelWinSize = static_cast<int>(CCDirector::get()->getWinSizeInPixels().height);
-			bool isKeyEnabled = mod->getSettingValue<bool>(key);
-			std::string numericString = isKeyEnabled ? numToString(pixelWinSize) : numToString(mod->getSettingValue<int64_t>("resolution-height"));
-			resolutionHeightInput->setString(numericString);
-			resolutionHeightInput->setEnabled(!isKeyEnabled);
-		}
-	})
+		[this, key, mod](CCMenuItemToggler* toggler) {
+			toggler->toggle(mod->getSettingValue<bool>(key));
+			mod->setSettingValue<bool>(key, !mod->getSettingValue<bool>(key));
+			if (key == "use-window-width") {
+				resolutionWidthInput->setString(numToString(Manager::get()->width));
+				resolutionWidthInput->setEnabled(!mod->getSettingValue<bool>(key));
+			}
+			if (key == "use-window-height") {
+				resolutionHeightInput->setString(numToString(Manager::get()->height));
+				resolutionHeightInput->setEnabled(!mod->getSettingValue<bool>(key));
+			}
+		})
 		.id(fmt::format("{}-toggler"_spr, key))
 		.scale(0.75f)
-		.parent(thing)
+		.parent(quickToggleMenu)
 		.collect();
 
 	Build<CCLabelBMFont>::create(title.c_str(), "bigFont.fnt")
 		.id(fmt::format("{}-label"_spr, key))
 		.scale(0.4f)
-		.parent(thing);
+		.parent(quickToggleMenu);
 
-	if (auto desc = Mod::get()->getSetting(key)->getDescription(); desc.has_value()) {
-		Build<InfoAlertButton>::create(title, desc.value(), .5f)
+	if (auto desc = mod->getSetting(key)->getDescription(); desc.has_value()) {
+		const std::string& trueDesc = desc.value();
+		InfoAlertButton* infoBtn = Build<InfoAlertButton>::create(title, trueDesc, .5f)
 			.id(fmt::format("{}-info"_spr, key))
-			.parent(thing);
+			.parent(quickToggleMenu)
+			.collect();
+		infoBtn->setUserObject("alphalaneous.tooltips/tooltip", CCString::create(trueDesc)); // t0d0: PARSE DESC
 	}
 
-	thing->updateLayout();
+	quickToggleMenu->updateLayout();
 
 	toggler->toggle(Mod::get()->getSettingValue<bool>(key)); // this line needs to be called AFTER updatelayout to avoid x-position inconsistencies --raydeeux
-	return thing;
+	return quickToggleMenu;
 }
 
 bool ScreenshotPopup::setup() {
