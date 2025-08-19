@@ -2,10 +2,9 @@
 
 using namespace geode::prelude;
 
-// Pretty Rad (and) Nifty Tool (to) Screen Capture Right Now
-// this namespace is not designed to screenshot any specific pointers in the GJBaseGameLayer class.
-// anyone found attempting to screenshot such pointers will be met with severe disappointment.
-// API by Erymanthus | RayDeeUx
+/// @note - PRNTSCRN: Pretty Rad, Nifty Tool; Screen Capture Right Now
+/// @note - this namespace is not designed to screenshot any specific pointers belong to the GJBaseGameLayer, PlayLayer, or LevelEditorLayer classes. anyone found attempting to screenshot such pointers will be met with severe disappointment.
+/// @note - API by Erymanthus | RayDeeUx
 namespace PRNTSCRN {
 	class ScreenshotEvent final : public Event {
 		protected:
@@ -13,27 +12,27 @@ namespace PRNTSCRN {
 			std::vector<CCNode*> nodePointersToHide {};
 			std::vector<std::string> querySelectorsToHide  {};
 		public:
-			// base ScreenshotEvent constructor
+			/// @note base ScreenshotEvent constructor
 			explicit ScreenshotEvent(CCNode* node) : nodeToScreenshot(node) {
 				nodePointersToHide = {};
 				querySelectorsToHide = {};
 			}
-			// this constructor is available for convenience. use with caution!
+			/// @note this constructor is available for convenience. use with caution!
 			explicit ScreenshotEvent(CCNode* node, const std::vector<CCNode*>& pointers) : nodeToScreenshot(node) {
 				nodePointersToHide = pointers;
 				querySelectorsToHide = {};
 			}
-			// this constructor is available for convenience. use with caution!
+			/// @note this constructor is available for convenience. use with caution!
 			explicit ScreenshotEvent(CCNode* node, const std::vector<std::string>& querySelectors) : nodeToScreenshot(node) {
 				nodePointersToHide = {};
 				querySelectorsToHide = querySelectors;
 			}
-			// complex ScreenshotEvent constructor (variant one) [used by API]
+			/// @note complex ScreenshotEvent constructor (variant one) [used by API]
 			explicit ScreenshotEvent(CCNode* node, const std::vector<CCNode*>& pointers, const std::vector<std::string>& querySelectors) : nodeToScreenshot(node) {
 				nodePointersToHide = pointers;
 				querySelectorsToHide = querySelectors;
 			}
-			// complex ScreenshotEvent constructor (variant one) [available for convenience, use with caution!]
+			/// @note complex ScreenshotEvent constructor (variant one) [available for convenience, use with caution!]
 			explicit ScreenshotEvent(CCNode* node, const std::vector<std::string>& querySelectors, const std::vector<CCNode*>& pointers) : nodeToScreenshot(node) {
 				nodePointersToHide = pointers;
 				querySelectorsToHide = querySelectors;
@@ -49,10 +48,9 @@ namespace PRNTSCRN {
 		ByQuerySelector = 2
 	};
 
-	// THIS FUNCTION IS FOR LOGGING PURPOSES ONLY.
-	// YOU SHOULD NOT NEED THIS IN 99.9% OF CASES.
-	// THE DOUBLE UNDERSCORES SHLD ILLUSTRATE THAT
-	// code happily reused from geode-sdk/DevTools
+	/// @note - THIS FUNCTION IS FOR LOGGING PURPOSES WHEN CALLING PRNTSCRN::screenshotNodeByTypeFrom() ONLY.
+	/// @note - YOU SHOULD NOT NEED TO CALL THIS FUNCTION IN 99.999999% OF CASES.
+	/// @note - code happily reused from geode-sdk/DevTools
 	inline std::string __demangle__(const char* typeName) {
 		#ifdef GEODE_IS_WINDOWS
 		return typeName + 6;
@@ -75,6 +73,7 @@ namespace PRNTSCRN {
 	/// @param pointersToHide vector of CCNode* pointers that should be made invisible for the screenshot. can be left empty.
 	/// @param querySelectorsToHide vector of `std::string`s that should be made invisible for the screenshot. these nodes will be accessed via CCNode::querySelector() from the `node` param. can be left empty.
 	/// @returns a Result of Err if something is wrong with the node (null), otherwise returns Ok().
+	/// @note - unlike most other function calls in this namespace, PRNTSCRN::screenshotNodeAdvanced() ignores the user's personal preferences for hiding the UI or the player in PRNTSCRN's settings.
 	/// @note - this function is designed for screenshotting PlayLayer or LevelEditorLayer with your own set of node pointers or querySelector nodes to hide. you should have already decided the contents of the two std::vector params before calling this.
 	/// @note - if you do not feel comfortable using this option to hide nodes by pointer or by querySelector, you are responsible for hiding specific nodes on your own, using PRNTSCRN::screenshotNode instead, and manually restoring the visibility states of those nodes you chose to hide.
 	/// @note - if a node fails to hide, double check your querySelectorsToHide vector and your pointersToHide vector. they could exist anywhere else on the node tree during your screenshot, which PRNTSCRN is not responsible for.
