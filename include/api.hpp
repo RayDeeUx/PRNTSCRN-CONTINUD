@@ -61,10 +61,16 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
         #endif
 	}
 
-	// querySelectorsToHide are node IDs that are direct children of the node chosen as the screenshot's target.
+	// screenshot a node of your choice with custom visibility filters.
+	// if the node being screenshotted is a PlayLayer or LevelEditorLayer node,
+	// you WILL need to specify your own nodes to hide--that is the whole purpose of this function!
+	// pointersToHide are pointers to any variable that inherits CCNode*. one example is PlayLayer::get()->m_player1.
+	// querySelectorsToHide are node IDs that are direct decendants of the node chosen as the screenshot's target.
 	// PRNTSCRN will call node->querySelector() to find the node you want to hide.
-	// if you do not feel comfortable using this, use PRNTSCRN::screenshotNode instead.
-	// for more info, see https://docs.geode-sdk.org/classes/cocos2d/CCNode#querySelector.
+	// if you do not feel comfortable using this option to hide nodes by pointer or by querySelector,
+	// you are responsible for hiding specific nodes on your own, using PRNTSCRN::screenshotNode instead,
+	// and manually restoring the visibility states of those nodes you chose to hide.
+	// for more info on querySelector, see https://docs.geode-sdk.org/classes/cocos2d/CCNode#querySelector.
 	inline geode::Result<> screenshotNodeAdvanced(CCNode* node, std::vector<CCNode*> pointersToHide, std::vector<std::string> querySelectorsToHide) {
 		if (!node) {
 			log::error("[PRNTSCRN API] unable to reference node from screenshotNodeAdvanced");
@@ -74,6 +80,14 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 		return Ok();
 	}
 
+	// screenshot a node as seen on the screen. when screenshotting a PlayLayer or LevelEditorLayer node,
+	// the user's personal preferences for hiding the UI or the player in PRNTSCRN's settings will apply.
+	// Examples:
+	/*
+	PRNTSCRN::screenshotNode(PlayLayer::get()->m_uiLayer);
+	PRNTSCRN::screenshotNode(LevelEditorLayer::get()->getChildByIDRecursive("main-node"));
+	PRNTSCRN::screenshotNode(CCScene::get()->getChildByType<LevelInfoLayer>(0)->getChildByID("right-side-menu"));
+	*/
 	inline geode::Result<> screenshotNode(CCNode* node) {
 		if (!node) {
 			log::error("[PRNTSCRN API] unable to reference node from screenshotNode");
@@ -83,6 +97,16 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 		return Ok();
 	}
 
+	// screenshot a node as seen on the screen. use the func's third parameter (PRNTSCRN::ReferenceType enum type)
+	// to choose how you want to fetch the node. possible enum values are ByID, ByIDRecursive, or ByQuerySelector.
+	// if the node being screenshotted is a PlayLayer or LevelEditorLayer node,
+	// the user's personal preferences for hiding the UI or the player in PRNTSCRN's settings will apply.
+	// Examples:
+	/*
+	PRNTSCRN::screenshotNodeUsingStringFrom(PlayLayer::get(), "UILayer", PRNTSCRN::ReferenceType::ByID);
+	PRNTSCRN::screenshotNodeUsingStringFrom(LevelEditorLayer::get(), "main-node", PRNTSCRN::ReferenceType::ByIDRecursive);
+	PRNTSCRN::screenshotNodeUsingStringFrom(CCScene::get(), "LevelInfoLayer > right-side-menu", PRNTSCRN::ReferenceType::ByQuerySelector);
+	*/
 	inline geode::Result<> screenshotNodeUsingStringFrom(CCNode* parent, const std::string_view querySelectorOrIDOrRecursive, ReferenceType fetchType) {
 		if (!parent) {
 		    log::error("[PRNTSCRN API] unable to reference parent node");
@@ -108,6 +132,17 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 		return PRNTSCRN::screenshotNode(node);
 	}
 
+	// screenshot a node as seen on the screen. per cocos spec, the `tag` parameter *must* be greater than -1.
+	// there is no recursive variant of this!!! the node you want to screenshot with the specified tag must be
+	// a direct child of the `parent` parameter.
+	// if the node being screenshotted is a PlayLayer or LevelEditorLayer node,
+	// the user's personal preferences for hiding the UI or the player in PRNTSCRN's settings will apply.
+	// Examples:
+	/*
+	PRNTSCRN::screenshotNodeUsingStringFrom(PlayLayer::get(), 32);
+	PRNTSCRN::screenshotNodeUsingStringFrom(LevelEditorLayer::get(), 32);
+	PRNTSCRN::screenshotNodeUsingStringFrom(CCScene::get(), 32);
+	*/
 	inline geode::Result<> screenshotNodeUsingTagFrom(CCNode* parent, int tag) {
 		if (!parent) {
 		    log::error("[PRNTSCRN API] unable to reference parent node");
