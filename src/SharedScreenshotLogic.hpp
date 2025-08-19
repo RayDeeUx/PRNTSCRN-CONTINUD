@@ -16,7 +16,7 @@ using namespace geode::prelude;
 
 #define ADD_SCALE(parent, val, unorderedMap) \
 	if (auto node = parent->val) { \
-		unorderedMap[#val] = node->getScale(); \
+		unorderedMap[node] = node->getScale(); \
 		node->setScale(0.f); \
 	}
 
@@ -24,15 +24,15 @@ using namespace geode::prelude;
 
 #define RES_MEM(parent, val) if (auto node = parent->val) node->setVisible(uiNodes[#val]);
 
-#define RES_SCALE(parent, val, unorderedMap) if (auto node = parent->val) node->setScale(unorderedMap[#val]);
+#define RES_SCALE(parent, val, unorderedMap) if (auto node = parent->val) node->setScale(unorderedMap[node]);
 
 namespace SharedScreenshotLogic {
 
 	std::string getFormattedDate();
-	void hideOtherPartsOfPlayerOne(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
-	void hideOtherPartsOfPlayerTwo(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
-	void unhideOtherPartsOfPlayerOne(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
-	void unhideOtherPartsOfPlayerTwo(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
+	void hideOtherPartsOfPlayerOne(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
+	void hideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
+	void unhideOtherPartsOfPlayerOne(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
+	void unhideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
 	void screenshot(CCNode* node);
 
 	constexpr std::array monthNames = {

@@ -14,7 +14,7 @@ std::string SharedScreenshotLogic::getFormattedDate() {
 	return fmt::format("{} {}, {}", humanReadableMonth, day, year);
 }
 
-void SharedScreenshotLogic::hideOtherPartsOfPlayerOne(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
+void SharedScreenshotLogic::hideOtherPartsOfPlayerOne(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
 	ADD_SCALE(gjbgl, m_player1->m_waveTrail, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player1->m_ghostTrail, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player1->m_shipStreak, unorderedMapStoringScales);
@@ -34,7 +34,7 @@ void SharedScreenshotLogic::hideOtherPartsOfPlayerOne(std::unordered_map<const c
 	ADD_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales);
 }
 
-void SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
+void SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
 	ADD_SCALE(gjbgl, m_player2->m_waveTrail, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player2->m_ghostTrail, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player2->m_shipStreak, unorderedMapStoringScales);
@@ -54,7 +54,7 @@ void SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(std::unordered_map<const c
 	ADD_SCALE(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales);
 }
 
-void SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
+void SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
 	RES_SCALE(gjbgl, m_player1->m_waveTrail, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player1->m_ghostTrail, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player1->m_shipStreak, unorderedMapStoringScales);
@@ -74,7 +74,7 @@ void SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(std::unordered_map<const
 	RES_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales);
 }
 
-void SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(std::unordered_map<const char *, float>& unorderedMapStoringScales, GJBaseGameLayer *gjbgl) {
+void SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer *gjbgl) {
 	RES_SCALE(gjbgl, m_player2->m_waveTrail, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player2->m_ghostTrail, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player2->m_shipStreak, unorderedMapStoringScales);
@@ -103,13 +103,12 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	// event filter from main.cpp will have already hidden the nodes by this point
 	std::unordered_map<const char*, bool> uiNodes = {};
-	std::unordered_map<const char*, float> playerPointerScales = {};
+	std::unordered_map<CCNode*, float> playerPointerScales = {};
 	bool hideUI = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-ui");
 	bool hidePL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-player");
 
 	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
 	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
-	CCScene* scene = typeinfo_cast<CCScene*>(node);
 
 	if (hideUI && pl) {
 		ADD_NODE(pl, UILayer);
