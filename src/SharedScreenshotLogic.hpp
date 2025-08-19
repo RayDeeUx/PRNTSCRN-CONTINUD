@@ -14,7 +14,7 @@ using namespace geode::prelude;
 		node->setVisible(false); \
 	}
 
-#define ADD_OPACITY(parent, val) \
+#define ADD_SCALE(parent, val) \
 	if (auto node = parent->val) { \
 		playerPointerOpacities[#val] = node->getScale(); \
 		node->setScale(0.f); \
@@ -24,7 +24,7 @@ using namespace geode::prelude;
 
 #define RES_MEM(parent, val) if (auto node = parent->val) node->setVisible(uiNodes[#val]);
 
-#define RES_OPACITY(parent, val) if (auto node = parent->val) node->setScale(playerPointerOpacities[#val]);
+#define RES_SCALE(parent, val) if (auto node = parent->val) node->setScale(playerPointerOpacities[#val]);
 
 namespace SharedScreenshotLogic {
 
