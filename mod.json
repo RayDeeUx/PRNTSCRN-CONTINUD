@@ -37,7 +37,7 @@
 		"hide-player": {
 			"type": "bool",
 			"name": "Hide Player",
-			"description": "Hides both players when taking a screenshot while playing a level or while inside the level editor.",
+			"description": "Hides both players when taking a screenshot while playing a level or while inside the level editor.\n\n<cy>Note that not everything can be hidden; dash fire sprites and ghost icon trails may still be visible in some cases. To hide them more consistently during gameplay, find the</c> <cl>\"No Ghost Trail\"</c> <cy>toggle in</c> <cl>Eclipse Menu</c> <cy>and the</c> <cl>\"Hide Player Dash Fire\"</c> <cy>toggle in</c> <cl>KrazyPlayLayer</c><cy>.</c>",
 			"default": false
 		},
 		"hide-ui": {

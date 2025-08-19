@@ -41,6 +41,12 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 		.scale(0.4f)
 		.parent(thing);
 
+	if (auto desc = Mod::get()->getSetting(key)->getDescription(); desc.has_value()) {
+		Build<InfoAlertButton>::create(title, desc.value(), .5f)
+			.id(fmt::format("{}-info"_spr, key))
+			.parent(thing);
+	}
+
 	thing->updateLayout();
 
 	toggler->toggle(Mod::get()->getSettingValue<bool>(key)); // this line needs to be called AFTER updatelayout to avoid x-position inconsistencies --raydeeux
