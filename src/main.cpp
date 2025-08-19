@@ -1,3 +1,6 @@
+// also you can keep this mod i dont want it
+// keep me and mat in the dev field somewhere and its all urs
+// -- ninxout to me (raydeeux), in discord DMs
 #include "SharedScreenshotLogic.hpp"
 #include "Manager.hpp"
 #include <api.hpp>
