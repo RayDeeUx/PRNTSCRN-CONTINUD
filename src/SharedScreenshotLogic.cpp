@@ -52,6 +52,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_MEM(gjbgl, m_player1);
 
 		ADD_SCALE(gjbgl, m_player1->m_waveTrail, playerPointerOpacities);
+		ADD_SCALE(gjbgl, m_player1->m_ghostTrail, playerPointerOpacities);
 		ADD_SCALE(gjbgl, m_player1->m_shipStreak, playerPointerOpacities);
 		ADD_SCALE(gjbgl, m_player1->m_dashParticles, playerPointerOpacities);
 		ADD_SCALE(gjbgl, m_player1->m_dashFireSprite, playerPointerOpacities);
@@ -74,6 +75,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_MEM(gjbgl, m_player2);
 
 		ADD_SCALE(gjbgl, m_player2->m_waveTrail, playerPointerOpacities);
+		ADD_SCALE(gjbgl, m_player2->m_ghostTrail, playerPointerOpacities);
 		ADD_SCALE(gjbgl, m_player2->m_shipStreak, playerPointerOpacities);
 		ADD_SCALE(gjbgl, m_player2->m_dashParticles, playerPointerOpacities);
 		ADD_SCALE(gjbgl, m_player2->m_dashFireSprite, playerPointerOpacities);
@@ -118,6 +120,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_MEM(gjbgl, m_player1);
 
 		RES_SCALE(gjbgl, m_player1->m_waveTrail, playerPointerOpacities);
+		RES_SCALE(gjbgl, m_player1->m_ghostTrail, playerPointerOpacities);
 		RES_SCALE(gjbgl, m_player1->m_shipStreak, playerPointerOpacities);
 		RES_SCALE(gjbgl, m_player1->m_dashParticles, playerPointerOpacities);
 		RES_SCALE(gjbgl, m_player1->m_dashFireSprite, playerPointerOpacities);
@@ -140,6 +143,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_MEM(gjbgl, m_player2);
 
 		RES_SCALE(gjbgl, m_player2->m_waveTrail, playerPointerOpacities);
+		RES_SCALE(gjbgl, m_player2->m_ghostTrail, playerPointerOpacities);
 		RES_SCALE(gjbgl, m_player2->m_shipStreak, playerPointerOpacities);
 		RES_SCALE(gjbgl, m_player2->m_dashParticles, playerPointerOpacities);
 		RES_SCALE(gjbgl, m_player2->m_dashFireSprite, playerPointerOpacities);
