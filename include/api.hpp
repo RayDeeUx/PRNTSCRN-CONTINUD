@@ -25,6 +25,10 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
     			nodePointersToHide = pointers;
     			querySelectorsToHide = querySelectors;
     		}
+    		explicit ScreenshotEvent(CCNode* node, std::vector<std::string> querySelectors, std::vector<CCNode*> pointers) : nodeToScreenshot(node) {
+    			nodePointersToHide = pointers;
+    			querySelectorsToHide = querySelectors;
+    		}
 	        [[nodiscard]] CCNode* getNode() const { return nodeToScreenshot; }
     		[[nodiscard]] std::vector<CCNode*> getPointersToHide() const { return nodePointersToHide; }
     		[[nodiscard]] std::vector<std::string> getQuerysToHide() const { return querySelectorsToHide; }
@@ -66,7 +70,6 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 			log::error("[PRNTSCRN API] unable to reference node from screenshotNodeAdvanced");
 			return Err(fmt::format("[PRNTSCRN API] unable to reference node from screenshotNodeAdvanced"));
 		}
-		node->setUserObject("has-custom-nodes-to-hide"_spr, CCBool::create(true));
 		ScreenshotEvent(node, pointersToHide, querySelectorsToHide).post();
 		return Ok();
 	}

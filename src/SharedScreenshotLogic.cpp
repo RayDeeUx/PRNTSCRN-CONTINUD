@@ -100,17 +100,20 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (CCBool* obj = typeinfo_cast<CCBool*>(node->getUserObject("has-custom-nodes-to-hide"_spr)); obj) {
 		hasCustomNodesToHide = obj->getValue();
 	}
+	log::info("hasCustomNodesToHide: {}", hasCustomNodesToHide); // T0D0: REMOVE
 
 	// event filter from main.cpp will have already hidden the nodes by this point
 	std::unordered_map<const char*, bool> uiNodes = {};
 	std::unordered_map<CCNode*, float> playerPointerScales = {};
-	bool hideUI = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-ui");
-	bool hidePL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-player");
+	bool hideUI = Mod::get()->getSettingValue<bool>("hide-ui");
+	bool hidePL = Mod::get()->getSettingValue<bool>("hide-player");
+	log::info("hideUI: {} (hasCustomNodesToHide: {})", hideUI, hasCustomNodesToHide); // T0D0: REMOVE
+	log::info("hidePL: {} (hasCustomNodesToHide: {})", hidePL, hasCustomNodesToHide); // T0D0: REMOVE
 
 	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
 	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
 
-	if (hideUI && pl) {
+	if (!hasCustomNodesToHide && hideUI && pl) {
 		ADD_NODE(pl, UILayer);
 		ADD_NODE(pl, debug-text);
 		ADD_NODE(pl, testmode-label);
@@ -119,11 +122,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(pl, cheeseworks.speedruntimer/timer);
 		ADD_NODE(pl, progress-bar);
 	}
-	if (hideUI && lel) {
+	if (!hasCustomNodesToHide && hideUI && lel) {
 		ADD_NODE(lel, UILayer);
 		ADD_NODE(lel, EditorUI);
 	}
-	if (hidePL && (pl || lel)) {
+	if (!hasCustomNodesToHide && hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
 		ADD_MEM(gjbgl, m_player1);
 		SharedScreenshotLogic::hideOtherPartsOfPlayerOne(playerPointerScales, gjbgl);
@@ -132,7 +135,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
 	Screenshot ss = Screenshot(Manager::get()->width, Manager::get()->height, node);
-	if (hideUI && pl) {
+	if (!hasCustomNodesToHide && hideUI && pl) {
 		RES_NODE(pl, UILayer);
 		RES_NODE(pl, debug-text);
 		RES_NODE(pl, testmode-label);
@@ -141,11 +144,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(pl, cheeseworks.speedruntimer/timer);
 		RES_NODE(pl, progress-bar);
 	}
-	if (hideUI && lel) {
+	if (!hasCustomNodesToHide && hideUI && lel) {
 		RES_NODE(lel, UILayer);
 		RES_NODE(lel, EditorUI);
 	}
-	if (hidePL && (pl || lel)) {
+	if (!hasCustomNodesToHide && hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
 		RES_MEM(gjbgl, m_player1);
 		SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(playerPointerScales, gjbgl);

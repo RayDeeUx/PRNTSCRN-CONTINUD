@@ -75,9 +75,16 @@ $on_mod(Loaded) {
 		std::unordered_map<CCNode*, bool> formerNodePointersVisibilityStates = {};
 		std::unordered_map<CCNode*, float> formerPlayerOnePointersScaleStates = {};
 		std::unordered_map<CCNode*, float> formerPlayerTwoPointersScaleStates = {};
+
 		CCNode* nodeBeingScreenshotted = ev->getNode();
+		nodeBeingScreenshotted->setUserObject("has-custom-nodes-to-hide"_spr, CCBool::create(false));
+
 		std::vector<CCNode*> hideThesePointers = ev->getPointersToHide();
 		std::vector<std::string> hideTheseQuerySelectors = ev->getQuerysToHide();
+		if (!hideThesePointers.empty() || !hideTheseQuerySelectors.empty()) {
+			static_cast<CCBool*>(nodeBeingScreenshotted->getUserObject("has-custom-nodes-to-hide"_spr))->setValue(true);
+		}
+		log::info("static_cast<CCBool*>(nodeBeingScreenshotted->getUserObject(\"has-custom-nodes-to-hide\"_spr))->getValue(): {}", static_cast<CCBool*>(nodeBeingScreenshotted->getUserObject("has-custom-nodes-to-hide"_spr))->getValue()); // T0D0: REMOVE
 		if (!hideThesePointers.empty()) {
 			for (CCNode* nodeToHide : hideThesePointers) {
 				if (!nodeToHide) continue;
@@ -116,7 +123,10 @@ $on_mod(Loaded) {
 				theNodeToRestore->setVisible(formerVisibility);
 			}
 		}
-		nodeBeingScreenshotted->setUserObject("has-custom-nodes-to-hide"_spr, CCBool::create(false));
+		if (!hideThesePointers.empty() || !hideTheseQuerySelectors.empty()) {
+			static_cast<CCBool*>(nodeBeingScreenshotted->getUserObject("has-custom-nodes-to-hide"_spr))->setValue(false);
+			log::info("static_cast<CCBool*>(nodeBeingScreenshotted->getUserObject(\"has-custom-nodes-to-hide\"_spr))->getValue(): {}", static_cast<CCBool*>(nodeBeingScreenshotted->getUserObject("has-custom-nodes-to-hide"_spr))->getValue()); // T0D0: REMOVE
+		}
 		return ListenerResult::Stop;
 	});
 }
