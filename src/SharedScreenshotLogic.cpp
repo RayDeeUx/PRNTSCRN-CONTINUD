@@ -132,13 +132,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_MEM(gjbgl, m_player2);
 		SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
-	CCSize size = CCSize{static_cast<float>(Manager::get()->width), static_cast<float>(Manager::get()->height)};
-	if (!pl && !lel && !scene) {
-		const CCSize sceneSize = CCScene::get()->getContentSize();
-		const CCSize nodeSize = node->getContentSize();
-		size = node->getContentSize() * geode::utils::getDisplayFactor() * geode::utils::getDisplayFactor() * std::max(nodeSize.width / sceneSize.width, nodeSize.height / sceneSize.height);
-	}
-	Screenshot ss = Screenshot(size, node);
+	Screenshot ss = Screenshot(Manager::get()->width, Manager::get()->height, node);
 	if (hideUI && pl) {
 		RES_NODE(pl, UILayer);
 		RES_NODE(pl, debug-text);
