@@ -87,6 +87,7 @@ $on_mod(Loaded) {
 		if (!hideThesePointers.empty()) {
 			for (CCNode* nodeToHide : hideThesePointers) {
 				if (!nodeToHide) continue;
+				if (nodeToHide == nodeBeingScreenshotted) continue;
 				formerNodePointersVisibilityStates[nodeToHide] = nodeToHide->isVisible();
 				nodeToHide->setVisible(false);
 				auto* gjbgl = GJBaseGameLayer::get();
@@ -100,6 +101,7 @@ $on_mod(Loaded) {
 				if (querySelectorToHide.empty()) continue;
 				CCNode* theNodeToHide = nodeBeingScreenshotted->querySelector(querySelectorToHide);
 				if (!theNodeToHide) continue;
+				if (theNodeToHide == nodeBeingScreenshotted) continue;
 				formerNodeIDsVisibilityStates[querySelectorToHide] = theNodeToHide->isVisible();
 				theNodeToHide->setVisible(false);
 			}
