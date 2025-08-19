@@ -3,36 +3,41 @@
 using namespace geode::prelude;
 
 namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right Now
-    class ScreenshotEvent final : public Event {
-	    protected:
-	        CCNode* nodeToScreenshot {};
-    		std::vector<CCNode*> nodePointersToHide {};
-    		std::vector<std::string> querySelectorsToHide  {};
-	    public:
-    		explicit ScreenshotEvent(CCNode* node) : nodeToScreenshot(node) {
-    			nodePointersToHide = {};
-    			querySelectorsToHide = {};
-    		}
-    	    explicit ScreenshotEvent(CCNode* node, std::vector<CCNode*> pointers) : nodeToScreenshot(node) {
-    			nodePointersToHide = pointers;
-    			querySelectorsToHide = {};
-    		}
-    	    explicit ScreenshotEvent(CCNode* node, std::vector<std::string> querySelectors) : nodeToScreenshot(node) {
-    			nodePointersToHide = {};
-    			querySelectorsToHide = querySelectors;
-    		}
-    		explicit ScreenshotEvent(CCNode* node, std::vector<CCNode*> pointers, std::vector<std::string> querySelectors) : nodeToScreenshot(node) {
-    			nodePointersToHide = pointers;
-    			querySelectorsToHide = querySelectors;
-    		}
-    		explicit ScreenshotEvent(CCNode* node, std::vector<std::string> querySelectors, std::vector<CCNode*> pointers) : nodeToScreenshot(node) {
-    			nodePointersToHide = pointers;
-    			querySelectorsToHide = querySelectors;
-    		}
-	        [[nodiscard]] CCNode* getNode() const { return nodeToScreenshot; }
-    		[[nodiscard]] std::vector<CCNode*> getPointersToHide() const { return nodePointersToHide; }
-    		[[nodiscard]] std::vector<std::string> getQuerysToHide() const { return querySelectorsToHide; }
-    };
+	class ScreenshotEvent final : public Event {
+		protected:
+			CCNode* nodeToScreenshot {};
+			std::vector<CCNode*> nodePointersToHide {};
+			std::vector<std::string> querySelectorsToHide  {};
+		public:
+			// base ScreenshotEvent constructor
+			explicit ScreenshotEvent(CCNode* node) : nodeToScreenshot(node) {
+				nodePointersToHide = {};
+				querySelectorsToHide = {};
+			}
+			// this constructor is available for convenience. use with caution!
+			explicit ScreenshotEvent(CCNode* node, const std::vector<CCNode*>& pointers) : nodeToScreenshot(node) {
+				nodePointersToHide = pointers;
+				querySelectorsToHide = {};
+			}
+			// this constructor is available for convenience. use with caution!
+			explicit ScreenshotEvent(CCNode* node, const std::vector<std::string>& querySelectors) : nodeToScreenshot(node) {
+				nodePointersToHide = {};
+				querySelectorsToHide = querySelectors;
+			}
+			// complex ScreenshotEvent constructor (variant one) [used by API]
+			explicit ScreenshotEvent(CCNode* node, const std::vector<CCNode*>& pointers, const std::vector<std::string>& querySelectors) : nodeToScreenshot(node) {
+				nodePointersToHide = pointers;
+				querySelectorsToHide = querySelectors;
+			}
+			// complex ScreenshotEvent constructor (variant one) [available for convenience, use with caution!]
+			explicit ScreenshotEvent(CCNode* node, const std::vector<std::string>& querySelectors, const std::vector<CCNode*>& pointers) : nodeToScreenshot(node) {
+				nodePointersToHide = pointers;
+				querySelectorsToHide = querySelectors;
+			}
+			[[nodiscard]] CCNode* getNode() const { return nodeToScreenshot; }
+			[[nodiscard]] std::vector<CCNode*> getPointersToHide() const { return nodePointersToHide; }
+			[[nodiscard]] std::vector<std::string> getQuerysToHide() const { return querySelectorsToHide; }
+	};
 
 	enum ReferenceType {
 		ByID = 0,
@@ -45,9 +50,9 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 	// THE DOUBLE UNDERSCORES SHLD ILLUSTRATE THAT
 	// code happily reused from geode-sdk/DevTools
 	inline std::string __demangle__(const char* typeName) {
-        #ifdef GEODE_IS_WINDOWS
+		#ifdef GEODE_IS_WINDOWS
 		return typeName + 6;
-        #else
+		#else
 		std::string ret;
 
 		int status = 0;
@@ -58,7 +63,7 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 		free(demangle);
 
 		return ret;
-        #endif
+		#endif
 	}
 
 	// screenshot a node of your choice with custom visibility filters.
@@ -72,7 +77,7 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 	// you are responsible for hiding specific nodes on your own, using PRNTSCRN::screenshotNode instead,
 	// and manually restoring the visibility states of those nodes you chose to hide.
 	// for more info on querySelector, see https://docs.geode-sdk.org/classes/cocos2d/CCNode#querySelector.
-	inline geode::Result<> screenshotNodeAdvanced(CCNode* node, std::vector<CCNode*> pointersToHide, std::vector<std::string> querySelectorsToHide) {
+	inline geode::Result<> screenshotNodeAdvanced(CCNode* node, const std::vector<CCNode*>& pointersToHide, const std::vector<std::string>& querySelectorsToHide) {
 		if (!node) {
 			log::error("[PRNTSCRN API] unable to reference node from screenshotNodeAdvanced");
 			return Err(fmt::format("[PRNTSCRN API] unable to reference node from screenshotNodeAdvanced"));
@@ -110,8 +115,8 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 	*/
 	inline geode::Result<> screenshotNodeUsingStringFrom(CCNode* parent, const std::string_view querySelectorOrIDOrRecursive, ReferenceType fetchType) {
 		if (!parent) {
-		    log::error("[PRNTSCRN API] unable to reference parent node");
-		    return Err(fmt::format("[PRNTSCRN API] unable to reference parent node"));
+			log::error("[PRNTSCRN API] unable to reference parent node");
+			return Err(fmt::format("[PRNTSCRN API] unable to reference parent node"));
 		}
 		CCNode* node = nullptr;
 		switch (fetchType) {
@@ -127,8 +132,8 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 				break;
 		}
 		if (!node) {
-		    log::error("[PRNTSCRN API] unable to reference node with string {} using ReferenceType mode {}", querySelectorOrIDOrRecursive, static_cast<int>(fetchType));
-		    return Err(fmt::format("[PRNTSCRN API] unable to reference node with string {} using ReferenceType mode {}", querySelectorOrIDOrRecursive, static_cast<int>(fetchType)));
+			log::error("[PRNTSCRN API] unable to reference node with string {} using ReferenceType mode {}", querySelectorOrIDOrRecursive, static_cast<int>(fetchType));
+			return Err(fmt::format("[PRNTSCRN API] unable to reference node with string {} using ReferenceType mode {}", querySelectorOrIDOrRecursive, static_cast<int>(fetchType)));
 		}
 		return PRNTSCRN::screenshotNode(node);
 	}
@@ -146,17 +151,17 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 	*/
 	inline geode::Result<> screenshotNodeUsingTagFrom(CCNode* parent, int tag) {
 		if (!parent) {
-		    log::error("[PRNTSCRN API] unable to reference parent node");
-		    return Err(fmt::format("[PRNTSCRN API] unable to reference parent node"));
+			log::error("[PRNTSCRN API] unable to reference parent node");
+			return Err(fmt::format("[PRNTSCRN API] unable to reference parent node"));
 		}
 		if (tag < 0) {
-		    log::error("[PRNTSCRN API] unable to fetch child by tag, tag {} is less than 0", tag);
-		    return Err(fmt::format("[PRNTSCRN API] unable to fetch child by tag, tag {} is less than 0", tag));
+			log::error("[PRNTSCRN API] unable to fetch child by tag, tag {} is less than 0", tag);
+			return Err(fmt::format("[PRNTSCRN API] unable to fetch child by tag, tag {} is less than 0", tag));
 		}
 		CCNode* node = parent->getChildByTag(tag);
 		if (!node) {
-		    log::error("[PRNTSCRN API] unable to reference node using screenshotNodeUsingTagFrom with tag {}", tag);
-		    return Err(fmt::format("[PRNTSCRN API] unable to reference node using screenshotNodeUsingTagFrom with tag {}", tag));
+			log::error("[PRNTSCRN API] unable to reference node using screenshotNodeUsingTagFrom with tag {}", tag);
+			return Err(fmt::format("[PRNTSCRN API] unable to reference node using screenshotNodeUsingTagFrom with tag {}", tag));
 		}
 		return PRNTSCRN::screenshotNode(node);
 	}
@@ -173,13 +178,13 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 	template<class T>
 	geode::Result<> screenshotNodeByTypeFrom(CCNode* parent, int index) {
 		if (!parent) {
-		    log::error("[PRNTSCRN API] unable to reference parent node using screenshotNodeByTypeFrom");
-		    return Err(fmt::format("[PRNTSCRN API] unable to reference parent node using screenshotNodeByTypeFrom"));
+			log::error("[PRNTSCRN API] unable to reference parent node using screenshotNodeByTypeFrom");
+			return Err(fmt::format("[PRNTSCRN API] unable to reference parent node using screenshotNodeByTypeFrom"));
 		}
 		CCNode* node = parent->getChildByType<T>(index);
 		if (!node) {
-		    log::error("[PRNTSCRN API] unable to reference node of type {} and index {} using screenshotNodeByTypeFrom", PRNTSCRN::__demangle__(typeid(T).name()), index);
-		    return Err(fmt::format("[PRNTSCRN API] unable to reference node of type {} and index {} using screenshotNodeByTypeFrom", PRNTSCRN::__demangle__(typeid(T).name()), index));
+			log::error("[PRNTSCRN API] unable to reference node of type {} and index {} using screenshotNodeByTypeFrom", PRNTSCRN::__demangle__(typeid(T).name()), index);
+			return Err(fmt::format("[PRNTSCRN API] unable to reference node of type {} and index {} using screenshotNodeByTypeFrom", PRNTSCRN::__demangle__(typeid(T).name()), index));
 		}
 		return PRNTSCRN::screenshotNode(node);
 	}
