@@ -104,8 +104,8 @@ bool ScreenshotPopup::setup() {
 	settingsMenu->addChild(createSetting("Hide Player", "hide-player"));
 	settingsMenu->addChild(createSetting("JPEG", "jpeg-mafia"));
 	settingsMenu->addChild(createSetting("Auto Screenshot", "auto-screenshot"));
-	settingsMenu->addChild(createSetting("Use Window Width", "use-window-width"));
-	settingsMenu->addChild(createSetting("Use Window Height", "use-window-height"));
+	// settingsMenu->addChild(createSetting("Use Window Width", "use-window-width")); // ninxout insisted that this stay separate
+	// settingsMenu->addChild(createSetting("Use Window Height", "use-window-height")); // ninxout insisted that this stay separate
 
 	if (pl) {
 	int64_t selectedSetting = isPlatformerLevel ? Mod::get()->getSettingValue<int64_t>("auto-seconds") : Mod::get()->getSettingValue<int64_t>("auto-percent");

@@ -14,9 +14,9 @@ using namespace geode::prelude;
 		node->setVisible(false); \
 	}
 
-#define ADD_SCALE(parent, val) \
+#define ADD_SCALE(parent, val, unorderedMap) \
 	if (auto node = parent->val) { \
-		playerPointerOpacities[#val] = node->getScale(); \
+		unorderedMap[#val] = node->getScale(); \
 		node->setScale(0.f); \
 	}
 
@@ -24,7 +24,7 @@ using namespace geode::prelude;
 
 #define RES_MEM(parent, val) if (auto node = parent->val) node->setVisible(uiNodes[#val]);
 
-#define RES_SCALE(parent, val) if (auto node = parent->val) node->setScale(playerPointerOpacities[#val]);
+#define RES_SCALE(parent, val, unorderedMap) if (auto node = parent->val) node->setScale(unorderedMap[#val]);
 
 namespace SharedScreenshotLogic {
 
