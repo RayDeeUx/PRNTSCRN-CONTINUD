@@ -49,7 +49,7 @@ $on_mod(Loaded) {
 		CCNode* nodeToScreenshot = CCScene::get();
 		if (PlayLayer* pl = PlayLayer::get(); pl) nodeToScreenshot = pl;
 		else if (LevelEditorLayer* lel = LevelEditorLayer::get(); lel) nodeToScreenshot = lel;
-		SharedScreenshotLogic::screenshot(nodeToScreenshot);
+		if (nodeToScreenshot) SharedScreenshotLogic::screenshot(nodeToScreenshot);
 		return ListenerResult::Propagate;
 	}, InvokeBindFilter(nullptr, "screenshot"_spr));
 	new EventListener([=](InvokeBindEvent* event) {
