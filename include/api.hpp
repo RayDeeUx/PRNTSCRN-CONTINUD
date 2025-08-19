@@ -113,8 +113,8 @@ namespace PRNTSCRN {
 			return Err(fmt::format("[PRNTSCRN API] unable to reference parent node"));
 		}
 		if (parent->getChildrenCount() < 1) {
-			log::error("[PRNTSCRN API] parent node lacks children");
-			return Err(fmt::format("[PRNTSCRN API] parent node lacks children"));
+			log::error("[PRNTSCRN API] parent node lacks children, call PRNTSCRN::screenshotNode() on the parent node instead");
+			return Err(fmt::format("[PRNTSCRN API] parent node lacks children, call PRNTSCRN::screenshotNode() on the parent node instead"));
 		}
 		if (querySelectorOrIDOrRecursive.empty()) {
 			log::error("[PRNTSCRN API] querySelectorOrIDOrRecursive parameter was empty");
@@ -153,12 +153,12 @@ namespace PRNTSCRN {
 			return Err(fmt::format("[PRNTSCRN API] unable to reference parent node"));
 		}
 		if (parent->getChildrenCount() < 1) {
-			log::error("[PRNTSCRN API] parent node lacks children");
-			return Err(fmt::format("[PRNTSCRN API] parent node lacks children"));
+			log::error("[PRNTSCRN API] parent node lacks children, call PRNTSCRN::screenshotNode() on the parent node instead");
+			return Err(fmt::format("[PRNTSCRN API] parent node lacks children, call PRNTSCRN::screenshotNode() on the parent node instead"));
 		}
 		if (tag < 0) {
-			log::error("[PRNTSCRN API] unable to fetch child by tag, tag {} is less than 0", tag);
-			return Err(fmt::format("[PRNTSCRN API] unable to fetch child by tag, tag {} is less than 0", tag));
+			log::error("[PRNTSCRN API] unable to fetch child by tag. tag {} is less than 0, and CCNodes without a specific tag are assigned -1 by default which makes PRNTSCRN::screenshotNodeUsingTagFrom() useless", tag);
+			return Err(fmt::format("[PRNTSCRN API] unable to fetch child by tag. tag {} is less than 0, and CCNodes without a specific tag are assigned -1 by default which makes PRNTSCRN::screenshotNodeUsingTagFrom() useless", tag));
 		}
 		CCNode* node = parent->getChildByTag(tag);
 		if (!node) {
@@ -180,8 +180,8 @@ namespace PRNTSCRN {
 			return Err(fmt::format("[PRNTSCRN API] unable to reference parent node using screenshotNodeByTypeFrom"));
 		}
 		if (parent->getChildrenCount() < 1) {
-			log::error("[PRNTSCRN API] parent node lacks children");
-			return Err(fmt::format("[PRNTSCRN API] parent node lacks children"));
+			log::error("[PRNTSCRN API] parent node lacks children, call PRNTSCRN::screenshotNode() on the parent node instead");
+			return Err(fmt::format("[PRNTSCRN API] parent node lacks children, call PRNTSCRN::screenshotNode() on the parent node instead"));
 		}
 		CCNode* node = parent->getChildByType<T>(index);
 		if (!node) {
