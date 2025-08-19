@@ -42,7 +42,8 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 			.id(fmt::format("{}-info"_spr, key))
 			.parent(quickToggleMenu)
 			.collect();
-		infoBtn->setUserObject("alphalaneous.tooltips/tooltip", CCString::create(trueDesc)); // t0d0: PARSE DESC
+		const std::string parsedDesc = string::replace(string::replace(string::replace(trueDesc, "</c>", ""), "<cl>", ""), "<cy>", "");
+		infoBtn->setUserObject("alphalaneous.tooltips/tooltip", CCString::create(parsedDesc)); // t0d0: PARSE DESC
 	}
 
 	quickToggleMenu->updateLayout();
