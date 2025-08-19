@@ -53,7 +53,7 @@ $on_mod(Loaded) {
 		return ListenerResult::Propagate;
 	}, InvokeBindFilter(nullptr, "screenshot"_spr));
 	new EventListener([=](InvokeBindEvent* event) {
-		if (event->isDown()) SharedScreenshotLogic::screenshot(CCScene::get());
+		if (event->isDown() && CCScene::get()) SharedScreenshotLogic::screenshot(CCScene::get());
 		return ListenerResult::Propagate;
 	}, InvokeBindFilter(nullptr, "plain-screenshot"_spr));
 	setWidth();
