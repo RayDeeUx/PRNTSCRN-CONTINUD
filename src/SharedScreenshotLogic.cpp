@@ -23,6 +23,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	// event filter from main.cpp will have already hidden the nodes by this point
 	std::unordered_map<const char*, bool> uiNodes = {};
+	std::unordered_map<const char*, float> playerPointerOpacities = {};
 	bool hideUI = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-ui");
 	bool hidePL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-player");
 
@@ -43,13 +44,53 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(lel, UILayer);
 		ADD_NODE(lel, EditorUI);
 	}
-	if (hidePL && pl) {
-		ADD_MEM(pl, m_player1);
-		ADD_MEM(pl, m_player2);
-	}
-	if (hidePL && lel) {
-		ADD_MEM(lel, m_player1);
-		ADD_MEM(lel, m_player2);
+	if (hidePL && (pl || lel)) {
+		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
+		if (CCSprite* fuckYou = gjbgl->m_player1->m_dashSpritesContainer) {
+			fuckYou->setCascadeOpacityEnabled(true);
+		}
+		ADD_MEM(gjbgl, m_player1);
+
+		ADD_OPACITY(gjbgl, m_player1->m_waveTrail);
+		ADD_OPACITY(gjbgl, m_player1->m_ghostTrail);
+		ADD_OPACITY(gjbgl, m_player1->m_shipStreak);
+		ADD_OPACITY(gjbgl, m_player1->m_dashParticles);
+		ADD_OPACITY(gjbgl, m_player1->m_dashFireSprite);
+		ADD_OPACITY(gjbgl, m_player1->m_landParticles0);
+		ADD_OPACITY(gjbgl, m_player1->m_landParticles1);
+		ADD_OPACITY(gjbgl, m_player1->m_ufoClickParticles);
+		ADD_OPACITY(gjbgl, m_player1->m_trailingParticles);
+		ADD_OPACITY(gjbgl, m_player1->m_shipClickParticles);
+		ADD_OPACITY(gjbgl, m_player1->m_robotBurstParticles);
+		ADD_OPACITY(gjbgl, m_player1->m_swingBurstParticles1);
+		ADD_OPACITY(gjbgl, m_player1->m_swingBurstParticles2);
+		ADD_OPACITY(gjbgl, m_player1->m_dashSpritesContainer);
+		ADD_OPACITY(gjbgl, m_player1->m_playerGroundParticles);
+		ADD_OPACITY(gjbgl, m_player1->m_vehicleGroundParticles);
+		ADD_OPACITY(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0));
+
+		if (CCSprite* fuckYou = gjbgl->m_player2->m_dashSpritesContainer) {
+			fuckYou->setCascadeOpacityEnabled(true);
+		}
+		ADD_MEM(gjbgl, m_player2);
+
+		ADD_OPACITY(gjbgl, m_player2->m_waveTrail);
+		ADD_OPACITY(gjbgl, m_player2->m_ghostTrail);
+		ADD_OPACITY(gjbgl, m_player2->m_shipStreak);
+		ADD_OPACITY(gjbgl, m_player2->m_dashParticles);
+		ADD_OPACITY(gjbgl, m_player2->m_dashFireSprite);
+		ADD_OPACITY(gjbgl, m_player2->m_landParticles0);
+		ADD_OPACITY(gjbgl, m_player2->m_landParticles1);
+		ADD_OPACITY(gjbgl, m_player2->m_ufoClickParticles);
+		ADD_OPACITY(gjbgl, m_player2->m_trailingParticles);
+		ADD_OPACITY(gjbgl, m_player2->m_shipClickParticles);
+		ADD_OPACITY(gjbgl, m_player2->m_robotBurstParticles);
+		ADD_OPACITY(gjbgl, m_player2->m_swingBurstParticles1);
+		ADD_OPACITY(gjbgl, m_player2->m_swingBurstParticles2);
+		ADD_OPACITY(gjbgl, m_player2->m_dashSpritesContainer);
+		ADD_OPACITY(gjbgl, m_player2->m_playerGroundParticles);
+		ADD_OPACITY(gjbgl, m_player2->m_vehicleGroundParticles);
+		ADD_OPACITY(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0));
 	}
 	CCSize size = CCSize{static_cast<float>(Manager::get()->width), static_cast<float>(Manager::get()->height)};
 	if (!pl && !lel && !scene) {
@@ -71,13 +112,53 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(lel, UILayer);
 		RES_NODE(lel, EditorUI);
 	}
-	if (hidePL && pl) {
-		RES_MEM(pl, m_player1);
-		RES_MEM(pl, m_player2);
-	}
-	if (hidePL && lel) {
-		RES_MEM(lel, m_player1);
-		RES_MEM(lel, m_player2);
+	if (hidePL && (pl || lel)) {
+		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
+		if (CCSprite* fuckYou = gjbgl->m_player1->m_dashSpritesContainer) {
+			fuckYou->setCascadeOpacityEnabled(false);
+		}
+		RES_MEM(gjbgl, m_player1);
+
+		RES_OPACITY(gjbgl, m_player1->m_waveTrail);
+		RES_OPACITY(gjbgl, m_player1->m_ghostTrail);
+		RES_OPACITY(gjbgl, m_player1->m_shipStreak);
+		RES_OPACITY(gjbgl, m_player1->m_dashParticles);
+		RES_OPACITY(gjbgl, m_player1->m_dashFireSprite);
+		RES_OPACITY(gjbgl, m_player1->m_landParticles0);
+		RES_OPACITY(gjbgl, m_player1->m_landParticles1);
+		RES_OPACITY(gjbgl, m_player1->m_ufoClickParticles);
+		RES_OPACITY(gjbgl, m_player1->m_trailingParticles);
+		RES_OPACITY(gjbgl, m_player1->m_shipClickParticles);
+		RES_OPACITY(gjbgl, m_player1->m_robotBurstParticles);
+		RES_OPACITY(gjbgl, m_player1->m_swingBurstParticles1);
+		RES_OPACITY(gjbgl, m_player1->m_swingBurstParticles2);
+		RES_OPACITY(gjbgl, m_player1->m_dashSpritesContainer);
+		RES_OPACITY(gjbgl, m_player1->m_playerGroundParticles);
+		RES_OPACITY(gjbgl, m_player1->m_vehicleGroundParticles);
+		RES_OPACITY(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0));
+
+		if (CCSprite* fuckYou = gjbgl->m_player2->m_dashSpritesContainer) {
+			fuckYou->setCascadeOpacityEnabled(false);
+		}
+		RES_MEM(gjbgl, m_player2);
+
+		RES_OPACITY(gjbgl, m_player2->m_waveTrail);
+		RES_OPACITY(gjbgl, m_player2->m_ghostTrail);
+		RES_OPACITY(gjbgl, m_player2->m_shipStreak);
+		RES_OPACITY(gjbgl, m_player2->m_dashParticles);
+		RES_OPACITY(gjbgl, m_player2->m_dashFireSprite);
+		RES_OPACITY(gjbgl, m_player2->m_landParticles0);
+		RES_OPACITY(gjbgl, m_player2->m_landParticles1);
+		RES_OPACITY(gjbgl, m_player2->m_ufoClickParticles);
+		RES_OPACITY(gjbgl, m_player2->m_trailingParticles);
+		RES_OPACITY(gjbgl, m_player2->m_shipClickParticles);
+		RES_OPACITY(gjbgl, m_player2->m_robotBurstParticles);
+		RES_OPACITY(gjbgl, m_player2->m_swingBurstParticles1);
+		RES_OPACITY(gjbgl, m_player2->m_swingBurstParticles2);
+		RES_OPACITY(gjbgl, m_player2->m_dashSpritesContainer);
+		RES_OPACITY(gjbgl, m_player2->m_playerGroundParticles);
+		RES_OPACITY(gjbgl, m_player2->m_vehicleGroundParticles);
+		RES_OPACITY(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0));
 	}
 
 	bool jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");
