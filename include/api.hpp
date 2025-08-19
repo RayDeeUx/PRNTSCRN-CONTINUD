@@ -2,7 +2,11 @@
 
 using namespace geode::prelude;
 
-namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right Now
+// Pretty Rad (and) Nifty Tool (to) Screen Capture Right Now
+// this namespace is not designed to screenshot any specific pointers in the GJBaseGameLayer class.
+// anyone found attempting to screenshot such pointers will be met with severe disappointment.
+// API by Erymanthus | RayDeeUx
+namespace PRNTSCRN {
 	class ScreenshotEvent final : public Event {
 		protected:
 			CCNode* nodeToScreenshot {};
@@ -77,6 +81,7 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 	// you are responsible for hiding specific nodes on your own, using PRNTSCRN::screenshotNode instead,
 	// and manually restoring the visibility states of those nodes you chose to hide.
 	// for more info on querySelector, see https://docs.geode-sdk.org/classes/cocos2d/CCNode#querySelector.
+	// IMPORTANT: if a node fails to hide, you either used the wrong query selector or your node pointer never existed.
 	inline geode::Result<> screenshotNodeAdvanced(CCNode* node, const std::vector<CCNode*>& pointersToHide, const std::vector<std::string>& querySelectorsToHide) {
 		if (!node) {
 			log::error("[PRNTSCRN API] unable to reference node from screenshotNodeAdvanced");
@@ -171,9 +176,9 @@ namespace PRNTSCRN { // Pretty Rad (and) Nifty Tool (to) Screen Capture Right No
 	// the user's personal preferences for hiding the UI or the player in PRNTSCRN's settings will apply.
 	// Examples:
 	/*
-	PRNTSCRN::screenshotNodeUsingStringFrom(PlayLayer::get(), 32);
-	PRNTSCRN::screenshotNodeUsingStringFrom(LevelEditorLayer::get(), 32);
-	PRNTSCRN::screenshotNodeUsingStringFrom(CCScene::get(), 32);
+	PRNTSCRN::screenshotNodeByTypeFrom<CCNode*>(PlayLayer::get(), 32);
+	PRNTSCRN::screenshotNodeByTypeFrom<CCNode*>(LevelEditorLayer::get(), 32);
+	PRNTSCRN::screenshotNodeByTypeFrom<CCNode*>(CCScene::get(), 32);
 	*/
 	template<class T>
 	geode::Result<> screenshotNodeByTypeFrom(CCNode* parent, int index) {
