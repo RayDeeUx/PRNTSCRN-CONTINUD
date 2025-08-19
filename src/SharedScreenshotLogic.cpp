@@ -14,6 +14,86 @@ std::string SharedScreenshotLogic::getFormattedDate() {
 	return fmt::format("{} {}, {}", humanReadableMonth, day, year);
 }
 
+void SharedScreenshotLogic::hideOtherPartsOfPlayerOne(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
+	ADD_SCALE(gjbgl, m_player1->m_waveTrail, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_ghostTrail, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_shipStreak, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_dashParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_dashFireSprite, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_landParticles0, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_landParticles1, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_ufoClickParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_trailingParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_shipClickParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_robotBurstParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_swingBurstParticles1, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_swingBurstParticles2, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_dashSpritesContainer, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_playerGroundParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_vehicleGroundParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales);
+}
+
+void SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
+	ADD_SCALE(gjbgl, m_player2->m_waveTrail, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_ghostTrail, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_shipStreak, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_dashParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_dashFireSprite, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_landParticles0, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_landParticles1, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_ufoClickParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_trailingParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_shipClickParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_robotBurstParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_swingBurstParticles1, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_swingBurstParticles2, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_dashSpritesContainer, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_playerGroundParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_vehicleGroundParticles, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales);
+}
+
+void SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
+	RES_SCALE(gjbgl, m_player1->m_waveTrail, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_ghostTrail, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_shipStreak, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_dashParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_dashFireSprite, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_landParticles0, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_landParticles1, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_ufoClickParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_trailingParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_shipClickParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_robotBurstParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_swingBurstParticles1, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_swingBurstParticles2, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_dashSpritesContainer, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_playerGroundParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_vehicleGroundParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales);
+}
+
+void SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(std::unordered_map<const char *, float>& unorderedMapStoringScales, GJBaseGameLayer *gjbgl) {
+	RES_SCALE(gjbgl, m_player2->m_waveTrail, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_ghostTrail, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_shipStreak, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_dashParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_dashFireSprite, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_landParticles0, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_landParticles1, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_ufoClickParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_trailingParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_shipClickParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_robotBurstParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_swingBurstParticles1, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_swingBurstParticles2, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_dashSpritesContainer, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_playerGroundParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_vehicleGroundParticles, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales);
+}
+
 void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (!node) return log::error("invalid node!");
 	bool hasCustomNodesToHide = false;
@@ -23,7 +103,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	// event filter from main.cpp will have already hidden the nodes by this point
 	std::unordered_map<const char*, bool> uiNodes = {};
-	std::unordered_map<const char*, float> playerPointerOpacities = {};
+	std::unordered_map<const char*, float> playerPointerScales = {};
 	bool hideUI = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-ui");
 	bool hidePL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-player");
 
@@ -46,51 +126,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
-		if (CCSprite* fuckYou = gjbgl->m_player1->m_dashSpritesContainer) {
-			fuckYou->setCascadeOpacityEnabled(true);
-		}
 		ADD_MEM(gjbgl, m_player1);
+		SharedScreenshotLogic::hideOtherPartsOfPlayerOne(playerPointerScales, gjbgl);
 
-		ADD_SCALE(gjbgl, m_player1->m_waveTrail, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_ghostTrail, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_shipStreak, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_dashParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_dashFireSprite, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_landParticles0, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_landParticles1, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_ufoClickParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_trailingParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_shipClickParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_robotBurstParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_swingBurstParticles1, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_swingBurstParticles2, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_dashSpritesContainer, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_playerGroundParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_vehicleGroundParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), playerPointerOpacities);
-
-		if (CCSprite* fuckYou = gjbgl->m_player2->m_dashSpritesContainer) {
-			fuckYou->setCascadeOpacityEnabled(true);
-		}
 		ADD_MEM(gjbgl, m_player2);
-
-		ADD_SCALE(gjbgl, m_player2->m_waveTrail, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_ghostTrail, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_shipStreak, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_dashParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_dashFireSprite, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_landParticles0, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_landParticles1, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_ufoClickParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_trailingParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_shipClickParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_robotBurstParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_swingBurstParticles1, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_swingBurstParticles2, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_dashSpritesContainer, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_playerGroundParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_vehicleGroundParticles, playerPointerOpacities);
-		ADD_SCALE(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0), playerPointerOpacities);
+		SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
 	CCSize size = CCSize{static_cast<float>(Manager::get()->width), static_cast<float>(Manager::get()->height)};
 	if (!pl && !lel && !scene) {
@@ -114,51 +154,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
-		if (CCSprite* fuckYou = gjbgl->m_player1->m_dashSpritesContainer) {
-			fuckYou->setCascadeOpacityEnabled(false);
-		}
 		RES_MEM(gjbgl, m_player1);
+		SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(playerPointerScales, gjbgl);
 
-		RES_SCALE(gjbgl, m_player1->m_waveTrail, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_ghostTrail, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_shipStreak, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_dashParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_dashFireSprite, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_landParticles0, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_landParticles1, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_ufoClickParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_trailingParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_shipClickParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_robotBurstParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_swingBurstParticles1, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_swingBurstParticles2, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_dashSpritesContainer, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_playerGroundParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_vehicleGroundParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), playerPointerOpacities);
-
-		if (CCSprite* fuckYou = gjbgl->m_player2->m_dashSpritesContainer) {
-			fuckYou->setCascadeOpacityEnabled(false);
-		}
 		RES_MEM(gjbgl, m_player2);
-
-		RES_SCALE(gjbgl, m_player2->m_waveTrail, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_ghostTrail, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_shipStreak, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_dashParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_dashFireSprite, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_landParticles0, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_landParticles1, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_ufoClickParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_trailingParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_shipClickParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_robotBurstParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_swingBurstParticles1, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_swingBurstParticles2, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_dashSpritesContainer, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_playerGroundParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_vehicleGroundParticles, playerPointerOpacities);
-		RES_SCALE(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0), playerPointerOpacities);
+		SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
 
 	bool jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");

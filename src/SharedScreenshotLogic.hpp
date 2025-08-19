@@ -29,6 +29,10 @@ using namespace geode::prelude;
 namespace SharedScreenshotLogic {
 
 	std::string getFormattedDate();
+	void hideOtherPartsOfPlayerOne(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
+	void hideOtherPartsOfPlayerTwo(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
+	void unhideOtherPartsOfPlayerOne(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
+	void unhideOtherPartsOfPlayerTwo(std::unordered_map<const char*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
 	void screenshot(CCNode* node);
 
 	constexpr std::array monthNames = {
