@@ -18,6 +18,7 @@ void SharedScreenshotLogic::hideOtherPartsOfPlayerOne(std::unordered_map<CCNode*
 	ADD_SCALE(gjbgl, m_player1->m_waveTrail, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player1->m_ghostTrail, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player1->m_shipStreak, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player1->m_regularTrail, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player1->m_dashParticles, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player1->m_dashFireSprite, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player1->m_landParticles0, unorderedMapStoringScales);
@@ -38,6 +39,7 @@ void SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*
 	ADD_SCALE(gjbgl, m_player2->m_waveTrail, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player2->m_ghostTrail, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player2->m_shipStreak, unorderedMapStoringScales);
+	ADD_SCALE(gjbgl, m_player2->m_regularTrail, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player2->m_dashParticles, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player2->m_dashFireSprite, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player2->m_landParticles0, unorderedMapStoringScales);
@@ -58,6 +60,7 @@ void SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(std::unordered_map<CCNod
 	RES_SCALE(gjbgl, m_player1->m_waveTrail, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player1->m_ghostTrail, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player1->m_shipStreak, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player1->m_regularTrail, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player1->m_dashParticles, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player1->m_dashFireSprite, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player1->m_landParticles0, unorderedMapStoringScales);
@@ -78,6 +81,7 @@ void SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(std::unordered_map<CCNod
 	RES_SCALE(gjbgl, m_player2->m_waveTrail, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player2->m_ghostTrail, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player2->m_shipStreak, unorderedMapStoringScales);
+	RES_SCALE(gjbgl, m_player2->m_regularTrail, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player2->m_dashParticles, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player2->m_dashFireSprite, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player2->m_landParticles0, unorderedMapStoringScales);
