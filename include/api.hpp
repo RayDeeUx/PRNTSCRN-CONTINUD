@@ -4,7 +4,7 @@ using namespace geode::prelude;
 
 /// @note - PRNTSCRN: Pretty Rad, Nifty Tool; Screen Capture Right Now
 /// @note - this namespace is not designed to screenshot any specific pointers belong to the GJBaseGameLayer, PlayLayer, or LevelEditorLayer classes. anyone found attempting to screenshot such pointers will be met with severe disappointment.
-/// @note - API by Erymanthus | RayDeeUx
+/// @note - API by Erymanthus | RayDeeUx, with advice from Prevter
 namespace PRNTSCRN {
 	class ScreenshotEvent final : public Event {
 		protected:
