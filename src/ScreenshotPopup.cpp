@@ -176,9 +176,7 @@ bool ScreenshotPopup::setup() {
 		else bodyText += "Screenshot the screen: <co>[Unknown]</c>";
 	} else bodyText += "Screenshot the screen: <c_>NONE SET</c>";
 
-	InfoAlertButton* infoButton = InfoAlertButton::create(
-		"PRNTSCRN Keybinds", bodyText, .7f
-	);
+	InfoAlertButton* infoButton = InfoAlertButton::create("PRNTSCRN Keybinds", bodyText, .7f);
 	infoButton->setID("keybinds-help-button"_spr);
 	infoButton->setPosition(m_mainLayer->getContentSize() - 3.f);
 	m_buttonMenu->addChild(infoButton);
