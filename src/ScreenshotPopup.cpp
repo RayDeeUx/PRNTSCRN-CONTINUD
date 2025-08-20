@@ -2,6 +2,7 @@
 #include "ScreenshotPopup.hpp"
 #include "Manager.hpp"
 #include <UIBuilder.hpp>
+#include <geode.custom-keybinds/include/Keybinds.hpp>
 
 using namespace geode::prelude;
 
@@ -159,6 +160,27 @@ bool ScreenshotPopup::setup() {
 	configDirButton->setID("screenshots-folder-button"_spr);
 	configDirButton->setPosition(ccp(80, 80));
 	m_buttonMenu->addChild(configDirButton);
+
+	std::string bodyText;
+	std::vector<geode::Ref<keybinds::Bind>> screenshotBinds = keybinds::BindManager::get()->getBindsFor("screenshot"_spr);
+	if (!screenshotBinds.empty()) {
+		const std::string& keybindString = screenshotBinds.at(0)->toString();
+		if (!keybindString.empty()) bodyText += fmt::format("Screenshot the level: <cl>{}</c>", keybindString);
+		else bodyText += "Screenshot the level: <co>[Unknown]</c>";
+	} else bodyText += "Screenshot the level: <c_>NONE SET</c>";
+	std::vector<geode::Ref<keybinds::Bind>> plainScreenshotBinds = keybinds::BindManager::get()->getBindsFor("plain-screenshot"_spr);
+	if (!plainScreenshotBinds.empty()) {
+		const std::string& keybindString = plainScreenshotBinds.at(0)->toString();
+		if (!keybindString.empty()) bodyText += fmt::format("Screenshot the screen: <cl>{}</c>", keybindString);
+		else bodyText += "Screenshot the screen: <co>[Unknown]</c>";
+	} else bodyText += "Screenshot the screen: <c_>NONE SET</c>";
+
+	InfoAlertButton* infoButton = InfoAlertButton::create(
+		"PRNTSCRN Keybinds", bodyText, .7f
+	);
+	infoButton->setID("keybinds-help-button"_spr);
+	infoButton->setPosition(m_mainLayer->getContentSize() - 3.f);
+	m_buttonMenu->addChild(infoButton);
 
 	m_buttonMenu->setID("button-menu"_spr);
 	m_closeBtn->setID("close-button"_spr);
