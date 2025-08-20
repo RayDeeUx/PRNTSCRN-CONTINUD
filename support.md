@@ -1,1 +1,4 @@
-Edit this file to change your mod's support info, or delete it if you don't need it.
+Check out the other developers behind PRNTSCRN!
+
+- ninXout: [GitHub](https://github.com/ninXout)
+- matcool: [GitHub](https://github.com/matcool)

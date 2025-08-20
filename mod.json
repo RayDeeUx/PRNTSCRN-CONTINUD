@@ -1,21 +1,44 @@
 {
-	"geode": "4.2.0",
+	"geode": "4.4.0",
 	"gd": {
 		"win": "2.2074",
-		"android": "2.2074",
 		"mac": "2.2074",
-		"ios": "2.2074"
+		"ios": "2.2074",
+		"android": "2.2074"
 	},
 	"id": "ninxout.prntscrn",
 	"name": "PRNTSCRN",
 	"version": "v1.0.0",
-	"developers": ["ninXout", "mat"],
+	"developers": ["RayDeeUx", "ninXout", "mat"],
 	"description": "Quick and easy screenshot tool!",
+	"links": {
+		"source": "https://github.com/RayDeeUx/PRNTSCRN-CONTINUD"
+	},
 	"resources": {
-        "sprites": [
-            "resources/screenshot.png"
-        ]
-    },
+		"sprites": [
+			"resources/screenshot.png"
+		]
+	},
+	"dependencies": {
+		"geode.node-ids": ">=1.20.0",
+		"geode.custom-keybinds": ">=1.10.3"
+	},
+	"api": {
+		"include": [
+			"include/*.hpp"
+		]
+	},
+	"tags": [
+		"universal",
+		"gameplay",
+		"editor",
+		"offline",
+		"enhancement",
+		"interface",
+		"utility",
+		"customization",
+		"developer"
+	],
 	"settings": {
 		"copy-clipboard": {
 			"type": "bool",
@@ -25,42 +48,65 @@
 		"hide-player": {
 			"type": "bool",
 			"name": "Hide Player",
+			"description": "Hides both players when taking a screenshot\nwhile playing a level or while inside the level editor.\n\n<cy>Note that not everything can be hidden;</c>\n<cy>dash fire sprites and ghost icon trails</c>\n<cy>may still be visible in some cases.</c>\n<cy>To hide them more consistently during gameplay,</c>\n<cy>find the</c> <cl>\"No Ghost Trail\"</c> <cy>toggle in</c> <cl>Eclipse Menu</c>\n<cy>and the</c> <cl>\"Hide Player Dash Fire\"</c> <cy>toggle in</c> <cl>KrazyPlayLayer</c><cy>.</c>",
 			"default": false
 		},
 		"hide-ui": {
 			"type": "bool",
 			"name": "Hide UI",
+			"description": "Hides the UI when taking a screenshot\nwhile playing a level or while inside the level editor.",
+			"default": true
+		},
+		"use-window-width": {
+			"type": "bool",
+			"name": "Use Window Width For Resolution Width",
 			"default": true
 		},
 		"resolution-width": {
 			"type": "int",
 			"name": "Resolution Width",
-			"description": "The width of the image",
-			"default": 1920
+			"description": "The width of your screenshot, if not using the window's width.",
+			"default": 1920,
+			"min": 1
+		},
+		"use-window-height": {
+			"type": "bool",
+			"name": "Use Window Height For Resolution Height",
+			"default": true
 		},
 		"resolution-height": {
 			"type": "int",
 			"name": "Resolution Height",
-			"description": "The height of the image",
-			"default": 1080
+			"description": "The height of your screenshot, if not using the window's height.",
+			"default": 1080,
+			"min": 1
 		},
 		"jpeg-mafia": {
 			"type": "bool",
-			"name": "Output to JPEG",
-			"description": "Use JPEG for images instead of PNG",
+			"name": "Save Screenshots as JPEG",
+			"description": "Use JPEG for images instead of PNG.",
 			"default": false
 		},
 		"auto-screenshot": {
 			"type": "bool",
 			"name": "Auto Screenshot",
-			"description": "Automatically at every percentage interval",
+			"description": "Automatically take a screenshot with a given percentage interval (for Classic levels)\nor a timed interval in seconds (for Platformer levels).\n\n<cy>Might cause occasional FPS drops.</c>",
 			"default": false
 		},
 		"auto-percent": {
 			"type": "int",
-			"name": "Auto Screenshot Percentage",
-			"description": "Automatically at every percentage interval",
-			"default": 10
+			"name": "Auto Screenshot Percentage Interval (Classic levels)",
+			"description": "Set the percentage interval for automatic screenshots in Classic levels.",
+			"default": 10,
+			"min": 5,
+			"max": 100
+		},
+		"auto-seconds": {
+			"type": "int",
+			"name": "Auto Screenshot Seconds Interval (Platformer levels)",
+			"description": "Set the timed interval in seconds for automatic screenshots in Platformer levels.",
+			"default": 30,
+			"min": 5
 		}
 	}
 }
