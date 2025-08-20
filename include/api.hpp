@@ -11,35 +11,42 @@ namespace PRNTSCRN {
 			CCNode* nodeToScreenshot {};
 			std::vector<CCNode*> nodePointersToHide {};
 			std::vector<std::string> querySelectorsToHide {};
+			std::string senderModID;
 		public:
 			/// @note base ScreenshotEvent constructor
 			explicit ScreenshotEvent(CCNode* node) : nodeToScreenshot(node) {
 				nodePointersToHide = {};
 				querySelectorsToHide = {};
+				senderModID = geode::getMod()->getID();
 			}
 			/// @note this constructor is available for convenience. use with caution!
 			explicit ScreenshotEvent(CCNode* node, const std::vector<CCNode*>& pointers) : nodeToScreenshot(node) {
 				nodePointersToHide = pointers;
 				querySelectorsToHide = {};
+				senderModID = geode::getMod()->getID();
 			}
 			/// @note this constructor is available for convenience. use with caution!
 			explicit ScreenshotEvent(CCNode* node, const std::vector<std::string>& querySelectors) : nodeToScreenshot(node) {
 				nodePointersToHide = {};
 				querySelectorsToHide = querySelectors;
+				senderModID = geode::getMod()->getID();
 			}
 			/// @note complex ScreenshotEvent constructor (variant one) [used by API]
 			explicit ScreenshotEvent(CCNode* node, const std::vector<CCNode*>& pointers, const std::vector<std::string>& querySelectors) : nodeToScreenshot(node) {
 				nodePointersToHide = pointers;
 				querySelectorsToHide = querySelectors;
+				senderModID = geode::getMod()->getID();
 			}
 			/// @note complex ScreenshotEvent constructor (variant one) [available for convenience, use with caution!]
 			explicit ScreenshotEvent(CCNode* node, const std::vector<std::string>& querySelectors, const std::vector<CCNode*>& pointers) : nodeToScreenshot(node) {
 				nodePointersToHide = pointers;
 				querySelectorsToHide = querySelectors;
+				senderModID = geode::getMod()->getID();
 			}
 			[[nodiscard]] CCNode* getNode() const { return nodeToScreenshot; }
 			[[nodiscard]] std::vector<CCNode*> getPointersToHide() const { return nodePointersToHide; }
 			[[nodiscard]] std::vector<std::string> getQuerysToHide() const { return querySelectorsToHide; }
+			[[nodiscard]] std::string getSenderModID() const { return senderModID; }
 	};
 
 	enum ReferenceType {
