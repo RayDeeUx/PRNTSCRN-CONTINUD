@@ -101,6 +101,7 @@ void SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(std::unordered_map<CCNod
 void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (!node) return log::error("invalid node!");
 	bool hasCustomNodesToHide = false;
+	std::string modIDAskingForScreenshot;
 	if (CCBool* obj = typeinfo_cast<CCBool*>(node->getUserObject("has-custom-nodes-to-hide"_spr)); obj) {
 		hasCustomNodesToHide = obj->getValue();
 	}
@@ -158,16 +159,22 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
 
+	if (CCString* modID = typeinfo_cast<CCString*>(node->getUserObject("mod-asking-for-screenshot"_spr)); modID) {
+		auto cString = static_cast<std::string>(modID->getCString());
+		if (!cString.empty()) modIDAskingForScreenshot = fmt::format("{} - ", cString);
+	}
+
 	bool jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");
 	std::string extension = jpeg ? ".jpg" : ".png";
 
 	std::string formattedDate = SharedScreenshotLogic::getFormattedDate();
+	std::string targetFolderName = modIDAskingForScreenshot.empty() ? "" : modIDAskingForScreenshot;
 
 	GJGameLevel* level = nullptr;
 	if (pl) level = pl->m_level;
-	std::string suffix = level ? fmt::format("{} - {} ({})", numToString(level->m_levelID.value()), level->m_levelName, formattedDate) : formattedDate;
+	targetFolderName += level ? fmt::format("{} - {} ({})", numToString(level->m_levelID.value()), level->m_levelName, formattedDate) : formattedDate;
 
-	std::filesystem::path folder = Mod::get()->getConfigDir() / suffix;
+	std::filesystem::path folder = Mod::get()->getConfigDir() / targetFolderName;
 
 	if (!std::filesystem::exists(folder)) std::filesystem::create_directory(folder);
 

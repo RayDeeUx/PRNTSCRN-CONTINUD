@@ -47,7 +47,18 @@ $on_mod(Loaded) {
 	new EventListener([=](InvokeBindEvent* event) {
 		if (!event->isDown()) return ListenerResult::Propagate;
 		CCNode* nodeToScreenshot = CCScene::get();
-		if (PlayLayer* pl = PlayLayer::get(); pl) nodeToScreenshot = pl;
+		if (PlayLayer* pl = PlayLayer::get(); pl) {
+			nodeToScreenshot = pl;
+			if (CCNode* ell = pl->getChildByID("EndLevelLayer"); ell) {
+				bool hideUISetting = Loader::get()->getLoadedMod("ninxout.prntscrn")->getSettingValue<bool>("hide-ui"); // guaranteed to be true
+				UILayer* uiLayer = hideUISetting ? pl->m_uiLayer : nullptr;
+				std::vector<std::string> nodeIDsToHide = {};
+				if (uiLayer) nodeIDsToHide = {"debug-text", "testmode-label", "percentage-label", "mat.run-info/RunInfoWidget", "cheeseworks.speedruntimer/timer", "progress-bar"};
+				Result res = PRNTSCRN::screenshotNodeAdvanced(pl, {ell, uiLayer}, nodeIDsToHide);
+				if (res.isErr()) log::error("[PRNTSCRN] Something went wrong! ({})", res.unwrapErr());
+			}
+			else if (CCScene::get()->getChildByID("PauseLayer")) SharedScreenshotLogic::screenshot(CCScene::get());
+		}
 		else if (LevelEditorLayer* lel = LevelEditorLayer::get(); lel) nodeToScreenshot = lel;
 		if (nodeToScreenshot) SharedScreenshotLogic::screenshot(nodeToScreenshot);
 		return ListenerResult::Propagate;
@@ -71,6 +82,10 @@ $on_mod(Loaded) {
 			log::error("[PRNTSCRN API] THE NODE WAS NULLPTR.");
 			return ListenerResult::Stop;
 		}
+		if (ev->getSenderModID().empty()) {
+			log::error("[PRNTSCRN API] THE MOD ID WAS EMPTY.");
+			return ListenerResult::Stop;
+		}
 		std::unordered_map<std::string, bool> formerNodeIDsVisibilityStates = {};
 		std::unordered_map<CCNode*, bool> formerNodePointersVisibilityStates = {};
 		std::unordered_map<CCNode*, float> formerPlayerOnePointersScaleStates = {};
@@ -78,6 +93,7 @@ $on_mod(Loaded) {
 
 		CCNode* nodeBeingScreenshotted = ev->getNode();
 		nodeBeingScreenshotted->setUserObject("has-custom-nodes-to-hide"_spr, CCBool::create(false));
+		nodeBeingScreenshotted->setUserObject("mod-asking-for-screenshot"_spr, CCString::create(ev->getSenderModID()));
 
 		std::vector<CCNode*> hideThesePointers = ev->getPointersToHide();
 		std::vector<std::string> hideTheseQuerySelectors = ev->getQuerysToHide();
@@ -126,6 +142,7 @@ $on_mod(Loaded) {
 		}
 		if (!hideThesePointers.empty() || !hideTheseQuerySelectors.empty()) {
 			static_cast<CCBool*>(nodeBeingScreenshotted->getUserObject("has-custom-nodes-to-hide"_spr))->setValue(false);
+			nodeBeingScreenshotted->setUserObject("mod-asking-for-screenshot"_spr, CCString::create(""));
 		}
 		return ListenerResult::Stop;
 	});
