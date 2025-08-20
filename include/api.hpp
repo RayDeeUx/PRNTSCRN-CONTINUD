@@ -10,7 +10,7 @@ namespace PRNTSCRN {
 		protected:
 			CCNode* nodeToScreenshot {};
 			std::vector<CCNode*> nodePointersToHide {};
-			std::vector<std::string> querySelectorsToHide  {};
+			std::vector<std::string> querySelectorsToHide {};
 		public:
 			/// @note base ScreenshotEvent constructor
 			explicit ScreenshotEvent(CCNode* node) : nodeToScreenshot(node) {

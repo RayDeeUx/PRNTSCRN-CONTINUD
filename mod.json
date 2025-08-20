@@ -28,6 +28,17 @@
 			"include/*.hpp"
 		]
 	},
+	"tags": [
+		"universal",
+		"gameplay",
+		"editor",
+		"offline",
+		"enhancement",
+		"interface",
+		"utility",
+		"customization",
+		"developer"
+	],
 	"settings": {
 		"copy-clipboard": {
 			"type": "bool",
