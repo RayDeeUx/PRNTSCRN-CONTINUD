@@ -168,6 +168,7 @@ bool ScreenshotPopup::setup() {
 		if (!keybindString.empty()) bodyText += fmt::format("Screenshot the level: <cl>{}</c>", keybindString);
 		else bodyText += "Screenshot the level: <co>[Unknown]</c>";
 	} else bodyText += "Screenshot the level: <c_>NONE SET</c>";
+	bodyText += "\n";
 	std::vector<geode::Ref<keybinds::Bind>> plainScreenshotBinds = keybinds::BindManager::get()->getBindsFor("plain-screenshot"_spr);
 	if (!plainScreenshotBinds.empty()) {
 		const std::string& keybindString = plainScreenshotBinds.at(0)->toString();
