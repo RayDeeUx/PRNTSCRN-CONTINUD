@@ -171,9 +171,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	std::string targetFolderName = modIDAskingForScreenshot.empty() ? "" : modIDAskingForScreenshot;
 
 	GJGameLevel* level = nullptr;
-	if (pl || lel) {
-		level = static_cast<GJBaseGameLayer*>(node)->m_level;
-	}
+	if (pl || lel) level = static_cast<GJBaseGameLayer*>(node)->m_level;
 	if (level) {
 		const std::string& lvlIDString = level->m_levelType == GJLevelType::Editor ? "Editor level" : numToString(level->m_levelID);
 		targetFolderName += fmt::format("{} - {} ({})", lvlIDString, level->m_levelName, formattedDate);
@@ -188,8 +186,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		index++;
 	}
 
-	std::string filename = fmt::format("{}/{}{}", folder.string(), index, extension);
-
+	std::string filename = folder / (numToString(index) + extension);
 	ss.intoFile(filename, jpeg);
 	if (Mod::get()->getSettingValue<bool>("copy-clipboard")) ss.intoClipboard();
 }
