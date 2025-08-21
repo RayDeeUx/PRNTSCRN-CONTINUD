@@ -47,8 +47,10 @@ $on_mod(Loaded) {
 	new EventListener([=](InvokeBindEvent* event) {
 		if (!event->isDown()) return ListenerResult::Propagate;
 		CCNode* nodeToScreenshot = CCScene::get();
-		if (PlayLayer* pl = PlayLayer::get(); pl) {
-			nodeToScreenshot = pl;
+		PlayLayer* pl = PlayLayer::get();
+		LevelEditorLayer* lel = LevelEditorLayer::get();
+		if (pl) {
+			SharedScreenshotLogic::screenshot(pl);
 			if (CCNode* ell = pl->getChildByID("EndLevelLayer"); ell) {
 				bool hideUISetting = Loader::get()->getLoadedMod("ninxout.prntscrn")->getSettingValue<bool>("hide-ui"); // guaranteed to get the Mod* pointer
 				UILayer* uiLayer = hideUISetting ? pl->m_uiLayer : nullptr;
@@ -56,12 +58,13 @@ $on_mod(Loaded) {
 				if (uiLayer) nodeIDsToHide = {"debug-text", "testmode-label", "percentage-label", "mat.run-info/RunInfoWidget", "cheeseworks.speedruntimer/timer", "progress-bar"};
 				Result res = PRNTSCRN::screenshotNodeAdvanced(pl, {ell, uiLayer}, nodeIDsToHide);
 				if (res.isErr()) log::error("[PRNTSCRN] Something went wrong! ({})", res.unwrapErr());
-			}
-			else if (CCScene::get()->getChildByID("PauseLayer")) SharedScreenshotLogic::screenshot(CCScene::get());
+			} else if (CCScene::get()->getChildByID("PauseLayer")) SharedScreenshotLogic::screenshot(CCScene::get());
+			return ListenerResult::Propagate;
 		}
-		else if (LevelEditorLayer* lel = LevelEditorLayer::get(); lel) {
-			nodeToScreenshot = lel;
+		if (lel) {
+			SharedScreenshotLogic::screenshot(lel);
 			if (lel->getChildByID("EditorPauseLayer")) SharedScreenshotLogic::screenshot(CCScene::get());
+			return ListenerResult::Propagate;
 		}
 		if (nodeToScreenshot) SharedScreenshotLogic::screenshot(nodeToScreenshot);
 		return ListenerResult::Propagate;
