@@ -50,7 +50,7 @@ $on_mod(Loaded) {
 		if (PlayLayer* pl = PlayLayer::get(); pl) {
 			nodeToScreenshot = pl;
 			if (CCNode* ell = pl->getChildByID("EndLevelLayer"); ell) {
-				bool hideUISetting = Loader::get()->getLoadedMod("ninxout.prntscrn")->getSettingValue<bool>("hide-ui"); // guaranteed to be true
+				bool hideUISetting = Loader::get()->getLoadedMod("ninxout.prntscrn")->getSettingValue<bool>("hide-ui"); // guaranteed to get the Mod* pointer
 				UILayer* uiLayer = hideUISetting ? pl->m_uiLayer : nullptr;
 				std::vector<std::string> nodeIDsToHide = {};
 				if (uiLayer) nodeIDsToHide = {"debug-text", "testmode-label", "percentage-label", "mat.run-info/RunInfoWidget", "cheeseworks.speedruntimer/timer", "progress-bar"};
@@ -59,7 +59,10 @@ $on_mod(Loaded) {
 			}
 			else if (CCScene::get()->getChildByID("PauseLayer")) SharedScreenshotLogic::screenshot(CCScene::get());
 		}
-		else if (LevelEditorLayer* lel = LevelEditorLayer::get(); lel) nodeToScreenshot = lel;
+		else if (LevelEditorLayer* lel = LevelEditorLayer::get(); lel) {
+			nodeToScreenshot = lel;
+			if (lel->getChildByID("EditorPauseLayer")) SharedScreenshotLogic::screenshot(CCScene::get());
+		}
 		if (nodeToScreenshot) SharedScreenshotLogic::screenshot(nodeToScreenshot);
 		return ListenerResult::Propagate;
 	}, InvokeBindFilter(nullptr, "screenshot"_spr));

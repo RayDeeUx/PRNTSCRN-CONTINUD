@@ -127,6 +127,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (hideUI && lel) {
 		ADD_NODE(lel, UILayer);
 		ADD_NODE(lel, EditorUI);
+		ADD_NODE(lel, EditorPauseLayer);
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
@@ -149,6 +150,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (hideUI && lel) {
 		RES_NODE(lel, UILayer);
 		RES_NODE(lel, EditorUI);
+		RES_NODE(lel, EditorPauseLayer);
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
