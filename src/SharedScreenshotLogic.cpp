@@ -171,15 +171,20 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	std::string targetFolderName = modIDAskingForScreenshot.empty() ? "" : modIDAskingForScreenshot;
 
 	GJGameLevel* level = nullptr;
-	if (pl) level = pl->m_level;
-	targetFolderName += level ? fmt::format("{} - {} ({})", numToString(level->m_levelID.value()), level->m_levelName, formattedDate) : formattedDate;
+	if (pl || lel) {
+		level = static_cast<GJBaseGameLayer*>(node)->m_level;
+	}
+	if (level) {
+		const std::string& lvlIDString = level->m_levelType == GJLevelType::Editor ? "Editor level" : numToString(level->m_levelID);
+		targetFolderName += fmt::format("{} - {} ({})", lvlIDString, level->m_levelName, formattedDate);
+	} else targetFolderName += formattedDate;
 
 	std::filesystem::path folder = Mod::get()->getConfigDir() / targetFolderName;
 
 	if (!std::filesystem::exists(folder)) std::filesystem::create_directory(folder);
 
 	int index = 1;
-	while (std::filesystem::exists(folder / (std::to_string(index) + extension))) {
+	while (std::filesystem::exists(folder / (numToString(index) + extension))) {
 		index++;
 	}
 
