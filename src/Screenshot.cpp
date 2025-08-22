@@ -45,12 +45,16 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 	}).detach();
 	*/
 	std::thread([=, this, data = std::move(m_data)]() {
+		log::info("making newData");
 		GLubyte* newData = new GLubyte[m_width * m_width * 4];
-		for (int i = 0; i < m_height; ++i){
+		log::info("entering forloop");
+		for (int i = 0; i < m_height; ++i) {
+			log::info("i: {}", i);
 			memcpy(&newData[i * m_width * 4],
 					&data.get()[(m_height - i - 1) * m_width * 4],
 					m_width * 4);
 		}
+		log::info("exited forloop");
 		#ifdef GEODE_IS_WINDOWS
 		CCImage image{};
 		image.m_nBitsPerComponent = 8;
@@ -61,8 +65,12 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		image.m_pData = newData;
 		image.saveToFile(filename.c_str(), true);
 		#elif defined(GEODE_IS_ANDROID)
+		log::info("imgp::encode::png");
 		auto result = imgp::encode::png((void*)(newData), m_width, m_height);
-		if (result.isOk()) geode::utils::file::writeBinary(filename, std::move(result).unwrap());
+		if (result.isOk()) {
+			geode::utils::file::writeBinary(filename, std::move(result).unwrap());
+		} else log::error("error: {}", result.unwrapErr());
+		log::info("exiting ifdef GEODE_IS_ANDROID");
 		#endif
 		if (isFromPRNTSCRNAndWantsSFX) {
 			Loader::get()->queueInMainThread([](){
