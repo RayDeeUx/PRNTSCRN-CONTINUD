@@ -1,3 +1,4 @@
+#include <Geode/ui/GeodeUI.hpp>
 #include "eclipse.hpp"
 #include "../SharedScreenshotLogic.hpp"
 #include "../include/api.hpp"
@@ -44,5 +45,13 @@ $on_mod(Loaded) {
 		});
 
 		(void) tab.addModSettingToggle(Mod::get()->getSetting("copy-clipboard"));
+
+		tab.addButton("Open Screenshots Folder", []() {
+			geode::utils::file::openFolder(Mod::get()->getConfigDir());
+		});
+
+		tab.addButton("Open PRNTSCRN Settings", []() {
+			geode::openSettingsPopup(Mod::get());
+		});
 	});
 }
