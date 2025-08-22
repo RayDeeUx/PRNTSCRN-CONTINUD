@@ -27,7 +27,7 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 		static_cast<GLsizei>(m_width),
 		static_cast<GLsizei>(m_height)
 	);
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, 0x821A, GL_RENDERBUFFER, m_depthStencil);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, 0x821A, GL_RENDERBUFFER, m_depthStencil); // 0x821A = GL_DEPTH_STENCIL_ATTACHMENT
 
 	// attach texture to framebuffer
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture, 0);
