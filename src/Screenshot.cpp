@@ -41,7 +41,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 
 	}).detach();
 	*/
-	std::thread([=]() {
+	std::thread([=, this]() {
 		GLubyte* newData = new GLubyte[m_width * m_width * 4];
 		for (int i = 0; i < m_height; ++i){
 			memcpy(&newData[i * m_width * 4],
