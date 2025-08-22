@@ -26,7 +26,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 	std::thread([=, data = std::move(m_data)]() {
 		GLubyte* newData = nullptr;
 		newData = new GLubyte[m_width * m_width * 4];
-		for (int i = 0; i < m_height; ++i){
+		for (int i = 0; i < m_height; ++i) {
 			memcpy(&newData[i * m_width * 4],
 					&data.get()[(m_height - i - 1) * m_width * 4],
 					m_width * 4);
@@ -48,8 +48,8 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		log::info("GLubyte* newData = new GLubyte[m_width * m_width * 4];");
 		GLubyte* newData = new GLubyte[m_width * m_width * 4];
 		log::info("for (int i = 0; i < m_height; ++i){");
-		for (int i = 0; i < m_height; ++i){
-		log::info("memcpy(&newData[i * m_width * 4],");
+		for (int i = 0; i < m_height; ++i) {
+			log::info("i: {}", i);
 			memcpy(&newData[i * m_width * 4],
 					&data.get()[(m_height - i - 1) * m_width * 4],
 					m_width * 4);
