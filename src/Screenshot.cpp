@@ -45,6 +45,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 	}).detach();
 	*/
 	std::thread([=, this, data = std::move(m_data)]() {
+		#ifdef GEODE_IS_WINDOWS
 		log::info("making newData");
 		GLubyte* newData = new GLubyte[m_width * m_width * 4];
 		log::info("entering forloop");
@@ -55,7 +56,6 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 					m_width * 4);
 		}
 		log::info("exited forloop");
-		#ifdef GEODE_IS_WINDOWS
 		CCImage image{};
 		image.m_nBitsPerComponent = 8;
 		image.m_nHeight = m_height;
@@ -66,7 +66,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		image.saveToFile(filename.c_str(), true);
 		#elif defined(GEODE_IS_ANDROID)
 		log::info("imgp::encode::png");
-		auto result = imgp::encode::png((void*)(newData), m_width, m_height);
+		auto result = imgp::encode::png((void*)(&data.get()), m_width, m_height);
 		if (result.isOk()) {
 			geode::utils::file::writeBinary(filename, std::move(result).unwrap());
 		} else log::error("error: {}", result.unwrapErr());
