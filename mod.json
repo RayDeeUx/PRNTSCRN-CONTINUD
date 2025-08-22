@@ -124,7 +124,7 @@
 		"show-more-details": {
 			"type": "bool",
 			"name": "Display More Settings Values in Eclipse Menu",
-			"description": "Shows non-boolean settings values in Eclipse Menu. Recommended for Eclipse Menu's Panel layout only.",
+			"description": "<cp>REQUIRES RESTART TO APPLY CHANGES.</c>\n\nShows non-boolean settings values in Eclipse Menu. Recommended for Eclipse Menu's Panel layout only.",
 			"default": false
 		}
 	}
