@@ -128,7 +128,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		auto cString = static_cast<std::string>(static_cast<CCString*>(pauseMenuType)->getCString());
 		if (!cString.empty()) pauseMenuTypeForSetting = cString;
 	}
-	bool modRequestingScreenshotIsSelf = modIDAskingForScreenshot.empty() || modIDAskingForScreenshot == Mod::get()->getID();
+	bool screenshotterIsSelf = modIDAskingForScreenshot.empty() || modIDAskingForScreenshot == Mod::get()->getID();
 
 	// event filter from main.cpp will have already hidden the nodes by this point
 	std::unordered_map<const char*, bool> uiNodes = {};
@@ -163,7 +163,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
 	CCSize selectedSize = CCSize(Manager::get()->width, Manager::get()->height);
-	if (!modRequestingScreenshotIsSelf) selectedSize = CCDirector::get()->getWinSizeInPixels();
+	if (!screenshotterIsSelf) selectedSize = CCDirector::get()->getWinSizeInPixels();
 	Screenshot ss = Screenshot(selectedSize, node);
 	if (isCtrl) RES_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
 	if (hideUI && pl) {
@@ -212,8 +212,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	}
 
 	std::string filename = normalizePath(folder / (numToString(index) + extension));
-	ss.intoFile(filename, jpeg);
-	if (Mod::get()->getSettingValue<bool>("copy-clipboard") && modRequestingScreenshotIsSelf) {
+	ss.intoFile(filename, screenshotterIsSelf && Mod::get()->getSettingValue<bool>("play-sfx"), jpeg);
+	if (Mod::get()->getSettingValue<bool>("copy-clipboard") && screenshotterIsSelf) {
 		bool shouldCopy = true;
 		if (!pauseMenuTypeForSetting.empty()) {
 			shouldCopy = false;

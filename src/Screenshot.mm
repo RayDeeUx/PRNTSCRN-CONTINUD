@@ -35,7 +35,7 @@ bool CGImageWriteToFile(CGImageRef image, const std::string& name, bool jpeg) {
     return true;
 }
 
-void Screenshot::intoFile(const std::string& filename, bool jpeg) {
+void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWantsSFX, bool jpeg) {
     int dataLen = m_width * m_height * 4;
 
     GLubyte* newData = nullptr;
@@ -60,7 +60,8 @@ void Screenshot::intoFile(const std::string& filename, bool jpeg) {
     );
 
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        CGImageWriteToFile(cgImg, filename, jpeg);
+        bool result = CGImageWriteToFile(cgImg, filename, jpeg);
+        if (result && isFromPRNTSCRNAndWantsSFX) FMODAudioEngine::get()->playEffect("screenshot_macOS_iOS.mp3"_spr);
     });
 }
 

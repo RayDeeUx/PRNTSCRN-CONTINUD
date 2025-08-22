@@ -19,6 +19,9 @@
 	"resources": {
 		"sprites": [
 			"resources/screenshot.png"
+		],
+		"files": [
+			"resources/*.mp3"
 		]
 	},
 	"dependencies": {
@@ -121,6 +124,12 @@
 			"description": "Set the timed interval in seconds for automatic screenshots in Platformer levels.",
 			"default": 30,
 			"min": 5
+		},
+		"play-sfx": {
+			"type": "bool",
+			"name": "Play Screenshot SFX",
+			"description": "So you actually know if your screenshot went through.",
+			"default": false
 		},
 		"show-more-details": {
 			"type": "bool",

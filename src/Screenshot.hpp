@@ -8,7 +8,7 @@ public:
 	Screenshot(unsigned int width, unsigned int height, CCNode* node);
 	Screenshot(const CCSize& size, CCNode* node);
 
-	void intoFile(const std::string& filename, bool jpeg);
+	void intoFile(const std::string& filename, bool isFromPRNTSCRNAndWantsSFX, bool jpeg);
 	void intoClipboard();
 	CCTexture2D* intoTexture();
 

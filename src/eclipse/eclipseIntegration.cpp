@@ -28,6 +28,7 @@ $on_mod(Loaded) {
 		addSetting(tab, "hide-player");
 		addSetting(tab, "jpeg-mafia");
 		addSetting(tab, "auto-screenshot");
+		addSetting(tab, "play-sfx");
 
 		tab.addButton("Open Screenshots Folder", [mod]() {
 			geode::utils::file::openFolder(mod->getConfigDir());

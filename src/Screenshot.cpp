@@ -17,7 +17,7 @@ CCTexture2D* Screenshot::intoTexture() {
 
 #ifdef GEODE_IS_WINDOWS
 
-void Screenshot::intoFile(const std::string& filename, bool jpeg) { // jpeg is unused because saveToFile handles automatically based on file extension. however it is being used in Screenshot.mm (macOS support)
+void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWantsSFX, bool jpeg) { // jpeg is unused because saveToFile handles automatically based on file extension. however it is being used in Screenshot.mm (macOS support)
 	std::thread([=, data = std::move(m_data)]() {
 		GLubyte* newData = nullptr;
 		newData = new GLubyte[m_width * m_width * 4];
@@ -32,6 +32,7 @@ void Screenshot::intoFile(const std::string& filename, bool jpeg) { // jpeg is u
 			if (image->initWithImageData(newData, m_width * m_height * 4, CCImage::EImageFormat::kFmtRawData, m_width, m_height, 8)) {
 				image->autorelease();
 				image->saveToFile(filename.c_str(), true);
+				if (isFromPRNTSCRNAndWantsSFX) FMODAudioEngine::get()->playEffect("screenshot_Windows_Android.mp3"_spr);
 			}
 		});
 	}).detach();
