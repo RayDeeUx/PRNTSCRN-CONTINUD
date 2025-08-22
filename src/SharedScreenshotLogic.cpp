@@ -43,7 +43,7 @@ void SharedScreenshotLogic::hideOtherPartsOfPlayerOne(std::unordered_map<CCNode*
 	ADD_SCALE(gjbgl, m_player1->m_dashSpritesContainer, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player1->m_playerGroundParticles, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player1->m_vehicleGroundParticles, unorderedMapStoringScales);
-	ADD_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales);
+	// ADD_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales); // this line won't even work anyway because you need to constantly set its scale to 0.f which is simply not happening
 }
 
 void SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
@@ -64,7 +64,7 @@ void SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*
 	ADD_SCALE(gjbgl, m_player2->m_dashSpritesContainer, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player2->m_playerGroundParticles, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player2->m_vehicleGroundParticles, unorderedMapStoringScales);
-	ADD_SCALE(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales);
+	// ADD_SCALE(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales); // this line won't even work anyway because you need to constantly set its scale to 0.f which is simply not happening
 }
 
 void SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
@@ -85,7 +85,7 @@ void SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(std::unordered_map<CCNod
 	RES_SCALE(gjbgl, m_player1->m_dashSpritesContainer, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player1->m_playerGroundParticles, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player1->m_vehicleGroundParticles, unorderedMapStoringScales);
-	RES_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales);
+	// RES_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales); // this line won't even work anyway because you need to constantly set its scale to 0.f which is simply not happening
 }
 
 void SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer *gjbgl) {
@@ -106,14 +106,18 @@ void SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(std::unordered_map<CCNod
 	RES_SCALE(gjbgl, m_player2->m_dashSpritesContainer, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player2->m_playerGroundParticles, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player2->m_vehicleGroundParticles, unorderedMapStoringScales);
-	RES_SCALE(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales);
+	// RES_SCALE(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales); // this line won't even work anyway because you need to constantly set its scale to 0.f which is simply not happening
 }
 
 void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (!node) return log::error("invalid node!");
 	bool hasCustomNodesToHide = false;
-	if (CCBool* obj = typeinfo_cast<CCBool*>(node->getUserObject("has-custom-nodes-to-hide"_spr)); obj) {
-		hasCustomNodesToHide = obj->getValue();
+	bool isCtrl = false;
+	if (CCObject* hasNodeFilters = node->getUserObject("has-custom-nodes-to-hide"_spr); hasNodeFilters) {
+		hasCustomNodesToHide = static_cast<CCBool*>(hasNodeFilters)->getValue();
+	}
+	if (CCObject* isControlFromPopup = node->getUserObject("is-plain-ss-from-popup"_spr); isControlFromPopup) {
+		isCtrl = static_cast<CCBool*>(isControlFromPopup)->getValue();
 	}
 
 	// event filter from main.cpp will have already hidden the nodes by this point
@@ -125,8 +129,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
 	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
 
-	ADD_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
-
+	if (isCtrl) ADD_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
 	if (hideUI && pl) {
 		ADD_NODE(pl, UILayer);
 		ADD_NODE(pl, debug-text);
@@ -150,7 +153,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
 	Screenshot ss = Screenshot(Manager::get()->width, Manager::get()->height, node);
-	RES_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
+	if (isCtrl) RES_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
 	if (hideUI && pl) {
 		RES_NODE(pl, UILayer);
 		RES_NODE(pl, debug-text);
@@ -177,13 +180,13 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	std::string modIDAskingForScreenshot;
 	std::string pauseMenuTypeForSetting;
 
-	if (CCString* modID = typeinfo_cast<CCString*>(node->getUserObject("mod-asking-for-screenshot"_spr)); modID) {
-		auto cString = static_cast<std::string>(modID->getCString());
+	if (CCObject* modID = node->getUserObject("mod-asking-for-screenshot"_spr); modID) {
+		auto cString = static_cast<std::string>(static_cast<CCString*>(modID)->getCString());
 		if (!cString.empty()) modIDAskingForScreenshot = fmt::format("{} - ", cString);
 	}
 
-	if (CCString* pauseMenuType = typeinfo_cast<CCString*>(node->getUserObject("pause-menu-type"_spr)); pauseMenuType) {
-		auto cString = static_cast<std::string>(pauseMenuType->getCString());
+	if (CCObject* pauseMenuType = node->getUserObject("pause-menu-type"_spr); pauseMenuType) {
+		auto cString = static_cast<std::string>(static_cast<CCString*>(pauseMenuType)->getCString());
 		if (!cString.empty()) pauseMenuTypeForSetting = cString;
 	}
 

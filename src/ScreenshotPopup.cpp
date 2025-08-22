@@ -196,7 +196,11 @@ void ScreenshotPopup::onScreenshot(CCObject*) {
 	bool isControl = CCKeyboardDispatcher::get()->getControlKeyPressed();
 	if (PlayLayer* pl = PlayLayer::get(); pl && !isControl) SharedScreenshotLogic::screenshot(pl);
 	else if (LevelEditorLayer* lel = LevelEditorLayer::get(); lel && !isControl) SharedScreenshotLogic::screenshot(lel);
-	else if (CCScene* scene = CCScene::get(); scene) SharedScreenshotLogic::screenshot(scene);
+	else if (CCScene* scene = CCScene::get(); scene) {
+		scene->setUserObject("is-plain-ss-from-popup"_spr, CCBool::create(true));
+		SharedScreenshotLogic::screenshot(scene);
+		scene->setUserObject("is-plain-ss-from-popup"_spr, CCBool::create(false));
+	}
 }
 
 void ScreenshotPopup::onConfigDir(CCObject*) {
