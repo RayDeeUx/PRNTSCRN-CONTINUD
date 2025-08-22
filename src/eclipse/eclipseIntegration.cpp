@@ -3,7 +3,6 @@
 #include "../Manager.hpp"
 #include "../ScreenshotPopup.hpp"
 #include "../SharedScreenshotLogic.hpp"
-#include "../include/api.hpp"
 
 using namespace eclipse;
 using namespace geode::prelude;
