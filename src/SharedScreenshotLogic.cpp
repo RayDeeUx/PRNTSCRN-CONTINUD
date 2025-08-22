@@ -1,4 +1,5 @@
 // ReSharper disable CppDFAUnreachableCode
+// ReSharper disable CppDFAConstantConditions
 // yeah that's right clion stop saying my code is unreachable >:(
 #include "SharedScreenshotLogic.hpp"
 #include "Screenshot.hpp"
@@ -124,6 +125,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
 	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
 
+	ADD_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
+
 	if (hideUI && pl) {
 		ADD_NODE(pl, UILayer);
 		ADD_NODE(pl, debug-text);
@@ -147,6 +150,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
 	Screenshot ss = Screenshot(Manager::get()->width, Manager::get()->height, node);
+	RES_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
 	if (hideUI && pl) {
 		RES_NODE(pl, UILayer);
 		RES_NODE(pl, debug-text);
