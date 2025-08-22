@@ -35,6 +35,9 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 	// but this leads me to ask: how the hell did MAT of all people manage to compile this by himself????
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencil);
 	#else
+	// if https://registry.khronos.org/OpenGL/extensions/OES/OES_packed_depth_stencil.txt rly works
+	// i will forever be in solidpixel's and Reto Koradi's debts holy fucking shit this enum exists
+	// thank you to https://overflow.adminforge.de/questions/28996721 for being a godsend holy fuck
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_OES, GL_RENDERBUFFER, m_depthStencil);
 	#endif
 
