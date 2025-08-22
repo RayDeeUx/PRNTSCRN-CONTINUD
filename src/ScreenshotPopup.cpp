@@ -108,18 +108,18 @@ bool ScreenshotPopup::setup() {
 	// settingsMenu->addChild(createSetting("Use Window Height", "use-window-height")); // ninxout insisted that this stay separate
 
 	if (pl) {
-	int64_t selectedSetting = isPlatformerLevel ? Mod::get()->getSettingValue<int64_t>("auto-seconds") : Mod::get()->getSettingValue<int64_t>("auto-percent");
-	std::string selectedPlaceholderString = isPlatformerLevel ? "s" : "%";
-	std::string selectedInputNodeID = isPlatformerLevel ? "auto-seconds-input"_spr : "auto-percent-input"_spr;
-	std::string selectedGeodeInputNodeID = isPlatformerLevel ? "seconds-geode-input"_spr : "percent-geode-input"_spr;
-	std::string selectedLabel = isPlatformerLevel ? "Auto Seconds" : "Auto Percent";
+		int64_t selectedSetting = isPlatformerLevel ? Mod::get()->getSettingValue<int64_t>("auto-seconds") : Mod::get()->getSettingValue<int64_t>("auto-percent");
+		std::string selectedPlaceholderString = isPlatformerLevel ? "s" : "%";
+		std::string selectedInputNodeID = isPlatformerLevel ? "auto-seconds-input"_spr : "auto-percent-input"_spr;
+		std::string selectedGeodeInputNodeID = isPlatformerLevel ? "seconds-geode-input"_spr : "percent-geode-input"_spr;
+		std::string selectedLabel = isPlatformerLevel ? "Auto Seconds" : "Auto Percent";
 
 		CCMenu* autoPercent = Build<CCMenu>::create()
-		.layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(4.f)->setAxisReverse(true))
-		.id("auto-screenshot"_spr)
-		.pos(75, 150)
-		.width(125.f)
-		.collect();
+			.layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(4.f)->setAxisReverse(true))
+			.id("auto-screenshot"_spr)
+			.pos(75, 150)
+			.width(125.f)
+			.collect();
 
 		autoPercentInput = Build<TextInput>::create(35.f, selectedPlaceholderString, "bigFont.fnt")
 			.id(selectedGeodeInputNodeID)
@@ -194,6 +194,8 @@ bool ScreenshotPopup::setup() {
 
 void ScreenshotPopup::onScreenshot(CCObject*) {
 	if (PlayLayer* pl = PlayLayer::get()) SharedScreenshotLogic::screenshot(pl);
+	else if (LevelEditorLayer* lel = LevelEditorLayer::get()) SharedScreenshotLogic::screenshot(lel);
+	else if (CCScene* scene = CCScene::get()) SharedScreenshotLogic::screenshot(scene);
 }
 
 void ScreenshotPopup::onConfigDir(CCObject*) {
