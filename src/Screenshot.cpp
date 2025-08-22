@@ -42,25 +42,39 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 	}).detach();
 	*/
 	std::thread([=, this, data = std::move(m_data)]() {
+		log::info("entered thread, initalizing newData with [m_width * m_width * 4]");
 		GLubyte* newData = new GLubyte[m_width * m_width * 4];
+		log::info("entering forloop");
 		for (int i = 0; i < m_height; ++i){
+			log::info("i: {}", i);
 			memcpy(&newData[i * m_width * 4],
 					&data.get()[(m_height - i - 1) * m_width * 4],
 					m_width * 4);
 		}
+		log::info("making new CCImage named image");
 		CCImage image{};
+		log::info("setting m_nBitsPerComponent");
 		image.m_nBitsPerComponent = 8;
+		log::info("setting m_nHeight");
 		image.m_nHeight = m_height;
+		log::info("setting m_nWidth");
 		image.m_nWidth = m_width;
+		log::info("setting m_bHasAlpha");
 		image.m_bHasAlpha = true;
+		log::info("setting m_bPreMulti");
 		image.m_bPreMulti = false;
+		log::info("setting m_pData");
 		image.m_pData = newData;
+		log::info("saving image to file");
 		image.saveToFile(filename.c_str(), true);
+		log::info("checking isFromPRNTSCRNAndWantsSFX's value");
 		if (isFromPRNTSCRNAndWantsSFX) {
+			log::info("queuing SFX");
 			Loader::get()->queueInMainThread([](){
 				FMODAudioEngine::get()->playEffect("screenshot_Windows_Android.mp3"_spr);
 			});
 		}
+		log::info("leaving thread");
 	}).detach();
 }
 
