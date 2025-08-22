@@ -1,5 +1,6 @@
 #include <Geode/ui/GeodeUI.hpp>
 #include "eclipse.hpp"
+#include "../ScreenshotPopup.hpp"
 #include "../SharedScreenshotLogic.hpp"
 #include "../include/api.hpp"
 
@@ -51,6 +52,19 @@ $on_mod(Loaded) {
 		});
 
 		tab.addButton("Open PRNTSCRN Settings", []() {
+			CCScene* scene = CCScene::get();
+			if (!scene) return;
+			if (CCNode* ssPopup = scene->getChildByID("ScreenshotPopup"_spr); ssPopup) {
+				if (CCNode* alert = scene->getChildByID("FLAlertLayer"); alert) {
+					std::string titleString;
+					CCNode* title = static_cast<FLAlertLayer*>(alert)->m_mainLayer->getChildByID("title");
+					if (title) titleString = static_cast<std::string>(static_cast<CCLabelBMFont*>(title)->getString());
+					if (utils::string::startsWith(titleString, "PRNTSCRN - ")) {
+						static_cast<FLAlertLayer*>(alert)->keyBackClicked();
+					}
+				}
+				static_cast<ScreenshotPopup*>(ssPopup)->keyBackClicked();
+			}
 			geode::openSettingsPopup(Mod::get());
 		});
 	});

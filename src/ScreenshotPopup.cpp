@@ -39,7 +39,7 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 
 	if (auto desc = mod->getSetting(key)->getDescription(); desc.has_value()) {
 		const std::string& trueDesc = desc.value();
-		InfoAlertButton* infoBtn = Build<InfoAlertButton>::create(title, trueDesc, .5f)
+		InfoAlertButton* infoBtn = Build<InfoAlertButton>::create(fmt::format("PRNTSCRN - {}", title), trueDesc, .5f)
 			.id(fmt::format("{}-info"_spr, key))
 			.parent(quickToggleMenu)
 			.collect();
@@ -161,7 +161,7 @@ bool ScreenshotPopup::setup() {
 	configDirButton->setPosition(ccp(80, 80));
 	m_buttonMenu->addChild(configDirButton);
 
-	InfoAlertButton* infoButton = InfoAlertButton::create("PRNTSCRN Keybinds", Manager::fetchKeybindsStrings(), .7f);
+	InfoAlertButton* infoButton = InfoAlertButton::create("PRNTSCRN - Keybinds", Manager::fetchKeybindsStrings(), .7f);
 	infoButton->setID("keybinds-help-button"_spr);
 	infoButton->setPosition(m_mainLayer->getContentSize() - 3.f);
 	m_buttonMenu->addChild(infoButton);
