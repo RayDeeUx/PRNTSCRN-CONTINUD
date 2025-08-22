@@ -1,5 +1,6 @@
 #include <Geode/ui/GeodeUI.hpp>
 #include "eclipse.hpp"
+#include "../Manager.hpp"
 #include "../ScreenshotPopup.hpp"
 #include "../SharedScreenshotLogic.hpp"
 #include "../include/api.hpp"
@@ -9,6 +10,7 @@ using namespace geode::prelude;
 
 $on_mod(Loaded) {
 	Loader::get()->queueInMainThread([] {
+		Mod* mod = Mod::get();
 		auto tab = MenuTab::find("PRNTSCRN");
 
 		tab.addButton("Screenshot", [](){
@@ -43,15 +45,20 @@ $on_mod(Loaded) {
 				return;
 			}
 			if (nodeToScreenshot) SharedScreenshotLogic::screenshot(nodeToScreenshot);
+		}).setDescription("Screenshot the level (either from gameplay or in the editor, if there is one active). Otherwise, screenshot the contents of the screen.");
+
+		if (std::shared_ptr<SettingV3> clipboardSetting = mod->getSetting("copy-clipboard"); clipboardSetting) {
+			tab.addModSettingToggle(clipboardSetting).setDescription("Copy screenshots to the clipboard.");
+		}
+		if (std::shared_ptr<SettingV3> setting = mod->getSetting("copy-screenshot-with-pause-menu-on"); setting) {
+			tab.addLabel(fmt::format("{} {}", setting->getDisplayName(), mod->getSettingValue<std::string>("copy-screenshot-with-pause-menu-on")));
+		}
+
+		tab.addButton("Open Screenshots Folder", [mod]() {
+			geode::utils::file::openFolder(mod->getConfigDir());
 		});
 
-		(void) tab.addModSettingToggle(Mod::get()->getSetting("copy-clipboard"));
-
-		tab.addButton("Open Screenshots Folder", []() {
-			geode::utils::file::openFolder(Mod::get()->getConfigDir());
-		});
-
-		tab.addButton("Open PRNTSCRN Settings", []() {
+		tab.addButton("Open PRNTSCRN Settings", [mod]() {
 			CCScene* scene = CCScene::get();
 			if (!scene) return;
 			if (CCNode* ssPopup = scene->getChildByID("ScreenshotPopup"_spr); ssPopup) {
@@ -65,7 +72,10 @@ $on_mod(Loaded) {
 				}
 				static_cast<ScreenshotPopup*>(ssPopup)->keyBackClicked();
 			}
-			geode::openSettingsPopup(Mod::get());
+			geode::openSettingsPopup(mod);
 		});
+
+		tab.addLabel(Manager::getBindsStringFor("screenshot"_spr));
+		tab.addLabel(Manager::getBindsStringFor("plain-screenshot"_spr));
 	});
 }
