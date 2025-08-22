@@ -62,7 +62,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		image.saveToFile(filename.c_str(), true);
 		#elif defined(GEODE_IS_ANDROID)
 		auto result = imgp::encode::png((void*)(newData), m_width, m_height);
-		if (result.isOk()) geode::utils::file::writeBinary(filename, result.unwrap());
+		if (result.isOk()) geode::utils::file::writeBinary(filename, std::move(result).unwrap());
 		#endif
 		if (isFromPRNTSCRNAndWantsSFX) {
 			Loader::get()->queueInMainThread([](){
