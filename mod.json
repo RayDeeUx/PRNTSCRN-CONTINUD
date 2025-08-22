@@ -26,7 +26,10 @@
 	},
 	"dependencies": {
 		"geode.node-ids": ">=1.20.0",
-		"geode.custom-keybinds": ">=1.10.3"
+		"geode.custom-keybinds": {
+			"version": ">=1.10.3",
+			"platforms": ["win", "mac", "android"]
+		}
 	},
 	"api": {
 		"include": [
@@ -60,13 +63,15 @@
 				"Regular levels only",
 				"Editor levels only",
 				"All levels"
-			]
+			],
+			"platforms": ["win", "mac"]
 		},
 		"hide-player": {
 			"type": "bool",
 			"name": "Hide Player",
 			"description": "Hides both players when taking a screenshot\nwhile playing a level or while inside the level editor.\n\n<cy>Note that not everything can be hidden;</c>\n<cy>dash fire sprites and ghost icon trails</c>\n<cy>may still be visible in some cases.</c>\n<cy>To hide them more consistently during gameplay,</c>\n<cy>find the</c> <cl>\"No Ghost Trail\"</c> <cy>toggle in</c> <cl>Eclipse Menu</c>\n<cy>and the</c> <cl>\"Hide Player Dash Fire\"</c> <cy>toggle in</c> <cl>KrazyPlayLayer</c><cy>.</c>",
-			"default": false
+			"default": false,
+			"platforms": ["win", "mac"]
 		},
 		"hide-ui": {
 			"type": "bool",

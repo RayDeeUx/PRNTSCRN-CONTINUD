@@ -15,7 +15,7 @@ CCTexture2D* Screenshot::intoTexture() {
 	return m_tex.intoTexture();
 }
 
-#ifdef GEODE_IS_WINDOWS
+#ifndef __APPLE__
 
 void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWantsSFX, bool jpeg) { // jpeg is unused because saveToFile handles automatically based on file extension. however it is being used in Screenshot.mm (macOS support)
 	std::thread([=, data = std::move(m_data)]() {
@@ -37,6 +37,10 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		});
 	}).detach();
 }
+
+#endif
+
+#ifdef GEODE_IS_WINDOWS
 
 void Screenshot::intoClipboard() {
 	std::thread([=, data = std::move(m_data)]() {
