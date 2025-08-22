@@ -1,5 +1,8 @@
 #include "Screenshot.hpp"
 #include <thread>
+#ifdef GEODE_IS_ANDROID
+#include <prevter.imageplus/include/api.hpp>
+#endif
 
 using namespace geode::prelude;
 
@@ -58,7 +61,8 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		#ifdef GEODE_IS_WINDOWS
 		image.saveToFile(filename.c_str(), true);
 		#elif defined(GEODE_IS_ANDROID)
-		log::info("TODO: USE IMAGEPLUS BY PREVTER TO SAVE IMAGE BECAUSE FUCK COCOS2D-X AND THE INCONSISTENCY GRRRRRRRRRRRRRR");
+		auto result = imgp::encode::png((void*)(m_data.get()), m_width, m_height);
+		if (result.isOk()) geode::utils::file::writeBinary(filename, result.unwrap());
 		#endif
 		if (isFromPRNTSCRNAndWantsSFX) {
 			Loader::get()->queueInMainThread([](){
