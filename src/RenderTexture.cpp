@@ -29,7 +29,7 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 	// im actually so fucking pissed off at this bullshit bro; putting int manually doesnt do shit at all
 	// but this leads me to ask: how the hell did MAT of all people manage to compile this by himself????
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, static_cast<GLsizei>(m_width), static_cast<GLsizei>(m_height));
-	// glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencil);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencil);
 	#else
 	// im an OpenGL noob so i used mistral to help me out
 	// sue me. --raydeeux
