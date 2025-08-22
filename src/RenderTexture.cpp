@@ -2,10 +2,7 @@
 
 using namespace geode::prelude;
 
-RenderTexture::RenderTexture(unsigned int width, unsigned int height) 
-	: m_width(width),
-	m_height(height)
-{
+RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(width), m_height(height) {
 	// generate texture
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 8);
 	glGenTextures(1, &m_texture);
