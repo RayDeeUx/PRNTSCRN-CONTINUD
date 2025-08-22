@@ -28,6 +28,11 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 		static_cast<GLsizei>(m_height)
 	);
 	#ifndef GEODE_IS_ANDROID
+	// im sorry OpenGL what the fuck do you mean that GL_DEPTH_STENCIL_ATTACHMENT is undefined on android
+	// eh whatever, ifdef the whole damn thing out--the only issue is *one* node on overcharged main menu
+	// this is honestly pretty sad to bear witness to; how the fuck did google manage to fuck up this bad
+	// im actually so fucking pissed off at this bullshit bro; putting int manually doesnt do shit at all
+	// but this leads me to ask: how the hell did MAT of all people manage to compile this by himself????
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencil);
 	#endif
 
