@@ -2,11 +2,10 @@
 // ReSharper disable CppDFAConstantConditions
 // yeah that's right clion stop saying my code is unreachable >:(
 #include "SharedScreenshotLogic.hpp"
-
-#include <api.hpp>
-
 #include "Screenshot.hpp"
 #include "Manager.hpp"
+#include <api.hpp>
+#include <chrono>
 
 using namespace geode::prelude;
 
@@ -19,13 +18,10 @@ std::string normalizePath(std::filesystem::path thePath) {
 }
 
 std::string SharedScreenshotLogic::getFormattedDate() {
-	auto now = std::chrono::system_clock::now();
-	auto floored = std::chrono::floor<std::chrono::days>(now);
-	std::chrono::year_month_day ymd = {floored};
-	auto humanReadableMonth = SharedScreenshotLogic::monthNames[static_cast<unsigned int>(ymd.month())];
-	auto day = static_cast<unsigned int>(ymd.day());
-	auto year = static_cast<int>(ymd.year());
-	return fmt::format("{} {}, {}", humanReadableMonth, day, year);
+	auto nowTimeT = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
+	auto now = std::localtime(&nowTimeT);
+	auto humanReadableMonth = SharedScreenshotLogic::monthNames[static_cast<unsigned int>(now->tm_mon + 1)];
+	return fmt::format("{} {}, {}", humanReadableMonth, now->tm_mday, now->tm_year + 1900);
 }
 
 void SharedScreenshotLogic::hideOtherPartsOfPlayerOne(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
