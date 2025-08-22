@@ -35,7 +35,7 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 	// but this leads me to ask: how the hell did MAT of all people manage to compile this by himself????
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencil);
 	#else
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER, m_depthStencil);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_OES, GL_RENDERBUFFER, m_depthStencil);
 	#endif
 
 	// attach texture to framebuffer
