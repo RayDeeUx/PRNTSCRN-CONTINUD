@@ -120,6 +120,12 @@
 			"description": "Set the timed interval in seconds for automatic screenshots in Platformer levels.",
 			"default": 30,
 			"min": 5
+		},
+		"show-more-details": {
+			"type": "bool",
+			"name": "Display More Settings Values in Eclipse Menu",
+			"description": "Shows non-boolean settings values in Eclipse Menu. Recommended for Eclipse Menu's Panel layout only.",
+			"default": false
 		}
 	}
 }

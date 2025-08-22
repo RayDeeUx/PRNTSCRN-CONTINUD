@@ -34,6 +34,7 @@ namespace SharedScreenshotLogic {
 	void unhideOtherPartsOfPlayerOne(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
 	void unhideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl);
 	void screenshot(CCNode* node);
+	void screenshotLevelOrScene();
 
 	constexpr std::array monthNames = {
 		"Unknown",

@@ -8,51 +8,27 @@
 using namespace eclipse;
 using namespace geode::prelude;
 
+void addSetting(MenuTab& tab, const std::string& settingsKey) {
+	if (std::shared_ptr<SettingV3> setting = Mod::get()->getSetting(settingsKey); setting) {
+		const std::string& colorlessDesc = string::replace(string::replace(string::replace(setting->getDescription().value_or("Copy screenshots to the clipboard."), "</c>", ""), "<cl>", ""), "<cy>", "");
+		tab.addModSettingToggle(setting).setDescription(colorlessDesc);
+	}
+}
+
 $on_mod(Loaded) {
 	Loader::get()->queueInMainThread([] {
 		Mod* mod = Mod::get();
 		auto tab = MenuTab::find("PRNTSCRN");
 
 		tab.addButton("Screenshot", [](){
-			CCNode* nodeToScreenshot = CCScene::get();
-			PlayLayer* pl = PlayLayer::get();
-			LevelEditorLayer* lel = LevelEditorLayer::get();
-			if (pl) {
-				SharedScreenshotLogic::screenshot(pl);
-				if (CCNode* ell = pl->getChildByID("EndLevelLayer"); ell) {
-					bool hideUISetting = Loader::get()->getLoadedMod("ninxout.prntscrn")->getSettingValue<bool>("hide-ui"); // guaranteed to get the Mod* pointer
-					UILayer* uiLayer = hideUISetting ? pl->m_uiLayer : nullptr;
-					std::vector<std::string> nodeIDsToHide = {};
-					if (uiLayer) nodeIDsToHide = {"debug-text", "testmode-label", "percentage-label", "mat.run-info/RunInfoWidget", "cheeseworks.speedruntimer/timer", "progress-bar"};
-					Result res = PRNTSCRN::screenshotNodeAdvanced(pl, {ell, uiLayer}, nodeIDsToHide);
-					if (res.isErr()) log::error("[PRNTSCRN] Something went wrong! ({})", res.unwrapErr());
-				} else if (CCScene::get()->getChildByID("PauseLayer")) {
-					CCScene* baseScene = CCScene::get();
-					baseScene->setUserObject("pause-menu-type"_spr, CCString::create("PauseLayer"));
-					SharedScreenshotLogic::screenshot(baseScene);
-					baseScene->setUserObject("pause-menu-type"_spr, CCString::create(""));
-				}
-				return;
-			}
-			if (lel) {
-				SharedScreenshotLogic::screenshot(lel);
-				if (lel->getChildByID("EditorPauseLayer")) {
-					CCScene* baseScene = CCScene::get();
-					baseScene->setUserObject("pause-menu-type"_spr, CCString::create("EditorPauseLayer"));
-					SharedScreenshotLogic::screenshot(baseScene);
-					baseScene->setUserObject("pause-menu-type"_spr, CCString::create(""));
-				}
-				return;
-			}
-			if (nodeToScreenshot) SharedScreenshotLogic::screenshot(nodeToScreenshot);
-		}).setDescription("Screenshot the level (either from gameplay or in the editor, if there is one active). Otherwise, screenshot the contents of the screen.");
+			SharedScreenshotLogic::screenshotLevelOrScene();
+		}).setDescription("Screenshot the level (either from gameplay or in the editor, if there is one active).\nOtherwise, screenshot the contents of the screen.");
 
-		if (std::shared_ptr<SettingV3> clipboardSetting = mod->getSetting("copy-clipboard"); clipboardSetting) {
-			tab.addModSettingToggle(clipboardSetting).setDescription("Copy screenshots to the clipboard.");
-		}
-		if (std::shared_ptr<SettingV3> setting = mod->getSetting("copy-screenshot-with-pause-menu-on"); setting) {
-			tab.addLabel(fmt::format("{} {}", setting->getDisplayName(), mod->getSettingValue<std::string>("copy-screenshot-with-pause-menu-on")));
-		}
+		addSetting(tab, "copy-clipboard");
+		addSetting(tab, "hide-ui");
+		addSetting(tab, "hide-player");
+		addSetting(tab, "jpeg-mafia");
+		addSetting(tab, "auto-screenshot");
 
 		tab.addButton("Open Screenshots Folder", [mod]() {
 			geode::utils::file::openFolder(mod->getConfigDir());
@@ -75,7 +51,20 @@ $on_mod(Loaded) {
 			geode::openSettingsPopup(mod);
 		});
 
-		tab.addLabel(Manager::getBindsStringFor("screenshot"_spr));
-		tab.addLabel(Manager::getBindsStringFor("plain-screenshot"_spr));
+		if (mod->getSettingValue<bool>("show-more-details")) {
+			(void) tab.addLabel("Most recent settings:");
+			tab.addLabel(fmt::format("Screenshot size: {} x {}", Manager::get()->width, Manager::get()->height));
+			if (std::shared_ptr<SettingV3> setting = mod->getSetting("copy-screenshot-with-pause-menu-on"); setting) {
+				tab.addLabel(fmt::format("{} {}", setting->getDisplayName(), mod->getSettingValue<std::string>("copy-screenshot-with-pause-menu-on")));
+			}
+			if (std::shared_ptr<SettingV3> setting = mod->getSetting("auto-percent"); setting) {
+				tab.addLabel(fmt::format("Auto Screenshot % Interval (Classic levels): {}%", mod->getSettingValue<int64_t>("auto-percent")));
+			}
+			if (std::shared_ptr<SettingV3> setting = mod->getSetting("auto-seconds"); setting) {
+				tab.addLabel(fmt::format("Auto Screenshot Seconds Interval (Plat. levels): {} seconds", mod->getSettingValue<int64_t>("auto-seconds")));
+			}
+			tab.addLabel(fmt::format("Screenshot the level: {}", Manager::getColorlessBindsStringFor("screenshot"_spr)));
+			tab.addLabel(fmt::format("Screenshot the screen: {}", Manager::getColorlessBindsStringFor("plain-screenshot"_spr)));
+		}
 	});
 }

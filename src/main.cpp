@@ -46,37 +46,7 @@ $on_mod(Loaded) {
 	}); // y'know, in case anyone wants to take a screenshot of the pause layer --raydeeux
 	new EventListener([=](InvokeBindEvent* event) {
 		if (!event->isDown()) return ListenerResult::Propagate;
-		CCNode* nodeToScreenshot = CCScene::get();
-		PlayLayer* pl = PlayLayer::get();
-		LevelEditorLayer* lel = LevelEditorLayer::get();
-		if (pl) {
-			SharedScreenshotLogic::screenshot(pl);
-			if (CCNode* ell = pl->getChildByID("EndLevelLayer"); ell) {
-				bool hideUISetting = Loader::get()->getLoadedMod("ninxout.prntscrn")->getSettingValue<bool>("hide-ui"); // guaranteed to get the Mod* pointer
-				UILayer* uiLayer = hideUISetting ? pl->m_uiLayer : nullptr;
-				std::vector<std::string> nodeIDsToHide = {};
-				if (uiLayer) nodeIDsToHide = {"debug-text", "testmode-label", "percentage-label", "mat.run-info/RunInfoWidget", "cheeseworks.speedruntimer/timer", "progress-bar"};
-				Result res = PRNTSCRN::screenshotNodeAdvanced(pl, {ell, uiLayer}, nodeIDsToHide);
-				if (res.isErr()) log::error("[PRNTSCRN] Something went wrong! ({})", res.unwrapErr());
-			} else if (CCScene::get()->getChildByID("PauseLayer")) {
-				CCScene* baseScene = CCScene::get();
-				baseScene->setUserObject("pause-menu-type"_spr, CCString::create("PauseLayer"));
-				SharedScreenshotLogic::screenshot(baseScene);
-				baseScene->setUserObject("pause-menu-type"_spr, CCString::create(""));
-			}
-			return ListenerResult::Propagate;
-		}
-		if (lel) {
-			SharedScreenshotLogic::screenshot(lel);
-			if (lel->getChildByID("EditorPauseLayer")) {
-				CCScene* baseScene = CCScene::get();
-				baseScene->setUserObject("pause-menu-type"_spr, CCString::create("EditorPauseLayer"));
-				SharedScreenshotLogic::screenshot(baseScene);
-				baseScene->setUserObject("pause-menu-type"_spr, CCString::create(""));
-			}
-			return ListenerResult::Propagate;
-		}
-		if (nodeToScreenshot) SharedScreenshotLogic::screenshot(nodeToScreenshot);
+		SharedScreenshotLogic::screenshotLevelOrScene();
 		return ListenerResult::Propagate;
 	}, InvokeBindFilter(nullptr, "screenshot"_spr));
 	new EventListener([=](InvokeBindEvent* event) {
