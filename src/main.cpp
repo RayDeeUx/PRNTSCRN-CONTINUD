@@ -58,12 +58,22 @@ $on_mod(Loaded) {
 				if (uiLayer) nodeIDsToHide = {"debug-text", "testmode-label", "percentage-label", "mat.run-info/RunInfoWidget", "cheeseworks.speedruntimer/timer", "progress-bar"};
 				Result res = PRNTSCRN::screenshotNodeAdvanced(pl, {ell, uiLayer}, nodeIDsToHide);
 				if (res.isErr()) log::error("[PRNTSCRN] Something went wrong! ({})", res.unwrapErr());
-			} else if (CCScene::get()->getChildByID("PauseLayer")) SharedScreenshotLogic::screenshot(CCScene::get());
+			} else if (CCScene::get()->getChildByID("PauseLayer")) {
+				CCScene* baseScene = CCScene::get();
+				baseScene->setUserObject("pause-menu-type"_spr, CCString::create("PauseLayer"));
+				SharedScreenshotLogic::screenshot(baseScene);
+				baseScene->setUserObject("pause-menu-type"_spr, CCString::create(""));
+			}
 			return ListenerResult::Propagate;
 		}
 		if (lel) {
 			SharedScreenshotLogic::screenshot(lel);
-			if (lel->getChildByID("EditorPauseLayer")) SharedScreenshotLogic::screenshot(CCScene::get());
+			if (lel->getChildByID("EditorPauseLayer")) {
+				CCScene* baseScene = CCScene::get();
+				baseScene->setUserObject("pause-menu-type"_spr, CCString::create("EditorPauseLayer"));
+				SharedScreenshotLogic::screenshot(baseScene);
+				baseScene->setUserObject("pause-menu-type"_spr, CCString::create(""));
+			}
 			return ListenerResult::Propagate;
 		}
 		if (nodeToScreenshot) SharedScreenshotLogic::screenshot(nodeToScreenshot);

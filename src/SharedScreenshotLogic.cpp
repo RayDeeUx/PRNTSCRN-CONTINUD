@@ -101,7 +101,6 @@ void SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(std::unordered_map<CCNod
 void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (!node) return log::error("invalid node!");
 	bool hasCustomNodesToHide = false;
-	std::string modIDAskingForScreenshot;
 	if (CCBool* obj = typeinfo_cast<CCBool*>(node->getUserObject("has-custom-nodes-to-hide"_spr)); obj) {
 		hasCustomNodesToHide = obj->getValue();
 	}
@@ -161,9 +160,17 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
 
+	std::string modIDAskingForScreenshot;
+	std::string pauseMenuTypeForSetting;
+
 	if (CCString* modID = typeinfo_cast<CCString*>(node->getUserObject("mod-asking-for-screenshot"_spr)); modID) {
 		auto cString = static_cast<std::string>(modID->getCString());
 		if (!cString.empty()) modIDAskingForScreenshot = fmt::format("{} - ", cString);
+	}
+
+	if (CCString* pauseMenuType = typeinfo_cast<CCString*>(node->getUserObject("pause-menu-type"_spr)); pauseMenuType) {
+		auto cString = static_cast<std::string>(pauseMenuType->getCString());
+		if (!cString.empty()) pauseMenuTypeForSetting = cString;
 	}
 
 	bool jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");
@@ -190,5 +197,17 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	std::string filename = folder / (numToString(index) + extension);
 	ss.intoFile(filename, jpeg);
-	if (Mod::get()->getSettingValue<bool>("copy-clipboard")) ss.intoClipboard();
+	if (Mod::get()->getSettingValue<bool>("copy-clipboard") && (modIDAskingForScreenshot.empty() || modIDAskingForScreenshot == Mod::get()->getID())) {
+		bool shouldCopy = true;
+		if (!pauseMenuTypeForSetting.empty()) {
+			shouldCopy = false;
+			const std::string& pauseMenuPreference = utils::string::toLower(Mod::get()->getSettingValue<std::string>("copy-screenshot-with-pause-menu-on"));
+			// "Never", "Regular levels only", "Editor levels only", "All levels"
+			if (pauseMenuPreference == "all levels") shouldCopy = true;
+			else if (pauseMenuPreference == "never") shouldCopy = false;
+			else if (pauseMenuPreference == "editor levels only" && pauseMenuTypeForSetting == "EditorPauseLayer") shouldCopy = true;
+			else if (pauseMenuPreference == "regular levels only" && pauseMenuTypeForSetting == "PauseLayer") shouldCopy = true;
+		}
+		if (shouldCopy) ss.intoClipboard();
+	}
 }

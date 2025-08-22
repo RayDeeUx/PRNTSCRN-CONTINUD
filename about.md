@@ -1,14 +1,14 @@
-# PRNTSCRN
+# <cy>PRNTSCRN</c>
 
-<c-AAAAAA>*(Pronounced `print`  `skren`, as in `print screen` )*</c>
+<c-AAAAAA>*(Pronounced  `print`  `skren` , as in  `print screen` )*</c>
 
-By <c-007d7d>Ray</c><c-00ffff>Dee</c><c-007d7d>Ux</c>, <c-00ff00>nin</c><c-0000ff>X</c><c-00ff00>out</c>, and <c-ff6666>mat</c>.
+<c-e0e0e0>By</c> <c-009d9d>Ray</c><c-00ffff>Dee</c><c-009d9d>Ux</c><c-e0e0e0>,</c> <c-00ff00>nin</c><c-2222ff>X</c><c-00ff00>out</c><c-e0e0e0>, and</c> <c-ff6666>mat</c><c-e0e0e0>.</c>
 
 A screenshot tool not too dissimilar from the F2 screenshot key from Minecraft!
 
 Tired of reaching for that clunky three-key shortcut to screenshot things? Disgusted by the window shadows from macOS screenshots? Finding it tedious to hide that one specific node via DevTools?
 
-Let PRNTSCRN make that screenshotting process easier for you!
+Let <cy>PRNTSCRN</c> make that screenshotting process easier for you!
 
 Features include:
 - Screenshotting levels without your UI clutter! (Or your player!)
@@ -19,4 +19,6 @@ Features include:
 - Rebindable keybinds!
 - An API for other mods to take screenshots through this mod!
 
-This is currently a desktop-only mod.
+Mobile support currently unavailable, but it is in the works.
+
+This [Geode mod](https://geode-sdk.org) is licensed under LGPLv2. [Join RayDeeUx's Discord server](https://discord.gg/WqZBYdBWZW) to report issues with using the mod.
