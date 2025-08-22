@@ -99,7 +99,9 @@ bool ScreenshotPopup::setup() {
 	settingsMenu->setContentSize({180.f, 145.f});
 	settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(true)->setAxisReverse(true)->setAxisAlignment(AxisAlignment::Center));
 
+	#ifdef GEODE_IS_DESKTOP
 	settingsMenu->addChild(createSetting("Copy To Clipboard", "copy-clipboard"));
+	#endif
 	settingsMenu->addChild(createSetting("Hide UI Layer", "hide-ui"));
 	settingsMenu->addChild(createSetting("Hide Player", "hide-player"));
 	settingsMenu->addChild(createSetting("JPEG", "jpeg-mafia"));

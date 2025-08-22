@@ -1,4 +1,5 @@
 #include "RenderTexture.hpp"
+#include <Geode/cocos/platform/win32/CCGL.h>
 
 using namespace geode::prelude;
 

@@ -26,7 +26,10 @@
 	},
 	"dependencies": {
 		"geode.node-ids": ">=1.20.0",
-		"geode.custom-keybinds": ">=1.10.3"
+		"geode.custom-keybinds": {
+			"version": ">=1.10.3",
+			"platforms": ["win", "mac", "android"]
+		}
 	},
 	"api": {
 		"include": [
@@ -48,7 +51,8 @@
 		"copy-clipboard": {
 			"type": "bool",
 			"name": "Copy to Clipboard",
-			"default": true
+			"default": true,
+			"platforms": ["win", "mac"]
 		},
 		"copy-screenshot-with-pause-menu-on": {
 			"type": "string",
@@ -60,7 +64,8 @@
 				"Regular levels only",
 				"Editor levels only",
 				"All levels"
-			]
+			],
+			"platforms": ["win", "mac"]
 		},
 		"hide-player": {
 			"type": "bool",

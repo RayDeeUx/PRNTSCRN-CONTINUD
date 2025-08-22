@@ -215,6 +215,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	bool shouldPlaySFX = screenshotterIsSelf && Mod::get()->getSettingValue<bool>("play-sfx");
 	ss.intoFile(filename, shouldPlaySFX, jpeg);
 
+	#ifdef GEODE_IS_DESKTOP
 	if (Mod::get()->getSettingValue<bool>("copy-clipboard") && screenshotterIsSelf) {
 		bool shouldCopy = true;
 		if (!pauseMenuTypeForSetting.empty()) {
@@ -228,6 +229,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		}
 		if (shouldCopy) ss.intoClipboard();
 	}
+	#endif
 }
 
 void SharedScreenshotLogic::screenshotLevelOrScene() {

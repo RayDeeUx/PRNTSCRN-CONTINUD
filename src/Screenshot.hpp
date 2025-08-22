@@ -9,7 +9,9 @@ public:
 	Screenshot(const CCSize& size, CCNode* node);
 
 	void intoFile(const std::string& filename, bool isFromPRNTSCRNAndWantsSFX, bool jpeg);
+	#ifdef GEODE_IS_DESKTOP
 	void intoClipboard();
+	#endif
 	CCTexture2D* intoTexture();
 
 private:
