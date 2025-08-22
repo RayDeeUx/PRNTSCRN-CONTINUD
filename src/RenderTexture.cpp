@@ -22,7 +22,7 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 
 	glGenRenderbuffers(1, &m_depthStencil);
 	glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencil);
-	#ifndef GEODE_IS_ANDROID
+	#ifdef GEODE_IS_DESKTOP
 	// im sorry OpenGL what the fuck do you mean that GL_DEPTH_STENCIL_ATTACHMENT is undefined on android
 	// eh whatever, ifdef the whole damn thing out--i want to get this shit working at least... goddammit
 	// this is honestly pretty sad to bear witness to; how the fuck did google manage to fuck up this bad
