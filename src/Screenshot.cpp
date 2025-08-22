@@ -55,7 +55,11 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		image.m_bHasAlpha = true;
 		image.m_bPreMulti = false;
 		image.m_pData = newData;
+		#ifdef GEODE_IS_WINDOWS
 		image.saveToFile(filename.c_str(), true);
+		#elif defined(GEODE_IS_ANDROID)
+		log::info("TODO: USE IMAGEPLUS BY PREVTER TO SAVE IMAGE BECAUSE FUCK COCOS2D-X AND THE INCONSISTENCY GRRRRRRRRRRRRRR");
+		#endif
 		if (isFromPRNTSCRNAndWantsSFX) {
 			Loader::get()->queueInMainThread([](){
 				FMODAudioEngine::get()->playEffect("screenshot_Windows_Android.mp3"_spr);
