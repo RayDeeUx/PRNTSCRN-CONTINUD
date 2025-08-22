@@ -26,7 +26,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 	std::thread([=, data = std::move(m_data)]() {
 		GLubyte* newData = nullptr;
 		newData = new GLubyte[m_width * m_width * 4];
-		for (int i = 0; i < m_height; ++i) {
+		for (int i = 0; i < m_height; ++i){
 			memcpy(&newData[i * m_width * 4],
 					&data.get()[(m_height - i - 1) * m_width * 4],
 					m_width * 4);
@@ -45,35 +45,23 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 	}).detach();
 	*/
 	std::thread([=, this, data = std::move(m_data)]() {
-		log::info("GLubyte* newData = new GLubyte[m_width * m_width * 4];");
 		GLubyte* newData = new GLubyte[m_width * m_width * 4];
-		log::info("for (int i = 0; i < m_height; ++i){");
-		for (int i = 0; i < m_height; ++i) {
-			log::info("i: {}", i);
+		for (int i = 0; i < m_height; ++i){
 			memcpy(&newData[i * m_width * 4],
 					&data.get()[(m_height - i - 1) * m_width * 4],
 					m_width * 4);
 		}
-		log::info("CCImage image{};");
-		CCImage image{};
-		log::info("image.m_nBitsPerComponent = 8;");
-		image.m_nBitsPerComponent = 8;
-		log::info("image.m_nHeight = m_height;");
-		image.m_nHeight = m_height;
-		log::info("image.m_nWidth = m_width;");
-		image.m_nWidth = m_width;
-		log::info("image.m_bHasAlpha = true;");
-		image.m_bHasAlpha = true;
-		log::info("image.m_bPreMulti = false;");
-		image.m_bPreMulti = false;
-		log::info("image.m_pData = newData;");
-		image.m_pData = newData;
-		log::info("#ifdef GEODE_IS_WINDOWS");
 		#ifdef GEODE_IS_WINDOWS
+		CCImage image{};
+		image.m_nBitsPerComponent = 8;
+		image.m_nHeight = m_height;
+		image.m_nWidth = m_width;
+		image.m_bHasAlpha = true;
+		image.m_bPreMulti = false;
+		image.m_pData = newData;
 		image.saveToFile(filename.c_str(), true);
 		#elif defined(GEODE_IS_ANDROID)
-		log::info("auto result = imgp::encode::png((void*)(m_data.get()), m_width, m_height);");
-		auto result = imgp::encode::png((void*)(m_data.get()), m_width, m_height);
+		auto result = imgp::encode::png((void*)(newData), m_width, m_height);
 		if (result.isOk()) geode::utils::file::writeBinary(filename, result.unwrap());
 		#endif
 		if (isFromPRNTSCRNAndWantsSFX) {
