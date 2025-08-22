@@ -6,6 +6,14 @@
 
 using namespace geode::prelude;
 
+std::string normalizePath(std::filesystem::path thePath) {
+	#ifdef GEODE_IS_WINDOWS
+	return geode::utils::string::wideToUtf8(thePath.wstring());
+	#else
+	return thePath.string();
+	#endif
+}
+
 std::string SharedScreenshotLogic::getFormattedDate() {
 	auto now = std::chrono::system_clock::now();
 	auto floored = std::chrono::floor<std::chrono::days>(now);
@@ -197,7 +205,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		index++;
 	}
 
-	std::string filename = folder / (numToString(index) + extension);
+	std::string filename = normalizePath(folder / (numToString(index) + extension));
 	ss.intoFile(filename, jpeg);
 	if (Mod::get()->getSettingValue<bool>("copy-clipboard") && (modIDAskingForScreenshot.empty() || modIDAskingForScreenshot == Mod::get()->getID())) {
 		bool shouldCopy = true;
