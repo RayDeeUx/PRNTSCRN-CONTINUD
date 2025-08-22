@@ -29,6 +29,10 @@
 		"geode.custom-keybinds": {
 			"version": ">=1.10.3",
 			"platforms": ["win", "mac", "android"]
+		},
+		"prevter.imageplus": {
+			"version": ">=1.0.0",
+			"platforms": ["android"]
 		}
 	},
 	"api": {
