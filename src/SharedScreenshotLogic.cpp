@@ -212,7 +212,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	}
 
 	std::string filename = normalizePath(folder / (numToString(index) + extension));
-	ss.intoFile(filename, screenshotterIsSelf && Mod::get()->getSettingValue<bool>("play-sfx"), jpeg);
+	bool shouldPlaySFX = screenshotterIsSelf && Mod::get()->getSettingValue<bool>("play-sfx");
+	ss.intoFile(filename, shouldPlaySFX, jpeg);
+
 	if (Mod::get()->getSettingValue<bool>("copy-clipboard") && screenshotterIsSelf) {
 		bool shouldCopy = true;
 		if (!pauseMenuTypeForSetting.empty()) {
