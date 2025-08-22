@@ -2,7 +2,7 @@
 
 #include <Geode/Geode.hpp>
 #include <memory>
-// code originally by mat, modified by raydeeux with help from prevter to remove all mentions of BGRA for android compat
+// code originally by mat, modified by raydeeux with help from prevter
 
 class RenderTexture {
 	unsigned int m_width = 0;
@@ -19,10 +19,10 @@ public:
 	~RenderTexture();
 
 	enum class PixelFormat {
-		// RGB,
-		// BGR,
-		RGBA // ,
-		// BGRA
+		RGB,
+		BGR,
+		RGBA,
+		BGRA
 	};
 
 	// begin, visit, end a node
