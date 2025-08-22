@@ -22,23 +22,20 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 
 	glGenRenderbuffers(1, &m_depthStencil);
 	glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencil);
-	glRenderbufferStorage(
-		GL_RENDERBUFFER, GL_DEPTH24_STENCIL8,
-		static_cast<GLsizei>(m_width),
-		static_cast<GLsizei>(m_height)
-	);
 	#ifndef GEODE_IS_ANDROID
 	// im sorry OpenGL what the fuck do you mean that GL_DEPTH_STENCIL_ATTACHMENT is undefined on android
 	// eh whatever, ifdef the whole damn thing out--i want to get this shit working at least... goddammit
 	// this is honestly pretty sad to bear witness to; how the fuck did google manage to fuck up this bad
 	// im actually so fucking pissed off at this bullshit bro; putting int manually doesnt do shit at all
 	// but this leads me to ask: how the hell did MAT of all people manage to compile this by himself????
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencil);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, static_cast<GLsizei>(m_width), static_cast<GLsizei>(m_height));
+	// glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencil);
 	#else
-	// if https://registry.khronos.org/OpenGL/extensions/OES/OES_packed_depth_stencil.txt rly works
-	// i will forever be in solidpixel's and Reto Koradi's debts holy fucking shit this enum exists
-	// thank you to https://overflow.adminforge.de/questions/28996721 for being a godsend holy fuck
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_OES, GL_RENDERBUFFER, m_depthStencil);
+	// im an OpenGL noob so i used mistral to help me out
+	// sue me. --raydeeux
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, static_cast<GLsizei>(m_width), static_cast<GLsizei>(m_height));
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthStencil);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencil);
 	#endif
 
 	// attach texture to framebuffer
