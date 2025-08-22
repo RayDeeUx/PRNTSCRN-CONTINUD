@@ -193,9 +193,10 @@ bool ScreenshotPopup::setup() {
 }
 
 void ScreenshotPopup::onScreenshot(CCObject*) {
-	if (PlayLayer* pl = PlayLayer::get()) SharedScreenshotLogic::screenshot(pl);
-	else if (LevelEditorLayer* lel = LevelEditorLayer::get()) SharedScreenshotLogic::screenshot(lel);
-	else if (CCScene* scene = CCScene::get()) SharedScreenshotLogic::screenshot(scene);
+	bool isControl = CCKeyboardDispatcher::get()->getControlKeyPressed();
+	if (PlayLayer* pl = PlayLayer::get(); pl && !isControl) SharedScreenshotLogic::screenshot(pl);
+	else if (LevelEditorLayer* lel = LevelEditorLayer::get(); lel && !isControl) SharedScreenshotLogic::screenshot(lel);
+	else if (CCScene* scene = CCScene::get(); scene) SharedScreenshotLogic::screenshot(scene);
 }
 
 void ScreenshotPopup::onConfigDir(CCObject*) {
