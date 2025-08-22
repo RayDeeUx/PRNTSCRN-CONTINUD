@@ -232,7 +232,7 @@ void SharedScreenshotLogic::screenshotLevelOrScene() {
 	CCNode* nodeToScreenshot = CCScene::get();
 	PlayLayer* pl = PlayLayer::get();
 	LevelEditorLayer* lel = LevelEditorLayer::get();
-	if (pl) {
+	if (pl && pl->getParent() == CCScene::get()) {
 		SharedScreenshotLogic::screenshot(pl);
 		if (CCNode* ell = pl->getChildByID("EndLevelLayer"); ell) {
 			bool hideUISetting = Loader::get()->getLoadedMod("ninxout.prntscrn")->getSettingValue<bool>("hide-ui"); // guaranteed to get the Mod* pointer
@@ -249,7 +249,7 @@ void SharedScreenshotLogic::screenshotLevelOrScene() {
 		}
 		return;
 	}
-	if (lel) {
+	if (lel && lel->getParent() == CCScene::get()) {
 		SharedScreenshotLogic::screenshot(lel);
 		if (lel->getChildByID("EditorPauseLayer")) {
 			CCScene* baseScene = CCScene::get();
