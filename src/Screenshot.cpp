@@ -17,7 +17,9 @@ CCTexture2D* Screenshot::intoTexture() {
 
 #ifndef __APPLE__
 
+// function formerly impl'd by ninxout, reimpl'd by prevter. former code preserved for posterity
 void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWantsSFX, bool jpeg) { // jpeg is unused because saveToFile handles automatically based on file extension. however it is being used in Screenshot.mm (macOS support)
+	/*
 	std::thread([=, data = std::move(m_data)]() {
 		GLubyte* newData = nullptr;
 		newData = new GLubyte[m_width * m_width * 4];
@@ -37,6 +39,28 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 			delete[] newData; // prevter caught this memleak --raydeeux
 		});
 
+	}).detach();
+	*/
+	std::thread([=]() {
+		GLubyte* newData = new GLubyte[m_width * m_width * 4];
+		for (int i = 0; i < m_height; ++i){
+			memcpy(&newData[i * m_width * 4],
+					&m_data.get()[(m_height - i - 1) * m_width * 4],
+					m_width * 4);
+		}
+		CCImage image{};
+		image.m_nBitsPerComponent = 8;
+		image.m_nHeight = m_height;
+		image.m_nWidth = m_width;
+		image.m_bHasAlpha = true;
+		image.m_bPreMulti = false;
+		image.m_pData = newData;
+		image.saveToFile(filename.c_str(), true);
+		if (isFromPRNTSCRNAndWantsSFX) {
+			Loader::get()->queueInMainThread([](){
+				FMODAudioEngine::get()->playEffect("screenshot_Windows_Android.mp3"_spr);
+			});
+		}
 	}).detach();
 }
 
