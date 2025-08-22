@@ -1,12 +1,9 @@
 #include "RenderTexture.hpp"
-#include <Geode/cocos/platform/win32/CCGL.h>
+// code originally by mat, modified by raydeeux with help from prevter to remove all usages of stencil and all mentions of BGRA for android compat
 
 using namespace geode::prelude;
 
-RenderTexture::RenderTexture(unsigned int width, unsigned int height) 
-	: m_width(width),
-	m_height(height)
-{
+RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(width), m_height(height) {
 	// generate texture
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 8);
 	glGenTextures(1, &m_texture);
@@ -24,6 +21,7 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height)
 	glGenFramebuffers(1, &m_fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 
+	/*
 	glGenRenderbuffers(1, &m_depthStencil);
 	glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencil);
 	glRenderbufferStorage(
@@ -32,6 +30,7 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height)
 		static_cast<GLsizei>(m_height)
 	);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencil);
+	*/
 
 	// attach texture to framebuffer
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture, 0);
@@ -40,7 +39,7 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height)
 RenderTexture::~RenderTexture() {
 	if (m_fbo) glDeleteFramebuffers(1, &m_fbo);
 	if (m_texture) glDeleteTextures(1, &m_texture);
-	if (m_depthStencil) glDeleteRenderbuffers(1, &m_depthStencil);
+	// if (m_depthStencil) glDeleteRenderbuffers(1, &m_depthStencil);
 }
 
 void RenderTexture::begin() {
@@ -72,7 +71,8 @@ void RenderTexture::end() {
 	// restore saved buffers
 	glBindRenderbuffer(GL_RENDERBUFFER, m_oldRBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_oldFBO);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	// glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glview->m_fScaleX = m_oldScaleX;
 	glview->m_fScaleY = m_oldScaleY;
@@ -91,6 +91,7 @@ std::unique_ptr<uint8_t[]> RenderTexture::readDataFromTexture(PixelFormat format
 	int perPixel = 4;
 	int glFormat = GL_RGBA;
 	switch (format) {
+		/*
 		case PixelFormat::BGR:
 			perPixel = 3;
 			glFormat = GL_BGR;
@@ -103,6 +104,7 @@ std::unique_ptr<uint8_t[]> RenderTexture::readDataFromTexture(PixelFormat format
 			perPixel = 4;
 			glFormat = GL_BGRA;
 			break;
+		*/
 		case PixelFormat::RGBA:
 			perPixel = 4;
 			glFormat = GL_RGBA;
