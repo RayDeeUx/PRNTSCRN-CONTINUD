@@ -95,9 +95,9 @@ bool ScreenshotPopup::setup() {
 
 	CCMenu* settingsMenu = CCMenu::create();
 	settingsMenu->setID("quick-settings"_spr);
-	settingsMenu->setPosition(ccp(235.f, 125.f));
+	settingsMenu->setPosition(ccp(240.f, 125.f));
 	settingsMenu->setContentSize({180.f, 145.f});
-	settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(true)->setAxisReverse(true)->setAxisAlignment(AxisAlignment::End));
+	settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(true)->setAxisReverse(true)->setAxisAlignment(AxisAlignment::Center));
 
 	settingsMenu->addChild(createSetting("Copy To Clipboard", "copy-clipboard"));
 	settingsMenu->addChild(createSetting("Hide UI Layer", "hide-ui"));
@@ -161,22 +161,7 @@ bool ScreenshotPopup::setup() {
 	configDirButton->setPosition(ccp(80, 80));
 	m_buttonMenu->addChild(configDirButton);
 
-	std::string bodyText;
-	std::vector<geode::Ref<keybinds::Bind>> screenshotBinds = keybinds::BindManager::get()->getBindsFor("screenshot"_spr);
-	if (!screenshotBinds.empty()) {
-		const std::string& keybindString = screenshotBinds.at(0)->toString();
-		if (!keybindString.empty()) bodyText += fmt::format("Screenshot the level: <cl>{}</c>", keybindString);
-		else bodyText += "Screenshot the level: <co>[Unknown]</c>";
-	} else bodyText += "Screenshot the level: <c_>NONE SET</c>";
-	bodyText += "\n";
-	std::vector<geode::Ref<keybinds::Bind>> plainScreenshotBinds = keybinds::BindManager::get()->getBindsFor("plain-screenshot"_spr);
-	if (!plainScreenshotBinds.empty()) {
-		const std::string& keybindString = plainScreenshotBinds.at(0)->toString();
-		if (!keybindString.empty()) bodyText += fmt::format("Screenshot the screen: <cl>{}</c>", keybindString);
-		else bodyText += "Screenshot the screen: <co>[Unknown]</c>";
-	} else bodyText += "Screenshot the screen: <c_>NONE SET</c>";
-
-	InfoAlertButton* infoButton = InfoAlertButton::create("PRNTSCRN Keybinds", bodyText, .7f);
+	InfoAlertButton* infoButton = InfoAlertButton::create("PRNTSCRN Keybinds", Manager::fetchKeybindsStrings(), .7f);
 	infoButton->setID("keybinds-help-button"_spr);
 	infoButton->setPosition(m_mainLayer->getContentSize() - 3.f);
 	m_buttonMenu->addChild(infoButton);
