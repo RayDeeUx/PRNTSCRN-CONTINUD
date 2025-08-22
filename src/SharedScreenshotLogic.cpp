@@ -1,3 +1,5 @@
+// ReSharper disable CppDFAUnreachableCode
+// yeah that's right clion stop saying my code is unreachable >:(
 #include "SharedScreenshotLogic.hpp"
 #include "Screenshot.hpp"
 #include "Manager.hpp"
