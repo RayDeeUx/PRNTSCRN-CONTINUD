@@ -4,23 +4,33 @@ using namespace geode::prelude;
 
 RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(width), m_height(height) {
 	// generate texture
+	log::info("calling glPixelStorei");
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 8);
+	log::info("calling glGenTextures");
 	glGenTextures(1, &m_texture);
+	log::info("calling glBindTexture");
 	glBindTexture(GL_TEXTURE_2D, m_texture);
 
+	log::info("calling glTexImage2D");
 	glTexImage2D(
 		GL_TEXTURE_2D, 0, GL_RGB,
 		static_cast<GLsizei>(m_width),
 		static_cast<GLsizei>(m_height),
 		0, GL_RGB, GL_UNSIGNED_BYTE, 0
 	);
+	log::info("calling glTexParameteri mag filter");
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	log::info("calling glTexParameteri min filter");
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
+	log::info("calling glGenFramebuffers with 1, &m_fbo");
 	glGenFramebuffers(1, &m_fbo);
+	log::info("calling glBindFramebuffer with GL_FRAMEBUFFER, m_fbo");
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 
+	log::info("calling glGenRenderbuffers with 1, &m_depthStencil");
 	glGenRenderbuffers(1, &m_depthStencil);
+	log::info("calling glBindRenderbuffer with GL_FRAMEBUFFER, m_depthStencil");
 	glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencil);
 
 	#ifdef GEODE_IS_DESKTOP
@@ -34,12 +44,17 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 	#else
 	// im an OpenGL noob so i used mistral to help me out
 	// sue me. --raydeeux
+	log::info("calling glRenderbufferStorage");
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8_OES, static_cast<GLsizei>(m_width), static_cast<GLsizei>(m_height));
+	log::info("calling glFramebufferRenderbuffer for depth attachment");
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthStencil);
+	log::info("calling glFramebufferRenderbuffer for stencil attachment");
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, m_depthStencil);
+	log::info("exiting android ifdef");
 	#endif
 
 	// attach texture to framebuffer
+	log::info("calling glFramebufferTexture2D");
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture, 0);
 }
 
