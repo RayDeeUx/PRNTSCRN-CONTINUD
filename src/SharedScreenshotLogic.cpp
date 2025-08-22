@@ -119,6 +119,17 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (CCObject* isControlFromPopup = node->getUserObject("is-plain-ss-from-popup"_spr); isControlFromPopup) {
 		isCtrl = static_cast<CCBool*>(isControlFromPopup)->getValue();
 	}
+	std::string modIDAskingForScreenshot;
+	std::string pauseMenuTypeForSetting;
+	if (CCObject* modID = node->getUserObject("mod-asking-for-screenshot"_spr); modID) {
+		auto cString = static_cast<std::string>(static_cast<CCString*>(modID)->getCString());
+		if (!cString.empty()) modIDAskingForScreenshot = fmt::format("{} - ", cString);
+	}
+	if (CCObject* pauseMenuType = node->getUserObject("pause-menu-type"_spr); pauseMenuType) {
+		auto cString = static_cast<std::string>(static_cast<CCString*>(pauseMenuType)->getCString());
+		if (!cString.empty()) pauseMenuTypeForSetting = cString;
+	}
+	bool modRequestingScreenshotIsSelf = modIDAskingForScreenshot.empty() || modIDAskingForScreenshot == Mod::get()->getID();
 
 	// event filter from main.cpp will have already hidden the nodes by this point
 	std::unordered_map<const char*, bool> uiNodes = {};
@@ -152,7 +163,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_MEM(gjbgl, m_player2);
 		SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
-	Screenshot ss = Screenshot(Manager::get()->width, Manager::get()->height, node);
+	CCSize selectedSize = CCSize(Manager::get()->width, Manager::get()->height);
+	if (!modRequestingScreenshotIsSelf) selectedSize = CCDirector::get()->getWinSizeInPixels();
+	Screenshot ss = Screenshot(selectedSize, node);
 	if (isCtrl) RES_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
 	if (hideUI && pl) {
 		RES_NODE(pl, UILayer);
@@ -175,19 +188,6 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 		RES_MEM(gjbgl, m_player2);
 		SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
-	}
-
-	std::string modIDAskingForScreenshot;
-	std::string pauseMenuTypeForSetting;
-
-	if (CCObject* modID = node->getUserObject("mod-asking-for-screenshot"_spr); modID) {
-		auto cString = static_cast<std::string>(static_cast<CCString*>(modID)->getCString());
-		if (!cString.empty()) modIDAskingForScreenshot = fmt::format("{} - ", cString);
-	}
-
-	if (CCObject* pauseMenuType = node->getUserObject("pause-menu-type"_spr); pauseMenuType) {
-		auto cString = static_cast<std::string>(static_cast<CCString*>(pauseMenuType)->getCString());
-		if (!cString.empty()) pauseMenuTypeForSetting = cString;
 	}
 
 	bool jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");
@@ -214,7 +214,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	std::string filename = normalizePath(folder / (numToString(index) + extension));
 	ss.intoFile(filename, jpeg);
-	if (Mod::get()->getSettingValue<bool>("copy-clipboard") && (modIDAskingForScreenshot.empty() || modIDAskingForScreenshot == Mod::get()->getID())) {
+	if (Mod::get()->getSettingValue<bool>("copy-clipboard") && modRequestingScreenshotIsSelf) {
 		bool shouldCopy = true;
 		if (!pauseMenuTypeForSetting.empty()) {
 			shouldCopy = false;
