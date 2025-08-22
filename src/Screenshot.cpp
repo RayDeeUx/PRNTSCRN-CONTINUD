@@ -34,9 +34,9 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 				image->saveToFile(filename.c_str(), true);
 				if (isFromPRNTSCRNAndWantsSFX) FMODAudioEngine::get()->playEffect("screenshot_Windows_Android.mp3"_spr);
 			}
+			delete[] newData; // prevter caught this memleak --raydeeux
 		});
 
-		delete[] newData; // prevter caught this memleak --raydeeux
 	}).detach();
 }
 
