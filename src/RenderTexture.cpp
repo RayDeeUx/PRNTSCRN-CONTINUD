@@ -89,19 +89,19 @@ std::unique_ptr<uint8_t[]> RenderTexture::readDataFromTexture(PixelFormat format
 	switch (format) {
 		case PixelFormat::BGR:
 			perPixel = 3;
-			glFormat = GL_BGR;
+			glFormat = 0x80E0; // GL_BGR
 			break;
 		case PixelFormat::RGB:
 			perPixel = 3;
-			glFormat = GL_RGB;
+			glFormat = 0x1907; // GL_RGB
 			break;
 		case PixelFormat::BGRA:
 			perPixel = 4;
-			glFormat = GL_BGRA;
+			glFormat = 0x80E1; // GL_BGRA
 			break;
 		case PixelFormat::RGBA:
 			perPixel = 4;
-			glFormat = GL_RGBA;
+			glFormat = 0x1908; // GL_RGBA
 			break;
 	}
 
