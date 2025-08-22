@@ -66,7 +66,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		image.saveToFile(filename.c_str(), true);
 		#elif defined(GEODE_IS_ANDROID)
 		log::info("imgp::encode::png");
-		auto result = imgp::encode::png((void*)(&data.get()), m_width, m_height);
+		auto result = imgp::encode::png((void*)(data.get()), m_width, m_height);
 		if (result.isOk()) {
 			geode::utils::file::writeBinary(filename, std::move(result).unwrap());
 		} else log::error("error: {}", result.unwrapErr());
