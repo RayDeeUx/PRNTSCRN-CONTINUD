@@ -29,9 +29,12 @@ void setHeight() {
 	}
 }
 
+#ifndef GEODE_IS_IOS
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 using namespace keybinds;
+#endif
 $on_mod(Loaded) {
+	#ifndef GEODE_IS_IOS
 	BindManager::get()->registerBindable({
 		"screenshot"_spr,
 		"Take a Screenshot!", "Takes a screenshot of the level on screen, if there is one. Otherwise, takes a screenshot of the screen itself.",
@@ -53,6 +56,7 @@ $on_mod(Loaded) {
 		if (event->isDown() && CCScene::get()) SharedScreenshotLogic::screenshot(CCScene::get());
 		return ListenerResult::Propagate;
 	}, InvokeBindFilter(nullptr, "plain-screenshot"_spr));
+	#endif
 	setWidth();
 	setHeight();
 	listenForSettingChanges("resolution-width", [](int64_t unused) { setWidth(); });

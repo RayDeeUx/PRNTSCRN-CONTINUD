@@ -32,7 +32,7 @@
 		},
 		"prevter.imageplus": {
 			"version": ">=1.0.0",
-			"platforms": ["android"]
+			"platforms": ["android", "ios"]
 		}
 	},
 	"api": {

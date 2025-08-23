@@ -1,6 +1,6 @@
 #include "Screenshot.hpp"
 #include <thread>
-#ifdef GEODE_IS_ANDROID
+#ifdef GEODE_IS_MOBILE
 #include <prevter.imageplus/include/api.hpp>
 #endif
 
@@ -18,7 +18,7 @@ CCTexture2D* Screenshot::intoTexture() {
 	return m_tex.intoTexture();
 }
 
-#ifndef __APPLE__
+#ifndef GEODE_IS_MACOS
 
 // function formerly impl'd by ninxout, reimpl'd by prevter. former code preserved for posterity
 void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWantsSFX, bool jpeg) { // jpeg is unused because saveToFile handles automatically based on file extension. however it is being used in Screenshot.mm (macOS support)
@@ -64,7 +64,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		image.m_bPreMulti = false;
 		image.m_pData = newData;
 		image.saveToFile(filename.c_str(), true);
-		#elif defined(GEODE_IS_ANDROID)
+		#elif defined(GEODE_IS_MOBILE)
 		log::info("imgp::encode::png");
 		auto result = imgp::encode::png((void*)(data.get()), width, height);
 		if (result.isOk()) {

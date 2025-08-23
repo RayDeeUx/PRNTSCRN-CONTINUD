@@ -1,7 +1,7 @@
 #include "Screenshot.hpp"
 #include <Geode/Geode.hpp>
 
-#ifdef __APPLE__
+#ifdef GEODE_IS_MACOS
 
 #define CommentType CommentType2
 #include <CoreGraphics/CoreGraphics.h>
@@ -64,10 +64,6 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		if (isFromPRNTSCRNAndWantsSFX) FMODAudioEngine::get()->playEffect("screenshot_macOS_iOS.mp3"_spr);
 	});
 }
-
-#endif
-
-#ifdef GEODE_IS_MACOS
 
 void Screenshot::intoClipboard() {
 	int dataLen = m_width * m_height * 4;
