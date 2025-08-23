@@ -23,7 +23,9 @@ $on_mod(Loaded) {
 			SharedScreenshotLogic::screenshotLevelOrScene();
 		}).setDescription("Screenshot the level (either from gameplay or in the editor, if there is one active).\nOtherwise, screenshot the contents of the screen.");
 
+		#ifdef GEODE_IS_DESKTOP
 		addSetting(tab, "copy-clipboard");
+		#endif
 		addSetting(tab, "hide-ui");
 		addSetting(tab, "hide-player");
 		addSetting(tab, "jpeg-mafia");

@@ -2,6 +2,7 @@
 
 #include <Geode/Geode.hpp>
 #include <memory>
+// code originally by mat, modified by raydeeux with help from prevter
 
 class RenderTexture {
 	unsigned int m_width = 0;

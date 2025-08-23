@@ -1,5 +1,8 @@
 #include "Screenshot.hpp"
 #include <thread>
+#ifdef GEODE_IS_MOBILE
+#include <prevter.imageplus/include/api.hpp>
+#endif
 
 using namespace geode::prelude;
 
@@ -15,9 +18,11 @@ CCTexture2D* Screenshot::intoTexture() {
 	return m_tex.intoTexture();
 }
 
-#ifdef GEODE_IS_WINDOWS
+#ifndef GEODE_IS_MACOS
 
+// function formerly impl'd by ninxout, reimpl'd by prevter. former code preserved for posterity
 void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWantsSFX, bool jpeg) { // jpeg is unused because saveToFile handles automatically based on file extension. however it is being used in Screenshot.mm (macOS support)
+	/*
 	std::thread([=, data = std::move(m_data)]() {
 		GLubyte* newData = nullptr;
 		newData = new GLubyte[m_width * m_width * 4];
@@ -34,13 +39,54 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 				image->saveToFile(filename.c_str(), true);
 				if (isFromPRNTSCRNAndWantsSFX) FMODAudioEngine::get()->playEffect("screenshot_Windows_Android.mp3"_spr);
 			}
+			delete[] newData; // prevter caught this memleak --raydeeux
 		});
+
+	}).detach();
+	*/
+	std::thread([=, width = std::move(m_width), height = std::move(m_height), data = std::move(m_data)]() {
+		#ifdef GEODE_IS_WINDOWS
+		log::info("making newData");
+		GLubyte* newData = new GLubyte[width * width * 4];
+		log::info("entering forloop");
+		for (int i = 0; i < height; ++i) {
+			log::info("i: {}", i);
+			memcpy(&newData[i * width * 4],
+					&data.get()[(height - i - 1) * width * 4],
+					width * 4);
+		}
+		log::info("exited forloop");
+		CCImage image{};
+		image.m_nBitsPerComponent = 8;
+		image.m_nHeight = height;
+		image.m_nWidth = width;
+		image.m_bHasAlpha = true;
+		image.m_bPreMulti = false;
+		image.m_pData = newData;
+		image.saveToFile(filename.c_str(), true);
+		#elif defined(GEODE_IS_MOBILE)
+		log::info("imgp::encode::png");
+		auto result = imgp::encode::png((void*)(data.get()), width, height);
+		if (result.isOk()) {
+			geode::utils::file::writeBinary(filename, std::move(result).unwrap());
+		} else log::error("error: {}", result.unwrapErr());
+		log::info("exiting ifdef GEODE_IS_ANDROID");
+		#endif
+		if (isFromPRNTSCRNAndWantsSFX) {
+			Loader::get()->queueInMainThread([](){
+				FMODAudioEngine::get()->playEffect("screenshot_Windows_Android.mp3"_spr);
+			});
+		}
 	}).detach();
 }
 
+#endif
+
+#ifdef GEODE_IS_WINDOWS
+
 void Screenshot::intoClipboard() {
-	std::thread([=, data = std::move(m_data)]() {
-		auto bitmap = CreateBitmap(m_width, m_height, 1, 32, data.get());
+	std::thread([=, width = std::move(m_width), height = std::move(m_height), data = std::move(m_data)]() {
+		auto bitmap = CreateBitmap(width, height, 1, 32, data.get());
 
 		if (OpenClipboard(NULL)) {
 			if (EmptyClipboard()) {
