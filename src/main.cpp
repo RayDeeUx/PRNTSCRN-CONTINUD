@@ -139,7 +139,7 @@ $on_mod(Loaded) {
 }
 
 #include <Geode/modify/PlayLayer.hpp>
-class $modify(AutoScreenshotPlayLsoayer, PlayLayer) {
+class $modify(AutoScreenshotPlayLayer, PlayLayer) {
 	struct Fields {
 		int lastScreenshot = 0;
 		bool autoScreenshot = false;
