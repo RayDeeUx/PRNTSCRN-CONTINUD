@@ -13,10 +13,10 @@ Let <cy>PRNTSCRN</c> make that screenshotting process easier for you!
 Featuring:
 - Screenshotting levels without your UI clutter! (Or your player!)
 - Automatic screenshots every `n`% or every `n` seconds when playing a level!
+- An API for other mods to take screenshots through this mod!
 - Customizable screenshot dimensions! (For those who prefer doing things that way.)
 - Eclipse Menu integration!
-- An API for other mods to take screenshots through this mod!
-- Rebindable keybinds! (macOS, Windows, and iOS only)
+- Rebindable keybinds! (macOS, Windows, and Android only)
 - Copy to clipboard! (macOS/Windows only)
 - Saving screenshots as JPG! (macOS/Windows only)
 
