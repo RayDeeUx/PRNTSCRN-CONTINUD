@@ -45,13 +45,13 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 	}).detach();
 	*/
 	std::thread([=, width = std::move(m_width), height = std::move(m_height), data = std::move(m_data)]() {
-		#ifdef GEODE_IS_WINDOWS
 		GLubyte* newData = new GLubyte[width * width * 4];
 		for (int i = 0; i < height; ++i) {
 			memcpy(&newData[i * width * 4],
 					&data.get()[(height - i - 1) * width * 4],
 					width * 4);
 		}
+		#ifdef GEODE_IS_WINDOWS
 		CCImage image{};
 		image.m_nBitsPerComponent = 8;
 		image.m_nHeight = height;
