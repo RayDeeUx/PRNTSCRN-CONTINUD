@@ -61,7 +61,8 @@
 		"copy-screenshot-with-pause-menu-on": {
 			"type": "string",
 			"name": "Screenshots with pause menus are copied on...",
-			"description": "When screenshotting a level (both gameplay and editor) while paused, PRNTSCRN will screenshot both the pause menu and the level itself. However, there is only enough room for one screenshot to be sent to the clipboard.\n\nBy default, PRNTSCRN copies screenshots of the level itself during regular gameplay, and copies the screenshot of the pause menu when building/editing a level. Here, you'll decide when to copy the screenshot containing a pause menu when screenshotting a level (either in regular gameplay or the level editor).",
+			"description": "When screenshotting a level (both gameplay and editor) while paused, PRNTSCRN will screenshot both the pause menu and the level itself. However, there is only enough room for one screenshot to be sent to the clipboard.\n\nBy default, PRNTSCRN copies screenshots of the level itself during regular gameplay, and copies the screenshot of the pause menu when building/editing a level. Here, you'll decide when to copy the screenshot containing a pause menu when screenshotting a level (either in regular gameplay or the level editor).\n\n\n\n\n\n\n\n",
+			"no-one-will-ever-use-this-key-but-i-need-to-say-something": "the newline spam was to fix mdpopup height miscalculations",
 			"default": "Editor levels only",
 			"one-of": [
 				"Never",

@@ -2,7 +2,7 @@
 
 <c-AAAAAA>*(Pronounced  `print`  `skren` , as in  `print screen` )*</c>
 
-<c-e0e0e0>By</c> <c-009d9d>Ray</c><c-00ffff>Dee</c><c-009d9d>Ux</c><c-e0e0e0>,</c> <c-00ff00>nin</c><c-2222ff>X</c><c-00ff00>out</c><c-e0e0e0>, and</c> <c-ff6666>mat</c><c-e0e0e0>.</c>
+<c-e0e0e0>By</c> <c-009d9d>Ray</c><c-00ffff>Dee</c><c-009d9d>Ux</c><c-e0e0e0>,</c> <c-00ff00>nin</c><c-2222ff>X</c><c-00ff00>out</c><c-e0e0e0>,</c> <c-ff6666>mat</c><c-e0e0e0>, and</c> <c-7d7dff>Prev</c><c-ffa040>ter</c><c-e0e0e0>.</c>
 
 A screenshot tool not too dissimilar from the F2 screenshot key from Minecraft!
 
