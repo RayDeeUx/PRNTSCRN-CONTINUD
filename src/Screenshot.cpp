@@ -74,7 +74,11 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		#endif
 		if (isFromPRNTSCRNAndWantsSFX) {
 			Loader::get()->queueInMainThread([](){
+				#ifdef GEODE_IS_IOS
+				FMODAudioEngine::get()->playEffect("screenshot_macOS_iOS.mp3"_spr);
+				#elif defined(GEODE_IS_ANDROID) || defined(GEODE_IS_WINDOWS)
 				FMODAudioEngine::get()->playEffect("screenshot_Windows_Android.mp3"_spr);
+				#endif
 			});
 		}
 	}).detach();
