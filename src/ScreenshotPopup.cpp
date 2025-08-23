@@ -103,7 +103,9 @@ bool ScreenshotPopup::setup() {
 	#endif
 	settingsMenu->addChild(createSetting("Hide UI Layer", "hide-ui"));
 	settingsMenu->addChild(createSetting("Hide Player", "hide-player"));
+	#ifdef GEODE_IS_DESKTOP
 	settingsMenu->addChild(createSetting("JPEG", "jpeg-mafia"));
+	#endif
 	settingsMenu->addChild(createSetting("Auto Screenshot", "auto-screenshot"));
 	// settingsMenu->addChild(createSetting("Use Window Width", "use-window-width")); // ninxout insisted that this stay separate
 	// settingsMenu->addChild(createSetting("Use Window Height", "use-window-height")); // ninxout insisted that this stay separate

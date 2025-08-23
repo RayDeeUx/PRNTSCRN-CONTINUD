@@ -189,7 +189,10 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
 
-	bool jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");
+	bool jpeg = false;
+	#ifdef GEODE_IS_DESKTOP
+	jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");
+	#endif
 	std::string extension = jpeg ? ".jpg" : ".png";
 
 	std::string formattedDate = SharedScreenshotLogic::getFormattedDate();

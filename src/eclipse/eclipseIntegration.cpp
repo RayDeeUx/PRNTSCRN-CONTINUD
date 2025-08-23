@@ -28,7 +28,9 @@ $on_mod(Loaded) {
 		#endif
 		addSetting(tab, "hide-ui");
 		addSetting(tab, "hide-player");
+		#ifdef GEODE_IS_DESKTOP
 		addSetting(tab, "jpeg-mafia");
+		#endif
 		addSetting(tab, "auto-screenshot");
 		addSetting(tab, "play-sfx");
 

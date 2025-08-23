@@ -111,7 +111,8 @@
 			"type": "bool",
 			"name": "Save Screenshots as JPEG",
 			"description": "Use JPEG for images instead of PNG.",
-			"default": false
+			"default": false,
+			"platforms": ["win", "mac"]
 		},
 		"auto-screenshot": {
 			"type": "bool",
