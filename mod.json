@@ -150,7 +150,7 @@
 		"show-more-details": {
 			"type": "bool",
 			"name": "Display More Settings Values in Eclipse Menu (READ!)",
-			"description": "<cp>REQUIRES RESTART TO APPLY CHANGES.</c>\n\nShows non-boolean settings values in Eclipse Menu. Recommended for Eclipse Menu's Panel layout only.",
+			"description": "<cp>REQUIRES RESTART TO APPLY CHANGES.</c>\n\nShows non-boolean, non-button settings values in PRNTSCRN's tab in Eclipse Menu. <cy>Recommended for Eclipse Menu's Panel layout</c> <cr>only</c><cy>.</c>",
 			"default": false
 		}
 	}
