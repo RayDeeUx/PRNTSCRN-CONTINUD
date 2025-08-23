@@ -61,7 +61,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		image.m_pData = newData;
 		image.saveToFile(filename.c_str(), true);
 		#elif defined(GEODE_IS_MOBILE)
-		auto result = imgp::encode::png((void*)(data.get()), width, height);
+		auto result = imgp::encode::png((void*)(newData), width, height);
 		if (result.isOk()) {
 			geode::utils::file::writeBinary(filename, std::move(result).unwrap());
 		} else log::error("error: {}", result.unwrapErr());
