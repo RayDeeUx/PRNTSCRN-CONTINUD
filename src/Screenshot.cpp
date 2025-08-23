@@ -74,11 +74,17 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		#endif
 		if (isFromPRNTSCRNAndWantsSFX) {
 			Loader::get()->queueInMainThread([](){
+				auto system = FMODAudioEngine::get()->m_system;
+				FMOD::Channel* channel;
+				FMOD::Sound* sound;
 				#ifdef GEODE_IS_IOS
-				FMODAudioEngine::get()->playEffect("screenshot_macOS_iOS.mp3"_spr);
+				std::string customSound = "screenshot_macOS_iOS.mp3";
 				#elif defined(GEODE_IS_ANDROID) || defined(GEODE_IS_WINDOWS)
-				FMODAudioEngine::get()->playEffect("screenshot_Windows_Android.mp3"_spr);
+				std::string customSound = "screenshot_Windows_Android.mp3";
 				#endif
+				system->createSound((Mod::get()->getResourcesDir() / customSound).string().c_str(), FMOD_DEFAULT, nullptr, &sound);
+				system->playSound(sound, nullptr, false, &channel);
+				channel->setVolume(35.f / 100.0f);
 			});
 		}
 	}).detach();
