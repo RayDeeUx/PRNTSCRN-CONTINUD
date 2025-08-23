@@ -65,8 +65,8 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		if (result.isOk()) {
 			geode::utils::file::writeBinary(filename, std::move(result).unwrap());
 		} else log::error("error: {}", result.unwrapErr());
-		#endif
 		delete[] newData; // prevent memory leak (prevter)
+		#endif
 		if (isFromPRNTSCRNAndWantsSFX) {
 			Loader::get()->queueInMainThread([](){
 				auto system = FMODAudioEngine::get()->m_system;
