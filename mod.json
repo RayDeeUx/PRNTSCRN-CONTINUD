@@ -134,6 +134,12 @@
 			"default": 30,
 			"min": 5
 		},
+		"pause-menu-button": {
+			"type": "bool",
+			"name": "Pause Menu Button",
+			"default": true,
+			"platforms": ["win", "mac"]
+		},
 		"play-sfx": {
 			"type": "bool",
 			"name": "Play Screenshot SFX",

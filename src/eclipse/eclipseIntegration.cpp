@@ -65,8 +65,10 @@ $on_mod(Loaded) {
 			if (std::shared_ptr<SettingV3> setting = mod->getSetting("auto-seconds"); setting) {
 				tab.addLabel(fmt::format("Auto Screenshot Seconds Interval (Plat. levels): {} seconds", mod->getSettingValue<int64_t>("auto-seconds")));
 			}
+			#ifndef GEODE_IS_IOS
 			tab.addLabel(fmt::format("Screenshot the level: {}", Manager::getColorlessBindsStringFor("screenshot"_spr)));
 			tab.addLabel(fmt::format("Screenshot the screen: {}", Manager::getColorlessBindsStringFor("plain-screenshot"_spr)));
+			#endif
 		}
 	});
 }

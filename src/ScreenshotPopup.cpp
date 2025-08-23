@@ -162,10 +162,12 @@ bool ScreenshotPopup::setup() {
 	configDirButton->setPosition(ccp(80, 80));
 	m_buttonMenu->addChild(configDirButton);
 
+	#ifndef GEODE_IS_IOS
 	InfoAlertButton* infoButton = InfoAlertButton::create("PRNTSCRN - Keybinds", Manager::fetchKeybindsStrings(), .7f);
 	infoButton->setID("keybinds-help-button"_spr);
 	infoButton->setPosition(m_mainLayer->getContentSize() - 3.f);
 	m_buttonMenu->addChild(infoButton);
+	#endif
 
 	m_buttonMenu->setID("button-menu"_spr);
 	m_closeBtn->setID("close-button"_spr);

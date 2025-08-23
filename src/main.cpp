@@ -187,6 +187,13 @@ class $modify(AutoScreenshotPlayLayer, PlayLayer) {
 class $modify(NewPauseLayer, PauseLayer) {
 	void customSetup() {
 		PauseLayer::customSetup();
+
+		bool addPauseButton = true;
+		#ifdef GEODE_IS_DESKTOP
+		addPauseButton = Mod::get()->getSettingValue<bool>("pause-menu-button");
+		#endif
+		if (!addPauseButton) return;
+
 		auto leftMenu = getChildByID("left-button-menu");
 		if (!leftMenu) return;
 
@@ -208,6 +215,13 @@ class $modify(NewPauseLayer, PauseLayer) {
 class $modify(NewEditorPauseLayer, EditorPauseLayer) {
 	bool init(LevelEditorLayer* lel) {
 		if (!EditorPauseLayer::init(lel)) return false;
+
+		bool addPauseButton = true;
+		#ifdef GEODE_IS_DESKTOP
+		addPauseButton = Mod::get()->getSettingValue<bool>("pause-menu-button");
+		#endif
+		if (!addPauseButton) return true;
+
 		auto settingsMenu = getChildByID("settings-menu");
 		if (!settingsMenu) return true;
 
