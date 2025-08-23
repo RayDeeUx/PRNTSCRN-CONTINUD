@@ -44,29 +44,29 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 
 	}).detach();
 	*/
-	std::thread([=, this, data = std::move(m_data)]() {
+	std::thread([=, width = std::move(m_width), height = std::move(m_height), data = std::move(m_data)]() {
 		#ifdef GEODE_IS_WINDOWS
 		log::info("making newData");
-		GLubyte* newData = new GLubyte[m_width * m_width * 4];
+		GLubyte* newData = new GLubyte[width * width * 4];
 		log::info("entering forloop");
-		for (int i = 0; i < m_height; ++i) {
+		for (int i = 0; i < height; ++i) {
 			log::info("i: {}", i);
-			memcpy(&newData[i * m_width * 4],
-					&data.get()[(m_height - i - 1) * m_width * 4],
-					m_width * 4);
+			memcpy(&newData[i * width * 4],
+					&data.get()[(height - i - 1) * width * 4],
+					width * 4);
 		}
 		log::info("exited forloop");
 		CCImage image{};
 		image.m_nBitsPerComponent = 8;
-		image.m_nHeight = m_height;
-		image.m_nWidth = m_width;
+		image.m_nHeight = height;
+		image.m_nWidth = width;
 		image.m_bHasAlpha = true;
 		image.m_bPreMulti = false;
 		image.m_pData = newData;
 		image.saveToFile(filename.c_str(), true);
 		#elif defined(GEODE_IS_ANDROID)
 		log::info("imgp::encode::png");
-		auto result = imgp::encode::png((void*)(data.get()), m_width, m_height);
+		auto result = imgp::encode::png((void*)(data.get()), width, height);
 		if (result.isOk()) {
 			geode::utils::file::writeBinary(filename, std::move(result).unwrap());
 		} else log::error("error: {}", result.unwrapErr());
@@ -85,8 +85,8 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 #ifdef GEODE_IS_WINDOWS
 
 void Screenshot::intoClipboard() {
-	std::thread([=, data = std::move(m_data)]() {
-		auto bitmap = CreateBitmap(m_width, m_height, 1, 32, data.get());
+	std::thread([=, width = std::move(m_width), height = std::move(m_height), data = std::move(m_data)]() {
+		auto bitmap = CreateBitmap(width, height, 1, 32, data.get());
 
 		if (OpenClipboard(NULL)) {
 			if (EmptyClipboard()) {
