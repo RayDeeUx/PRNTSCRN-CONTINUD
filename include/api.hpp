@@ -3,8 +3,12 @@
 using namespace geode::prelude;
 
 /// @note - PRNTSCRN: Pretty Rad, Nifty Tool; Screen Capture Right Now
-/// @note - this namespace is not designed to screenshot any specific pointers belong to the GJBaseGameLayer, PlayLayer, or LevelEditorLayer classes. anyone found attempting to screenshot such pointers will be met with severe disappointment.
 /// @note - API by Erymanthus | RayDeeUx, with advice from Prevter
+/// @note - this namespace is not designed to screenshot any specific pointers belonging to the GJBaseGameLayer (GJBGL), PlayLayer (PL), or LevelEditorLayer (LEL) classes.
+/// @note - anyone found attempting to screenshot node pointers in GJBGL, PL, or LEL will most likely be met with severe disappointment.
+/// @note - all screenshots using this API will use the window size.
+/// @note - all screenshots using this API will be sent to the config directory for the mod `ninxout.prntscrn`.
+/// @note - all screenshots using this API will NOT (READ: NOT!!!) be copied to the user's clipboard.
 namespace PRNTSCRN {
 	class ScreenshotEvent final : public Event {
 		protected:
@@ -56,8 +60,8 @@ namespace PRNTSCRN {
 	};
 
 	/// @note - THIS FUNCTION IS FOR LOGGING PURPOSES WHEN CALLING PRNTSCRN::screenshotNodeByTypeFrom() ONLY.
-	/// @note - YOU SHOULD NOT NEED TO CALL THIS FUNCTION IN 99.999999% OF CASES.
-	/// @note - code happily reused from geode-sdk/DevTools
+	/// @note - YOU SHOULD NOT NEED TO CALL THIS FUNCTION IN 99.9999999999999999999999999999999999% OF CASES.
+	/// @note - code happily reused from geode-sdk/DevTools.
 	inline std::string __demangle__(const char* typeName) {
 		#ifdef GEODE_IS_WINDOWS
 		return typeName + 6;
@@ -83,7 +87,7 @@ namespace PRNTSCRN {
 	/// @note - unlike most other function calls in this namespace, PRNTSCRN::screenshotNodeAdvanced() ignores the user's personal preferences for hiding the UI or the player in PRNTSCRN's settings.
 	/// @note - this function is designed for screenshotting PlayLayer or LevelEditorLayer with your own set of node pointers or querySelector nodes to hide. you should have already decided the contents of the two std::vector params before calling this.
 	/// @note - if you do not feel comfortable using this option to hide nodes by pointer or by querySelector, you are responsible for hiding specific nodes on your own, using PRNTSCRN::screenshotNode instead, and manually restoring the visibility states of those nodes you chose to hide.
-	/// @note - if a node fails to hide, double check your querySelectorsToHide vector and your pointersToHide vector. they could exist anywhere else on the node tree during your screenshot, which PRNTSCRN is not responsible for.
+	/// @note - if a node fails to hide, double check your querySelectorsToHide vector and your pointersToHide vector. they could exist anywhere else on the node tree during your screenshot, which is an edge case PRNTSCRN is not designed for, nor is PRNTSCRN responsible for.
 	/// @note - for more info on querySelector, see https://docs.geode-sdk.org/classes/cocos2d/CCNode#querySelector.
 	inline geode::Result<> screenshotNodeAdvanced(CCNode* node, const std::vector<CCNode*>& pointersToHide, const std::vector<std::string>& querySelectorsToHide) {
 		if (!node) {
