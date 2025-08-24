@@ -60,14 +60,18 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		image.m_bPreMulti = false;
 		image.m_pData = newData;
 		image.saveToFile(filename.c_str(), true);
-		#elif defined(GEODE_IS_MOBILE)
+		#elif GEODE_IS_MOBILE
 		auto result = imgp::encode::png((void*)(newData), width, height);
 		if (result.isOk()) {
 			geode::utils::file::writeBinary(filename, std::move(result).unwrap());
 		} else log::error("error: {}", result.unwrapErr());
 		delete[] newData; // prevent memory leak (prevter)
 		#endif
+		#ifdef GEODE_IS_WINDOWS
 		if (isFromPRNTSCRNAndWantsSFX) {
+		#elif GEODE_IS_MOBILE
+		if (isFromPRNTSCRNAndWantsSFX && result.isOk()) {
+		#endif
 			Loader::get()->queueInMainThread([](){
 				auto system = FMODAudioEngine::get()->m_system;
 				FMOD::Channel* channel;
@@ -79,7 +83,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 				#endif
 				system->createSound((Mod::get()->getResourcesDir() / customSound).string().c_str(), FMOD_DEFAULT, nullptr, &sound);
 				system->playSound(sound, nullptr, false, &channel);
-				channel->setVolume(35.f / 100.0f);
+				channel->setVolume(85.f / 100.0f);
 			});
 		}
 	}).detach();
