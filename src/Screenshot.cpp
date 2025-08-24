@@ -81,7 +81,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		log::info("checking for isFromPRNTSCRNAndWantsSFX");
 		if (isFromPRNTSCRNAndWantsSFXMoved && isOK) {
 		#endif
-			log::info("queuing SFX");
+			e
 			Loader::get()->queueInMainThread([](){
 				auto system = FMODAudioEngine::get()->m_system;
 				FMOD::Channel* channel;
@@ -96,6 +96,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 				channel->setVolume(85.f / 100.0f);
 			});
 		}
+		log::info("prevter insisted that i add this log line");
 	}).detach();
 }
 
