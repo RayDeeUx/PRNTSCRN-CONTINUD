@@ -235,7 +235,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	}
 
 	if (pl && pl->getChildByID("EndLevelLayer")) {
-		if (!pl->getChildByID("EndLevelLayer")->isVisible()) index++; // prevent filename collison
+		if (pl->getChildByID("EndLevelLayer")->getScale() == 0.f) extension = " (without endscreen)" + extension;
 	}
 
 	std::string filename = geode::utils::string::pathToString(folder / (numToString(index) + extension));
@@ -266,10 +266,10 @@ void SharedScreenshotLogic::screenshotLevelOrScene() {
 	if (pl && pl->getParent() == CCScene::get()) {
 		SharedScreenshotLogic::screenshot(pl);
 		if (CCNode* ell = pl->getChildByID("EndLevelLayer"); ell) {
-			bool ellOriginaVis = ell->isVisible();
-			ell->setVisible(false);
+			float ellOriginalScale = ell->getScale();
+			ell->setScale(0.f);
 			SharedScreenshotLogic::screenshot(pl);
-			ell->setVisible(ellOriginaVis);
+			ell->setScale(ellOriginalScale);
 			return;
 		}
 		if (CCScene::get()->getChildByID("PauseLayer")) {
