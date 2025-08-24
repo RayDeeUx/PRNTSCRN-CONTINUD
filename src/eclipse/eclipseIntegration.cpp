@@ -58,8 +58,10 @@ $on_mod(Loaded) {
 		});
 
 		if (mod->getSettingValue<bool>("show-more-details")) {
-			(void) tab.addLabel("Most recent settings:");
-			tab.addLabel(fmt::format("Screenshot size: {} x {}", Manager::get()->width, Manager::get()->height));
+			(void) tab.addLabel("Most recent settings at the start of this launch:");
+			std::string asteriskWidth = mod->getSettingValue<bool>("use-window-width") ? "" : "*";
+			std::string asteriskHeigh = mod->getSettingValue<bool>("use-window-height") ? "" : "*";
+			tab.addLabel(fmt::format("Screenshot size: {}{} x {}{}", Manager::get()->width, asteriskWidth, Manager::get()->height, asteriskHeigh));
 			if (std::shared_ptr<SettingV3> setting = mod->getSetting("copy-screenshot-with-pause-menu-on"); setting) {
 				tab.addLabel(fmt::format("{} {}", setting->getDisplayName(), mod->getSettingValue<std::string>("copy-screenshot-with-pause-menu-on")));
 			}
