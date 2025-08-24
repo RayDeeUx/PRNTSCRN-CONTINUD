@@ -44,7 +44,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 
 	}).detach();
 	*/
-	std::thread([=, width = std::move(m_width), height = std::move(m_height), data = std::move(m_data)]() {
+	std::thread([=, width = std::move(m_width), height = std::move(m_height), data = std::move(m_data), isFromPRNTSCRNAndWantsSFXMoved = std::move(isFromPRNTSCRNAndWantsSFX)]() {
 		log::info("vertically flipping bytevector");
 		GLubyte* newData = new GLubyte[width * width * 4];
 		for (int i = 0; i < height; ++i) {
@@ -75,10 +75,10 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		log::info("memory leak prevented by prevter :fire:");
 		#endif
 		#ifdef GEODE_IS_WINDOWS
-		if (isFromPRNTSCRNAndWantsSFX) {
+		if (isFromPRNTSCRNAndWantsSFXMoved) {
 		#elif defined(GEODE_IS_MOBILE)
 		log::info("checking for isFromPRNTSCRNAndWantsSFX");
-		if (isFromPRNTSCRNAndWantsSFX && encodeResult.isOk()) {
+		if (isFromPRNTSCRNAndWantsSFXMoved && encodeResult.isOk()) {
 		#endif
 			log::info("queuing SFX");
 			Loader::get()->queueInMainThread([](){
