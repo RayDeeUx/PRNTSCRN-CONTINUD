@@ -81,7 +81,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		log::info("checking for isFromPRNTSCRNAndWantsSFX");
 		if (isFromPRNTSCRNAndWantsSFXMoved && isOK) {
 		#endif
-			e
+			log::info("queueing SFX");
 			Loader::get()->queueInMainThread([](){
 				auto system = FMODAudioEngine::get()->m_system;
 				FMOD::Channel* channel;
