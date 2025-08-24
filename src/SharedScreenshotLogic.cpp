@@ -235,7 +235,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	}
 
 	if (pl && pl->getChildByID("EndLevelLayer")) {
-		if (pl->getChildByID("EndLevelLayer")->getScale() == 0.f) extension = " (without endscreen)" + extension;
+		if (pl->getChildByID("EndLevelLayer")->getScale() == 0.f) extension = " (without endscreen)" + extension; // prevent filename collision
 	}
 
 	std::string filename = geode::utils::string::pathToString(folder / (numToString(index) + extension));
