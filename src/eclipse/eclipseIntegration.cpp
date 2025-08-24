@@ -34,7 +34,9 @@ $on_mod(Loaded) {
 		addSetting(tab, "jpeg-mafia");
 		#endif
 		addSetting(tab, "auto-screenshot");
+		#ifndef GEODE_IS_IOS
 		addSetting(tab, "play-sfx");
+		#endif
 
 		tab.addButton("Open Screenshots Folder", [mod]() {
 			geode::utils::file::openFolder(mod->getConfigDir());
