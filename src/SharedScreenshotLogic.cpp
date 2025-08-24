@@ -239,10 +239,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	}
 
 	std::string filename = geode::utils::string::pathToString(folder / (numToString(index) + extension));
-	bool shouldPlaySFX = false;
-	#ifndef GEODE_IS_IOS
-	shouldPlaySFX = screenshotterIsSelf && Mod::get()->getSettingValue<bool>("play-sfx");
-	#endif
+	bool shouldPlaySFX = screenshotterIsSelf && Mod::get()->getSettingValue<bool>("play-sfx");
 	ss.intoFile(filename, shouldPlaySFX, jpeg);
 
 	#ifdef GEODE_IS_DESKTOP

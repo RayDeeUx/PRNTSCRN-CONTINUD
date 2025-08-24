@@ -76,7 +76,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		#endif
 		#ifdef GEODE_IS_WINDOWS
 		if (isFromPRNTSCRNAndWantsSFXMoved) {
-		#elif defined(GEODE_IS_ANDROID)
+		#elif defined(GEODE_IS_MOBILE)
 		log::info("checking for isFromPRNTSCRNAndWantsSFX");
 		if (isFromPRNTSCRNAndWantsSFXMoved && encodeResult.isOk()) {
 		#endif
@@ -85,7 +85,11 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 				auto system = FMODAudioEngine::get()->m_system;
 				FMOD::Channel* channel;
 				FMOD::Sound* sound;
+				#ifdef GEODE_IS_IOS
+				std::string customSound = "screenshot_macOS_iOS.mp3";
+				#elif defined(GEODE_IS_ANDROID) || defined(GEODE_IS_WINDOWS)
 				std::string customSound = "screenshot_Windows_Android.mp3";
+				#endif
 				system->createSound(geode::utils::string::pathToString((Mod::get()->getResourcesDir() / customSound)).c_str(), FMOD_DEFAULT, nullptr, &sound);
 				system->playSound(sound, nullptr, false, &channel);
 				channel->setVolume(85.f / 100.0f);

@@ -158,8 +158,7 @@
 			"type": "bool",
 			"name": "Play Screenshot SFX",
 			"description": "So you actually know if your screenshot went through.",
-			"default": false,
-			"platforms": ["win", "mac", "android"]
+			"default": false
 		},
 		"show-more-details": {
 			"type": "bool",
