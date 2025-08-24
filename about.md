@@ -6,7 +6,7 @@
 
 A screenshot tool not too dissimilar from the F2 screenshot key from Minecraft!
 
-Tired of that clunky three-key screenshot shortcut? Disgusted by the window shadows from macOS screenshots? Finding it tedious to hide that specific nodes through DevTools for the perfect screenshot?
+Tired of that clunky three-key screenshot shortcut? Disgusted by the window shadows from macOS screenshots? Finding it tedious to hide specific nodes through DevTools for the perfect screenshot?
 
 Let <cy>PRNTSCRN</c> make the screenshotting process easier for you!
 
