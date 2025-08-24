@@ -79,8 +79,6 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		#elif defined(GEODE_IS_ANDROID)
 		log::info("checking for isFromPRNTSCRNAndWantsSFX");
 		if (isFromPRNTSCRNAndWantsSFXMoved && encodeResult.isOk()) {
-		#elif defined(GEODE_IS_IOS)
-		if (false) {
 		#endif
 			log::info("queuing SFX");
 			Loader::get()->queueInMainThread([](){
