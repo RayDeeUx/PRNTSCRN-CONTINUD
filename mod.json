@@ -84,6 +84,18 @@
 			"description": "Hides the UI when taking a screenshot\nwhile playing a level or while inside the level editor.",
 			"default": true
 		},
+		"hide-attempts": {
+			"type": "bool",
+			"name": "Hide Attempt Label",
+			"description": "Hides the attempt label when taking a screenshot\nwhile playing a level or while inside the level editor.\n\nUseful for taking screenshots while in Practice Mode.",
+			"default": false
+		},
+		"hide-checkpoints": {
+			"type": "bool",
+			"name": "Hide Practice Mode Checkpoints",
+			"description": "Hides checkpoints from Practice Mode when taking a screenshot\nwhile playing a level.",
+			"default": false
+		},
 		"use-window-width": {
 			"type": "bool",
 			"name": "Use Window Width For Resolution Width",

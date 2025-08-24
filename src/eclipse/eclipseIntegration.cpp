@@ -28,6 +28,8 @@ $on_mod(Loaded) {
 		#endif
 		addSetting(tab, "hide-ui");
 		addSetting(tab, "hide-player");
+		addSetting(tab, "hide-attempts");
+		addSetting(tab, "hide-checkpoints");
 		#ifdef GEODE_IS_DESKTOP
 		addSetting(tab, "jpeg-mafia");
 		#endif

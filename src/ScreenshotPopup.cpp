@@ -103,6 +103,10 @@ bool ScreenshotPopup::setup() {
 	#endif
 	settingsMenu->addChild(createSetting("Hide UI Layer", "hide-ui"));
 	settingsMenu->addChild(createSetting("Hide Player", "hide-player"));
+	if (pl) {
+		settingsMenu->addChild(createSetting("Hide Attempt Label", "hide-attempts"));
+		settingsMenu->addChild(createSetting("Hide Checkpoints", "hide-checkpoints"));
+	}
 	#ifdef GEODE_IS_DESKTOP
 	settingsMenu->addChild(createSetting("JPEG", "jpeg-mafia"));
 	#endif

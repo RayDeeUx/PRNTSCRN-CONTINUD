@@ -133,8 +133,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	// event filter from main.cpp will have already hidden the nodes by this point
 	std::unordered_map<const char*, bool> uiNodes = {};
 	std::unordered_map<CCNode*, float> playerPointerScales = {};
+	std::unordered_map<std::string, GLubyte> checkpointOpacities = {};
 	bool hideUI = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-ui");
 	bool hidePL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-player");
+	bool hideAL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-attempts");
+	bool hideCK = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-checkpoints");
 
 	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
 	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
@@ -148,6 +151,20 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(pl, mat.run-info/RunInfoWidget);
 		ADD_NODE(pl, cheeseworks.speedruntimer/timer);
 		ADD_NODE(pl, progress-bar);
+	}
+	if (hideAL && pl && pl->m_attemptLabel) {
+		ADD_MEM(pl, m_attemptLabel);
+		if (pl->m_attemptLabel->getParent()) ADD_NODE(pl->m_attemptLabel->getParent(), raydeeux.attemptlabeltweaks/custom-attempt-label);
+	}
+	if (hideCK && pl && pl->m_checkpointArray && pl->m_checkpointArray->count() > 0) {
+		int i = 0;
+		for (CheckpointObject* ckpt : CCArrayExt<CheckpointObject*>(pl->m_checkpointArray)) {
+			if (ckpt && ckpt->m_physicalCheckpointObject) {
+				checkpointOpacities[fmt::format("checkpoint_{}", i).c_str()] = ckpt->m_physicalCheckpointObject->getOpacity();
+				ckpt->m_physicalCheckpointObject->setOpacity(0);
+			}
+			i++;
+		}
 	}
 	if (hideUI && lel) {
 		ADD_NODE(lel, UILayer);
@@ -174,6 +191,19 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(pl, mat.run-info/RunInfoWidget);
 		RES_NODE(pl, cheeseworks.speedruntimer/timer);
 		RES_NODE(pl, progress-bar);
+	}
+	if (hideAL && pl && pl->m_attemptLabel) {
+		RES_MEM(pl, m_attemptLabel);
+		if (pl->m_attemptLabel->getParent()) RES_NODE(pl->m_attemptLabel->getParent(), raydeeux.attemptlabeltweaks/custom-attempt-label);
+	}
+	if (hideCK && pl && pl->m_checkpointArray && pl->m_checkpointArray->count() > 0) {
+		int i = 0;
+		for (CheckpointObject* ckpt : CCArrayExt<CheckpointObject*>(pl->m_checkpointArray)) {
+			if (ckpt && ckpt->m_physicalCheckpointObject) {
+				ckpt->m_physicalCheckpointObject->setOpacity(checkpointOpacities[fmt::format("checkpoint_{}", i).c_str()]);
+			}
+			i++;
+		}
 	}
 	if (hideUI && lel) {
 		RES_NODE(lel, UILayer);
@@ -214,6 +244,10 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		index++;
 	}
 
+	if (pl && pl->getChildByID("EndLevelLayer")) {
+		if (!pl->getChildByID("EndLevelLayer")->isVisible()) index++; // prevent filename collison
+	}
+
 	std::string filename = normalizePath(folder / (numToString(index) + extension));
 	bool shouldPlaySFX = screenshotterIsSelf && Mod::get()->getSettingValue<bool>("play-sfx");
 	ss.intoFile(filename, shouldPlaySFX, jpeg);
@@ -242,17 +276,18 @@ void SharedScreenshotLogic::screenshotLevelOrScene() {
 	if (pl && pl->getParent() == CCScene::get()) {
 		SharedScreenshotLogic::screenshot(pl);
 		if (CCNode* ell = pl->getChildByID("EndLevelLayer"); ell) {
-			bool hideUISetting = Loader::get()->getLoadedMod("ninxout.prntscrn")->getSettingValue<bool>("hide-ui"); // guaranteed to get the Mod* pointer
-			UILayer* uiLayer = hideUISetting ? pl->m_uiLayer : nullptr;
-			std::vector<std::string> nodeIDsToHide = {};
-			if (uiLayer) nodeIDsToHide = {"debug-text", "testmode-label", "percentage-label", "mat.run-info/RunInfoWidget", "cheeseworks.speedruntimer/timer", "progress-bar"};
-			Result res = PRNTSCRN::screenshotNodeAdvanced(pl, {ell, uiLayer}, nodeIDsToHide);
-			if (res.isErr()) log::error("[PRNTSCRN] Something went wrong! ({})", res.unwrapErr());
-		} else if (CCScene::get()->getChildByID("PauseLayer")) {
+			bool ellOriginaVis = ell->isVisible();
+			ell->setVisible(false);
+			SharedScreenshotLogic::screenshot(pl);
+			ell->setVisible(ellOriginaVis);
+			return;
+		}
+		if (CCScene::get()->getChildByID("PauseLayer")) {
 			CCScene* baseScene = CCScene::get();
 			baseScene->setUserObject("pause-menu-type"_spr, CCString::create("PauseLayer"));
 			SharedScreenshotLogic::screenshot(baseScene);
 			baseScene->setUserObject("pause-menu-type"_spr, CCString::create(""));
+			return;
 		}
 		return;
 	}
