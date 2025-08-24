@@ -64,9 +64,10 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		#elif defined(GEODE_IS_MOBILE)
 		log::info("calling prevter's image API");
 		auto encodeResult = imgp::encode::png((void*)(newData), width, height);
-		if (encodeResult.isOk()) {
+		const bool isOK = encodeResult.isOk();
+		if (isOK) {
 			log::info("encoding success! writing binary");
-			auto writeBinaryResult = geode::utils::file::writeBinary(filename, encodeResult.unwrap());
+			auto writeBinaryResult = geode::utils::file::writeBinary(filename, std::move(encodeResult).unwrap());
 			if (writeBinaryResult.isOk()) {
 				log::info("binary write success!");
 			} else log::error("binary write error! filename: {}, error: {}", filename, writeBinaryResult.unwrapErr());
@@ -78,7 +79,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		if (isFromPRNTSCRNAndWantsSFXMoved) {
 		#elif defined(GEODE_IS_MOBILE)
 		log::info("checking for isFromPRNTSCRNAndWantsSFX");
-		if (isFromPRNTSCRNAndWantsSFXMoved && encodeResult.isOk()) {
+		if (isFromPRNTSCRNAndWantsSFXMoved && isOK) {
 		#endif
 			log::info("queuing SFX");
 			Loader::get()->queueInMainThread([](){
