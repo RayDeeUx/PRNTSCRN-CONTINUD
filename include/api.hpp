@@ -2,13 +2,18 @@
 
 using namespace geode::prelude;
 
-/// @note - PRNTSCRN: Pretty Rad, Nifty Tool; Screen Capture Right Now
-/// @note - API by Erymanthus | RayDeeUx, with advice from Prevter
+/// @note - PRNTSCRN: Pretty Rad, Nifty Tool; Screen Capture Right Now [v1.0.0]
+/// @note - API by Erymanthus | RayDeeUx (Discord: @erymanthus, GitHub/Codeberg: @RayDeeUx), with advice from Prevter
+/// @note - scroll down for a TL;DR!
 /// @note - this namespace is not designed to screenshot any specific pointers belonging to the GJBaseGameLayer (GJBGL), PlayLayer (PL), or LevelEditorLayer (LEL) classes.
 /// @note - anyone found attempting to screenshot node pointers in GJBGL, PL, or LEL will most likely be met with severe disappointment.
+/// @note - anyone found using this API to screenshot any node whose content size does not match the content size of the current running scene will also most likely be met with severe disappointment.
+/// @note - screenshots of nodes with transparent backgrounds and/or content sizes smaller than the content size of the current running scene will have black backgrounds, not transparent backgrounds. this is because OpenGL is the kind of language with a higher barrier of entry that rarely takes kindly to noobs. if anyone has any suggestions on how to improve the OpenGL calls in this function, good luck.
 /// @note - all screenshots using this API will use the window size.
 /// @note - all screenshots using this API will be sent to the config directory for the mod `ninxout.prntscrn`.
 /// @note - all screenshots using this API will NOT (READ: NOT!!!) be copied to the user's clipboard.
+/// @note - all screenshots using this API MUST (READ: MUST!!!) be spaced apart by at least two (2) seconds. this is a technical limitation known as "computers are not physically capable of saving raw byte data to image files instantaneously", and by using this API you *must* assume that PRNTSCRN has not found a workaround for this issue internally; even if PRNTSCRN's changelogs indicate otherwise. [TL;DR: you shouldn't be requesting screenshots by constructing and posting ScreenshotEvents very frequently.]
+/// @note - TL;DR: even though any CCNode* is theoretically supported, the PRNTSCRN namespace is best used to screenshot nodes with non-transparent backgrounds whose contents fill the whole screen.
 namespace PRNTSCRN {
 	class ScreenshotEvent final : public Event {
 		protected:
@@ -84,11 +89,12 @@ namespace PRNTSCRN {
 	/// @param pointersToHide vector of CCNode* pointers that should be made invisible for the screenshot. can be left empty.
 	/// @param querySelectorsToHide vector of `std::string`s that should be made invisible for the screenshot. these nodes will be accessed via CCNode::querySelector() from the `node` param. can be left empty.
 	/// @returns a Result of Err if something is wrong with the node (null), otherwise returns Ok().
-	/// @note - unlike most other function calls in this namespace, PRNTSCRN::screenshotNodeAdvanced() ignores the user's personal preferences for hiding the UI or the player in PRNTSCRN's settings.
+	/// @note - unlike most other function calls in this namespace, PRNTSCRN::screenshotNodeAdvanced() ignores the user's personal preferences for hiding the UI, the player, the attempt text, and the visible checkpoints as per their settings for PRNTSCRN.
 	/// @note - this function is designed for screenshotting PlayLayer or LevelEditorLayer with your own set of node pointers or querySelector nodes to hide. you should have already decided the contents of the two std::vector params before calling this.
 	/// @note - if you do not feel comfortable using this option to hide nodes by pointer or by querySelector, you are responsible for hiding specific nodes on your own, using PRNTSCRN::screenshotNode instead, and manually restoring the visibility states of those nodes you chose to hide.
+	/// @note - if you want to hide Practice Mode checkpoints, YOU (YES, YOU) are responsible for hiding Practice Mode checkpoints on your own BEFORE calling this function. this is because Practice Mode checkpoints are stored in PlayLayer::m_checkpointArray, and you need to edit each individual CheckpointObject's m_physicalCheckpointObject variable (i recommend setting opacity to 0).
 	/// @note - if a node fails to hide, double check your querySelectorsToHide vector and your pointersToHide vector. they could exist anywhere else on the node tree during your screenshot, which is an edge case PRNTSCRN is not designed for, nor is PRNTSCRN responsible for.
-	/// @note - for more info on querySelector, see https://docs.geode-sdk.org/classes/cocos2d/CCNode#querySelector.
+	/// @note - for more info on (how to use) querySelector, see https://docs.geode-sdk.org/classes/cocos2d/CCNode#querySelector.
 	inline geode::Result<> screenshotNodeAdvanced(CCNode* node, const std::vector<CCNode*>& pointersToHide, const std::vector<std::string>& querySelectorsToHide) {
 		if (!node) {
 			log::error("[PRNTSCRN API] unable to reference node from screenshotNodeAdvanced");
@@ -101,7 +107,7 @@ namespace PRNTSCRN {
 	/// @brief screenshot a node as seen on the screen.
 	/// @param node CCNode* being screenshotted. you are responsible for filling in the CCNode* parameter.
 	/// @returns a Result of Err if something is wrong with the node (null), otherwise returns Ok().
-	/// @note if the node being screenshotted is a PlayLayer or LevelEditorLayer node, the user's personal preferences for hiding the UI or the player in PRNTSCRN's settings will apply.
+	/// @note - if the node being screenshotted is a PlayLayer or LevelEditorLayer node, the user's personal preferences for hiding the UI, the player, the attempt label (from PlayLayer), or the practice mode checkpoints (from PlayLayer) in PRNTSCRN's settings will apply.
 	inline geode::Result<> screenshotNode(CCNode* node) {
 		if (!node) {
 			log::error("[PRNTSCRN API] unable to reference node from screenshotNode");
@@ -116,7 +122,8 @@ namespace PRNTSCRN {
 	/// @param querySelectorOrIDOrRecursive the string to be used. could be a node ID for CCNode::getChildByID(), could be a node ID for CCNode::getChildByIDRecursive(), or a querySelector for CCNode::querySelector().
 	/// @param fetchType an enum of type PRNTSCRN::ReferenceType to determine if the `querySelectorOrIDOrRecursive` parameter is used for CCNode::getChildByID(), CCNode::getChildByIDRecursive(), or CCNode::querySelector().
 	/// @returns a Result of Err if something is wrong with the parent node (null, lacks children nodes, querySelectorOrIDOrRecursive was empty, or node was not found), otherwise returns Result from calling PRNTSCRN::screenshotNode().
-	/// @note if the node being screenshotted is a PlayLayer or LevelEditorLayer node, the user's personal preferences for hiding the UI or the player in PRNTSCRN's settings will apply.
+	/// @note if the node being screenshotted is a PlayLayer or LevelEditorLayer node, the user's personal preferences for hiding the UI, the player, the attempt label (from PlayLayer), or the practice mode checkpoints (from PlayLayer) in PRNTSCRN's settings will apply.
+	/// @note - for more info on (how to use) querySelector, see https://docs.geode-sdk.org/classes/cocos2d/CCNode#querySelector.
 	inline geode::Result<> screenshotNodeUsingStringFrom(CCNode* parent, const std::string_view querySelectorOrIDOrRecursive, ReferenceType fetchType) {
 		if (!parent) {
 			log::error("[PRNTSCRN API] unable to reference parent node");
@@ -154,7 +161,7 @@ namespace PRNTSCRN {
 	/// @param parent CCNode* pointer whose child node you want to access by tag, and take a screenshot of.
 	/// @param tag the tag of the child you want to screenshot. behavior relies entirely on Cocos-2dx's original CCNode::getChildByTag() function.
 	/// @returns a Result of Err if something is wrong with the parent node (null, lacks children nodes, tag param is less than 0), otherwise returns Result from calling PRNTSCRN::screenshotNode().
-	/// @note - if the node being screenshotted is a PlayLayer or LevelEditorLayer node, the user's personal preferences for hiding the UI or the player in PRNTSCRN's settings will apply.
+	/// @note - if the node being screenshotted is a PlayLayer or LevelEditorLayer node, the user's personal preferences for hiding the UI, the player, the attempt label (from PlayLayer), or the practice mode checkpoints (from PlayLayer) in PRNTSCRN's settings will apply.
 	/// @note - the node being accessed by its tag MUST be a direct descendant of the `parent` parameter!
 	/// @note - this function returns early if the `tag` param is less than 0, as most CCNode* variables lack tags and use -1 as a fallback value.
 	inline geode::Result<> screenshotNodeUsingTagFrom(CCNode* parent, int tag) {
@@ -182,7 +189,7 @@ namespace PRNTSCRN {
 	/// @param parent CCNode* whose children you want to access and take a screenshot of.
 	/// @param index the nth child of type T that you want to screenshot, if there are multiple children of type T from param parent.
 	/// @returns a Result of Err if something is wrong with the parent node (null or lacks children nodes), otherwise returns Result from calling PRNTSCRN::screenshotNode().
-	/// @note if the node being screenshotted is a PlayLayer or LevelEditorLayer node, the user's personal preferences for hiding the UI or the player in PRNTSCRN's settings will apply.
+	/// @note if the node being screenshotted is a PlayLayer or LevelEditorLayer node, the user's personal preferences for hiding the UI, the player, the attempt label (from PlayLayer), or the practice mode checkpoints (from PlayLayer) in PRNTSCRN's settings will apply.
 	template<class T>
 	geode::Result<> screenshotNodeByTypeFrom(CCNode* parent, int index) {
 		if (!parent) {
