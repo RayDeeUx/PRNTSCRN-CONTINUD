@@ -65,7 +65,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		    auto system = FMODAudioEngine::get()->m_system;
 			FMOD::Channel* channel;
 			FMOD::Sound* sound;
-			system->createSound((Mod::get()->getResourcesDir() / "screenshot_macOS_iOS.mp3").string().c_str(), FMOD_DEFAULT, nullptr, &sound);
+			system->createSound(geode::utils::string::pathToString((Mod::get()->getResourcesDir() / "screenshot_macOS_iOS.mp3")).c_str(), FMOD_DEFAULT, nullptr, &sound);
 			system->playSound(sound, nullptr, false, &channel);
 			channel->setVolume(85.f / 100.0f);
 		}

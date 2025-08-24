@@ -81,7 +81,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 				#elif defined(GEODE_IS_ANDROID) || defined(GEODE_IS_WINDOWS)
 				std::string customSound = "screenshot_Windows_Android.mp3";
 				#endif
-				system->createSound((Mod::get()->getResourcesDir() / customSound).string().c_str(), FMOD_DEFAULT, nullptr, &sound);
+				system->createSound(geode::utils::string::pathToString((Mod::get()->getResourcesDir() / customSound)).c_str(), FMOD_DEFAULT, nullptr, &sound);
 				system->playSound(sound, nullptr, false, &channel);
 				channel->setVolume(85.f / 100.0f);
 			});

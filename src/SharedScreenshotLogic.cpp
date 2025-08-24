@@ -4,18 +4,8 @@
 #include "SharedScreenshotLogic.hpp"
 #include "Screenshot.hpp"
 #include "Manager.hpp"
-#include <api.hpp>
-#include <chrono>
 
 using namespace geode::prelude;
-
-std::string normalizePath(std::filesystem::path thePath) {
-	#ifdef GEODE_IS_WINDOWS
-	return geode::utils::string::wideToUtf8(thePath.wstring());
-	#else
-	return thePath.string();
-	#endif
-}
 
 std::string SharedScreenshotLogic::getFormattedDate() {
 	auto nowTimeT = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
@@ -248,7 +238,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		if (!pl->getChildByID("EndLevelLayer")->isVisible()) index++; // prevent filename collison
 	}
 
-	std::string filename = normalizePath(folder / (numToString(index) + extension));
+	std::string filename = geode::utils::string::pathToString(folder / (numToString(index) + extension));
 	bool shouldPlaySFX = screenshotterIsSelf && Mod::get()->getSettingValue<bool>("play-sfx");
 	ss.intoFile(filename, shouldPlaySFX, jpeg);
 
