@@ -60,7 +60,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		image.m_bPreMulti = false;
 		image.m_pData = newData;
 		image.saveToFile(filename.c_str(), true);
-		#elif GEODE_IS_MOBILE
+		#elif defined(GEODE_IS_MOBILE)
 		auto result = imgp::encode::png((void*)(newData), width, height);
 		if (result.isOk()) {
 			geode::utils::file::writeBinary(filename, std::move(result).unwrap());
@@ -69,7 +69,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		#endif
 		#ifdef GEODE_IS_WINDOWS
 		if (isFromPRNTSCRNAndWantsSFX) {
-		#elif GEODE_IS_MOBILE
+		#elif defined(GEODE_IS_MOBILE)
 		if (isFromPRNTSCRNAndWantsSFX && result.isOk()) {
 		#endif
 			Loader::get()->queueInMainThread([](){
