@@ -24,6 +24,10 @@ Screenshot::Screenshot(uint32_t width, uint32_t height, CCNode* node)
 Screenshot::Screenshot(const CCSize& size, CCNode* node)
 	: m_impl(std::make_shared<Impl>(static_cast<uint32_t>(size.width), static_cast<uint32_t>(size.height), node)) {}
 
+uint32_t Screenshot::getWidth() const { return m_impl->m_width; }
+uint32_t Screenshot::getHeight() const { return m_impl->m_height; }
+std::unique_ptr<uint8_t[]>& Screenshot::getData() const { return m_impl->m_data; }
+
 #ifndef GEODE_IS_MACOS
 
 // function formerly impl'd by ninxout, reimpl'd by prevter. former code preserved for posterity

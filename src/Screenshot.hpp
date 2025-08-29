@@ -13,6 +13,10 @@ public:
 	void intoClipboard();
 	#endif
 
+	uint32_t getWidth() const;
+	uint32_t getHeight() const;
+	std::unique_ptr<uint8_t[]>& getData() const;
+
 private:
 	class Impl;
 	std::shared_ptr<Impl> m_impl;
