@@ -36,21 +36,24 @@ bool CGImageWriteToFile(CGImageRef image, const std::string& name, bool jpeg) {
 }
 
 void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWantsSFX, bool jpeg) {
-	int dataLen = m_width * m_height * 4;
+    auto width = this->getWidth();
+    auto height = this->getHeight();
+    auto& data = this->getData();
+	int dataLen = width * height * 4;
 
 	GLubyte* newData = nullptr;
-	newData = new GLubyte[m_width * m_width * 4];
-	for (int i = 0; i < m_height; ++i){
-		memcpy(&newData[i * m_width * 4], 
-				&m_data[(m_height - i - 1) * m_width * 4], 
-				m_width * 4);
+	newData = new GLubyte[dataLen];
+	for (int i = 0; i < height; ++i){
+		memcpy(&newData[i * width * 4],
+				&data[(height - i - 1) * width * 4],
+				width * 4);
 	}
 
 	CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, newData, dataLen, NULL);
 
 	CGImageRef cgImg = CGImageCreate(
-		m_width, m_height, 
-		8, 8 * 4, m_width * 4, 
+		width, height,
+		8, 8 * 4, width * 4,
 		CGColorSpaceCreateDeviceRGB(), 
 		kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast, 
 		provider,   // data provider
@@ -73,21 +76,24 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 }
 
 void Screenshot::intoClipboard() {
-	int dataLen = m_width * m_height * 4;
+    auto width = this->getWidth();
+    auto height = this->getHeight();
+    auto& data = this->getData();
+	int dataLen = width * height * 4;
 
 	GLubyte* newData = nullptr;
-	newData = new GLubyte[m_width * m_width * 4];
-	for (int i = 0; i < m_height; ++i){
-		memcpy(&newData[i * m_width * 4], 
-				&m_data[(m_height - i - 1) * m_width * 4], 
-				m_width * 4);
+	newData = new GLubyte[dataLen];
+	for (int i = 0; i < height; ++i){
+		memcpy(&newData[i * width * 4],
+				&data[(height - i - 1) * width * 4],
+				width * 4);
 	}
 
 	CGDataProviderRef provider = CGDataProviderCreateWithData(NULL, newData, dataLen, NULL);
 
 	CGImageRef cgImg = CGImageCreate(
-		m_width, m_height, 
-		8, 8 * 4, m_width * 4, 
+		width, height,
+		8, 8 * 4, width * 4,
 		CGColorSpaceCreateDeviceRGB(), 
 		kCGBitmapByteOrderDefault | kCGImageAlphaPremultipliedLast, 
 		provider,   // data provider
@@ -97,7 +103,7 @@ void Screenshot::intoClipboard() {
 	);
 
 	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-		NSImage* image = [[NSImage alloc] initWithCGImage:cgImg size:NSMakeSize(m_width, m_height)];
+		NSImage* image = [[NSImage alloc] initWithCGImage:cgImg size:NSMakeSize(width, height)];
 
 		if (image != nil) {
 			NSPasteboard *pasteboard = [NSPasteboard generalPasteboard];

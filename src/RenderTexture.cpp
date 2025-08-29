@@ -43,9 +43,15 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 }
 
 RenderTexture::~RenderTexture() {
-	if (m_fbo) glDeleteFramebuffers(1, &m_fbo);
+	if (m_fbo) {
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glDeleteFramebuffers(1, &m_fbo);
+	}
 	if (m_texture) glDeleteTextures(1, &m_texture);
-	if (m_depthStencil) glDeleteRenderbuffers(1, &m_depthStencil);
+	if (m_depthStencil) {
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+		glDeleteRenderbuffers(1, &m_depthStencil);
+	}
 }
 
 void RenderTexture::begin() {

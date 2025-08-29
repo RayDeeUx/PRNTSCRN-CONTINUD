@@ -6,17 +6,27 @@
 
 using namespace geode::prelude;
 
-Screenshot::Screenshot(unsigned int width, unsigned int height, CCNode* node) : m_width(width), m_height(height), m_node(node), m_tex(RenderTexture(width, height)) {
-	m_data = m_tex.capture(node);
-}
+class Screenshot::Impl {
+public:
+	uint32_t m_width;
+	uint32_t m_height;
+	CCNode* m_node;
+	std::unique_ptr<uint8_t[]> m_data;
 
-Screenshot::Screenshot(const CCSize& size, CCNode* node) : m_width(static_cast<int>(size.width)), m_height(static_cast<int>(size.height)), m_node(node), m_tex(RenderTexture(size.width, size.height))  {
-	m_data = m_tex.capture(node);
-}
+	Impl(uint32_t width, uint32_t height, CCNode* node) : m_width(width), m_height(height), m_node(node) {
+		m_data = RenderTexture(width, height).capture(node);
+	}
+};
 
-CCTexture2D* Screenshot::intoTexture() {
-	return m_tex.intoTexture();
-}
+Screenshot::Screenshot(uint32_t width, uint32_t height, CCNode* node)
+	: m_impl(std::make_shared<Impl>(width, height, node)) {}
+
+Screenshot::Screenshot(const CCSize& size, CCNode* node)
+	: m_impl(std::make_shared<Impl>(static_cast<uint32_t>(size.width), static_cast<uint32_t>(size.height), node)) {}
+
+uint32_t Screenshot::getWidth() const { return m_impl->m_width; }
+uint32_t Screenshot::getHeight() const { return m_impl->m_height; }
+std::unique_ptr<uint8_t[]>& Screenshot::getData() const { return m_impl->m_data; }
 
 #ifndef GEODE_IS_MACOS
 
@@ -44,26 +54,26 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 
 	}).detach();
 	*/
-	std::thread([=, width = std::move(m_width), height = std::move(m_height), data = std::move(m_data), isFromPRNTSCRNAndWantsSFXMoved = std::move(isFromPRNTSCRNAndWantsSFX)]() {
+	std::thread([=, impl = m_impl]() {
 		log::info("vertically flipping bytevector");
-		GLubyte* newData = new GLubyte[width * width * 4];
-		for (int i = 0; i < height; ++i) {
-			memcpy(&newData[i * width * 4],
-					&data.get()[(height - i - 1) * width * 4],
-					width * 4);
+		GLubyte* newData = new GLubyte[impl->m_width * impl->m_width * 4];
+		for (int i = 0; i < impl->m_height; ++i) {
+			memcpy(&newData[i * impl->m_width * 4],
+					&impl->m_data.get()[(impl->m_height - i - 1) * impl->m_width * 4],
+					impl->m_width * 4);
 		}
 		#ifdef GEODE_IS_WINDOWS
 		CCImage image{};
 		image.m_nBitsPerComponent = 8;
-		image.m_nHeight = height;
-		image.m_nWidth = width;
+		image.m_nHeight = impl->m_height;
+		image.m_nWidth = impl->m_width;
 		image.m_bHasAlpha = true;
 		image.m_bPreMulti = false;
 		image.m_pData = newData;
 		image.saveToFile(filename.c_str(), true);
 		#elif defined(GEODE_IS_MOBILE)
 		log::info("calling prevter's image API");
-		auto encodeResult = imgp::encode::png((void*)(newData), width, height);
+		auto encodeResult = imgp::encode::png((void*)(newData), impl->m_width, impl->m_height);
 		const bool isOK = encodeResult.isOk();
 		if (isOK) {
 			log::info("encoding success! writing binary");
@@ -76,10 +86,10 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		log::info("memory leak prevented by prevter :fire:");
 		#endif
 		#ifdef GEODE_IS_WINDOWS
-		if (isFromPRNTSCRNAndWantsSFXMoved) {
+		if (isFromPRNTSCRNAndWantsSFX) {
 		#elif defined(GEODE_IS_MOBILE)
 		log::info("checking for isFromPRNTSCRNAndWantsSFX");
-		if (isFromPRNTSCRNAndWantsSFXMoved && isOK) {
+		if (isFromPRNTSCRNAndWantsSFX && isOK) {
 		#endif
 			log::info("queueing SFX");
 			Loader::get()->queueInMainThread([](){
@@ -105,15 +115,76 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 #ifdef GEODE_IS_WINDOWS
 
 void Screenshot::intoClipboard() {
-	std::thread([=, width = std::move(m_width), height = std::move(m_height), data = std::move(m_data)]() {
-		auto bitmap = CreateBitmap(width, height, 1, 32, data.get());
+	std::thread([impl = m_impl]() {
+		auto width = impl->m_width;
+		auto height = impl->m_height;
 
-		if (OpenClipboard(NULL)) {
-			if (EmptyClipboard()) {
-				SetClipboardData(CF_BITMAP, bitmap);
-				CloseClipboard();
+		BITMAPV5HEADER v5{};
+		v5.bV5Size        = sizeof(BITMAPV5HEADER);
+		v5.bV5Width       = width;
+		v5.bV5Height      = height;
+		v5.bV5Planes      = 1;
+		v5.bV5BitCount    = 32;
+		v5.bV5Compression = BI_BITFIELDS;
+		v5.bV5RedMask     = 0x00FF0000;
+		v5.bV5GreenMask   = 0x0000FF00;
+		v5.bV5BlueMask    = 0x000000FF;
+		v5.bV5AlphaMask   = 0xFF000000;
+		v5.bV5CSType      = LCS_WINDOWS_COLOR_SPACE;
+		v5.bV5Intent      = LCS_GM_IMAGES;
+		v5.bV5SizeImage   = static_cast<DWORD>(width) * static_cast<DWORD>(height) * 4;
+
+		auto headerSize = sizeof(BITMAPV5HEADER);
+		auto pixelBytes = static_cast<SIZE_T>(width) * height * 4;
+		auto totalSize  = headerSize + pixelBytes;
+
+		auto hMem = GlobalAlloc(GMEM_MOVEABLE, totalSize);
+		if (!hMem) {
+			log::error("failed to allocate global memory");
+			return;
+		}
+
+		void* base = GlobalLock(hMem);
+		if (!base) {
+			log::error("failed to lock global memory");
+			GlobalFree(hMem);
+			return;
+		}
+
+		std::memcpy(base, &v5, headerSize);
+		{
+			auto dst = static_cast<uint8_t*>(base) + headerSize;
+			auto src = impl->m_data.get();
+			auto n = static_cast<size_t>(width) * height;
+			for (size_t i = 0; i < n; ++i) {
+				dst[0] = src[2]; // B
+				dst[1] = src[1]; // G
+				dst[2] = src[0]; // R
+				dst[3] = src[3]; // A
+				dst += 4;
+				src += 4;
 			}
 		}
+
+		GlobalUnlock(hMem);
+
+		if (!OpenClipboard(nullptr)) {
+			log::error("failed to open clipboard");
+			GlobalFree(hMem);
+			return;
+		}
+
+		EmptyClipboard();
+
+		if (!SetClipboardData(CF_DIBV5, hMem)) {
+			log::error("failed to set clipboard data");
+			GlobalFree(hMem);
+			CloseClipboard();
+			return;
+		}
+
+		// hMem is owned by clipboard, don't free it
+		CloseClipboard();
 	}).detach();
 }
 

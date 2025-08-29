@@ -12,12 +12,12 @@ public:
 	#ifdef GEODE_IS_DESKTOP
 	void intoClipboard();
 	#endif
-	CCTexture2D* intoTexture();
+
+	uint32_t getWidth() const;
+	uint32_t getHeight() const;
+	std::unique_ptr<uint8_t[]>& getData() const;
 
 private:
-	unsigned int m_width;
-	unsigned int m_height;
-	CCNode* m_node;
-	RenderTexture m_tex;
-	std::unique_ptr<uint8_t[]> m_data;
+	class Impl;
+	std::shared_ptr<Impl> m_impl;
 };
