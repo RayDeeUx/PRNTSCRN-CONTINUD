@@ -26,6 +26,49 @@ std::string SharedScreenshotLogic::getFormattedDate() {
 	return fmt::format("{} {}, {}", humanReadableMonth, now->tm_mday, now->tm_year + 1900);
 }
 
+bool SharedScreenshotLogic::belongsToEitherPlayer(CCNode* nodeBeingChecked) {
+	GJBaseGameLayer* gjbgl = GJBaseGameLayer::get();
+	if (!gjbgl) return false;
+
+	if (nodeBeingChecked == gjbgl->m_player1->m_waveTrail) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_ghostTrail) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_shipStreak) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_regularTrail) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_dashParticles) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_dashFireSprite) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_landParticles0) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_landParticles1) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_ufoClickParticles) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_trailingParticles) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_shipClickParticles) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_robotBurstParticles) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_swingBurstParticles1) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_swingBurstParticles2) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_dashSpritesContainer) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_playerGroundParticles) return true;
+	if (nodeBeingChecked == gjbgl->m_player1->m_vehicleGroundParticles) return true;
+
+	if (nodeBeingChecked == gjbgl->m_player2->m_waveTrail) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_ghostTrail) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_shipStreak) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_regularTrail) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_dashParticles) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_dashFireSprite) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_landParticles0) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_landParticles1) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_ufoClickParticles) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_trailingParticles) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_shipClickParticles) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_robotBurstParticles) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_swingBurstParticles1) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_swingBurstParticles2) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_dashSpritesContainer) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_playerGroundParticles) return true;
+	if (nodeBeingChecked == gjbgl->m_player2->m_vehicleGroundParticles) return true;
+
+	return false;
+}
+
 void SharedScreenshotLogic::hideOtherPartsOfPlayerOne(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
 	ADD_SCALE(gjbgl, m_player1->m_waveTrail, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player1->m_ghostTrail, unorderedMapStoringScales);
@@ -110,6 +153,48 @@ void SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(std::unordered_map<CCNod
 	// RES_SCALE(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales); // this line won't even work anyway because you need to constantly set its scale to 0.f which is simply not happening
 }
 
+void SharedScreenshotLogic::hidePartsOfPlayer(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, PlayerObject* player) {
+	if (!player) return;
+	ADD_OTHER_PLAYER_MEM(player->m_waveTrail, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_ghostTrail, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_shipStreak, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_regularTrail, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_dashParticles, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_dashFireSprite, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_landParticles0, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_landParticles1, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_ufoClickParticles, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_trailingParticles, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_shipClickParticles, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_robotBurstParticles, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_swingBurstParticles1, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_swingBurstParticles2, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_dashSpritesContainer, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_playerGroundParticles, unorderedMapStoringScales);
+	ADD_OTHER_PLAYER_MEM(player->m_vehicleGroundParticles, unorderedMapStoringScales);
+}
+
+void SharedScreenshotLogic::unhidePartsOfPlayer(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, PlayerObject* player) {
+	if (!player) return;
+	RES_OTHER_PLAYER_MEM(player->m_waveTrail, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_ghostTrail, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_shipStreak, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_regularTrail, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_dashParticles, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_dashFireSprite, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_landParticles0, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_landParticles1, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_ufoClickParticles, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_trailingParticles, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_shipClickParticles, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_robotBurstParticles, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_swingBurstParticles1, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_swingBurstParticles2, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_dashSpritesContainer, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_playerGroundParticles, unorderedMapStoringScales);
+	RES_OTHER_PLAYER_MEM(player->m_vehicleGroundParticles, unorderedMapStoringScales);
+}
+
 void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (!node) return log::error("invalid node!");
 	bool hasCustomNodesToHide = false;
@@ -136,10 +221,14 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	std::unordered_map<const char*, bool> uiNodes = {};
 	std::unordered_map<CCNode*, float> playerPointerScales = {};
 	std::unordered_map<std::string, GLubyte> checkpointOpacities = {};
+	std::unordered_map<CCNode*, bool> otherPlayerVisibilities = {};
+	std::unordered_map<CCNode*, float> otherPlayerPointerScales = {};
+
 	bool hideUI = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-ui");
 	bool hidePL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-player");
 	bool hideAL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-attempts");
 	bool hideCK = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-checkpoints");
+	bool hideOT = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-multiplayers");
 
 	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
 	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
@@ -205,6 +294,37 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_MEM(gjbgl, m_player2);
 		SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
+	if (hideOT && ((pl && pl->m_objectLayer) || (lel && lel->m_objectLayer))) {
+		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
+		for (CCNode* maybePossiblyPlayer : CCArrayExt<CCNode*>(gjbgl->m_objectLayer->getChildren())) {
+			if (!maybePossiblyPlayer) continue;
+			if (maybePossiblyPlayer == gjbgl->m_player1 || maybePossiblyPlayer == gjbgl->m_player2) continue;
+
+			if (SharedScreenshotLogic::belongsToEitherPlayer(maybePossiblyPlayer)) continue;
+			const std::string& nodeID = maybePossiblyPlayer->getID();
+			if (nodeID.empty() || utils::string::startsWith(nodeID, "dankmeme.globed2/remote-player-progress-")) continue;
+
+			bool isGlobed = utils::string::startsWith(nodeID, "dankmeme.globed2/remote-player-");
+			bool isChampion = utils::string::startsWith(nodeID, "ninxout.champions/player1-") || utils::string::startsWith(nodeID, "ninxout.champions/player2-");
+			if (maybePossiblyPlayer && (isGlobed || isChampion)) {
+				otherPlayerVisibilities[maybePossiblyPlayer] = maybePossiblyPlayer->isVisible();
+				maybePossiblyPlayer->setVisible(false);
+			}
+
+			if (isChampion && maybePossiblyPlayer) {
+				SharedScreenshotLogic::hidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(maybePossiblyPlayer));
+			} else if (isGlobed && maybePossiblyPlayer) {
+				if (CCNode* complexPlayerOne = maybePossiblyPlayer->getChildByID("dankmeme.globed2/visual-player1"); complexPlayerOne) {
+					CCNode* playerObjectOne = complexPlayerOne->getChildByID("PlayerObject");
+					if (playerObjectOne) SharedScreenshotLogic::hidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(playerObjectOne));
+				}
+				if (CCNode* complexPlayerTwo = maybePossiblyPlayer->getChildByID("dankmeme.globed2/visual-player2"); complexPlayerTwo) {
+					CCNode* playerObjectTwo = complexPlayerTwo->getChildByID("PlayerObject");
+					if (playerObjectTwo) SharedScreenshotLogic::hidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(playerObjectTwo));
+				}
+			}
+		}
+	}
 	CCSize selectedSize = CCSize(Manager::get()->width, Manager::get()->height);
 	if (!screenshotterIsSelf) selectedSize = CCDirector::get()->getWinSizeInPixels();
 	Screenshot ss = Screenshot(selectedSize, node);
@@ -263,6 +383,36 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 		RES_MEM(gjbgl, m_player2);
 		SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
+	}
+	if (hideOT && ((pl && pl->m_objectLayer) || (lel && lel->m_objectLayer))) {
+		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
+		for (CCNode* maybePossiblyPlayer : CCArrayExt<CCNode*>(gjbgl->m_objectLayer->getChildren())) {
+			if (!maybePossiblyPlayer) continue;
+			if (maybePossiblyPlayer == gjbgl->m_player1 || maybePossiblyPlayer == gjbgl->m_player2) continue;
+
+			if (SharedScreenshotLogic::belongsToEitherPlayer(maybePossiblyPlayer)) continue;
+			const std::string& nodeID = maybePossiblyPlayer->getID();
+			if (nodeID.empty() || utils::string::startsWith(nodeID, "dankmeme.globed2/remote-player-progress-")) continue;
+
+			bool isGlobed = utils::string::startsWith(nodeID, "dankmeme.globed2/remote-player-");
+			bool isChampion = utils::string::startsWith(nodeID, "ninxout.champions/player1-") || utils::string::startsWith(nodeID, "ninxout.champions/player2-");
+			if (maybePossiblyPlayer && (isGlobed || isChampion)) {
+				maybePossiblyPlayer->setVisible(otherPlayerVisibilities[maybePossiblyPlayer]);
+			}
+
+			if (isChampion && maybePossiblyPlayer) {
+				SharedScreenshotLogic::unhidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(maybePossiblyPlayer));
+			} else if (isGlobed && maybePossiblyPlayer) {
+				if (CCNode* complexPlayerOne = maybePossiblyPlayer->getChildByID("dankmeme.globed2/visual-player1"); complexPlayerOne) {
+					CCNode* playerObjectOne = complexPlayerOne->getChildByID("PlayerObject");
+					if (playerObjectOne) SharedScreenshotLogic::unhidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(playerObjectOne));
+				}
+				if (CCNode* complexPlayerTwo = maybePossiblyPlayer->getChildByID("dankmeme.globed2/visual-player2"); complexPlayerTwo) {
+					CCNode* playerObjectTwo = complexPlayerTwo->getChildByID("PlayerObject");
+					if (playerObjectTwo) SharedScreenshotLogic::unhidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(playerObjectTwo));
+				}
+			}
+		}
 	}
 
 	bool jpeg = false;
