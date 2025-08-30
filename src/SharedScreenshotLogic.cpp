@@ -7,6 +7,18 @@
 
 using namespace geode::prelude;
 
+namespace eclipse::gui::cocos {
+	class Popup final : public CCNode {
+		// dummy declaration
+	};
+}
+
+namespace eclipse::hacks::Levels {
+	class PauseCountdown final : public CCNode {
+		// dummy declaration
+	};
+}
+
 std::string SharedScreenshotLogic::getFormattedDate() {
 	auto nowTimeT = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 	auto now = std::localtime(&nowTimeT);
@@ -131,7 +143,13 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
 	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
+	bool originalEclipsePopupVisibility = false;
+	bool originalEclipseCountdownVisibility = false;
 
+	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
+		originalEclipsePopupVisibility = eclipsePopup->isVisible();
+		eclipsePopup->setVisible(false);
+	}
 	if (isCtrl) ADD_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
 	if (hideUI && pl) {
 		ADD_NODE(pl, UILayer);
@@ -141,6 +159,24 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(pl, mat.run-info/RunInfoWidget);
 		ADD_NODE(pl, cheeseworks.speedruntimer/timer);
 		ADD_NODE(pl, progress-bar);
+		ADD_NODE(pl, sawblade.dim_mode/dimOverlay);
+		ADD_NODE(pl, sawblade.dim_mode/opacityLabel);
+		ADD_NODE(pl, zilko.xdbot/state-label);
+		ADD_NODE(pl, zilko.xdbot/frame-label);
+		ADD_NODE(pl, zilko.xdbot/recording-audio-label);
+		ADD_NODE(pl, zilko.xdbot/button-menu);
+		ADD_NODE(pl, dankmeme.globed2/game-overlay);
+		ADD_NODE(pl, thesillydoggo.qolmod/noclip-tint-popup);
+		ADD_NODE(pl, tobyadd.gdh/labels_top_left);
+		ADD_NODE(pl, tobyadd.gdh/labels_top_right);
+		ADD_NODE(pl, tobyadd.gdh/labels_bottom_left);
+		ADD_NODE(pl, tobyadd.gdh/labels_bottom_right);
+		ADD_NODE(pl, tobyadd.gdh/labels_bottom);
+		ADD_NODE(pl, tobyadd.gdh/labels_top);
+		if (CCNode* eclipseCountdown = CCScene::get()->getChildByType<eclipse::hacks::Levels::PauseCountdown>(0); eclipseCountdown) {
+			originalEclipseCountdownVisibility = eclipseCountdown->isVisible();
+			eclipseCountdown->setVisible(false);
+		}
 	}
 	if (hideAL && pl && pl->m_attemptLabel) {
 		ADD_MEM(pl, m_attemptLabel);
@@ -172,6 +208,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	CCSize selectedSize = CCSize(Manager::get()->width, Manager::get()->height);
 	if (!screenshotterIsSelf) selectedSize = CCDirector::get()->getWinSizeInPixels();
 	Screenshot ss = Screenshot(selectedSize, node);
+	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
+		eclipsePopup->setVisible(originalEclipsePopupVisibility);
+	}
 	if (isCtrl) RES_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
 	if (hideUI && pl) {
 		RES_NODE(pl, UILayer);
@@ -181,6 +220,23 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(pl, mat.run-info/RunInfoWidget);
 		RES_NODE(pl, cheeseworks.speedruntimer/timer);
 		RES_NODE(pl, progress-bar);
+		RES_NODE(pl, sawblade.dim_mode/dimOverlay);
+		RES_NODE(pl, sawblade.dim_mode/opacityLabel);
+		RES_NODE(pl, zilko.xdbot/state-label);
+		RES_NODE(pl, zilko.xdbot/frame-label);
+		RES_NODE(pl, zilko.xdbot/recording-audio-label);
+		RES_NODE(pl, zilko.xdbot/button-menu);
+		RES_NODE(pl, dankmeme.globed2/game-overlay);
+		RES_NODE(pl, thesillydoggo.qolmod/noclip-tint-popup);
+		RES_NODE(pl, tobyadd.gdh/labels_top_left);
+		RES_NODE(pl, tobyadd.gdh/labels_top_right);
+		RES_NODE(pl, tobyadd.gdh/labels_bottom_left);
+		RES_NODE(pl, tobyadd.gdh/labels_bottom_right);
+		RES_NODE(pl, tobyadd.gdh/labels_bottom);
+		RES_NODE(pl, tobyadd.gdh/labels_top);
+		if (CCNode* eclipseCountdown = CCScene::get()->getChildByType<eclipse::hacks::Levels::PauseCountdown>(0); eclipseCountdown) {
+			eclipseCountdown->setVisible(originalEclipseCountdownVisibility);
+		}
 	}
 	if (hideAL && pl && pl->m_attemptLabel) {
 		RES_MEM(pl, m_attemptLabel);
