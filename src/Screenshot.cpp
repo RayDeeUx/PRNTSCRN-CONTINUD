@@ -62,6 +62,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 					&impl->m_data.get()[(impl->m_height - i - 1) * impl->m_width * 4],
 					impl->m_width * 4);
 		}
+
 		#ifdef GEODE_IS_WINDOWS
 		CCImage image{};
 		image.m_nBitsPerComponent = 8;
@@ -85,6 +86,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		delete[] newData; // prevent memory leak (prevter)
 		log::info("memory leak prevented by prevter :fire:");
 		#endif
+
 		#ifdef GEODE_IS_WINDOWS
 		if (isFromPRNTSCRNAndWantsSFX) {
 		#elif defined(GEODE_IS_MOBILE)
