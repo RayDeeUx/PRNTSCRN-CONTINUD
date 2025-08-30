@@ -88,6 +88,7 @@ void SharedScreenshotLogic::hideOtherPartsOfPlayerOne(std::unordered_map<CCNode*
 	ADD_SCALE(gjbgl, m_player1->m_playerGroundParticles, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player1->m_vehicleGroundParticles, unorderedMapStoringScales);
 	// ADD_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales); // this line won't even work anyway because you need to constantly set its scale to 0.f which is simply not happening
+	ADD_SCALE(gjbgl->m_player1->getParent(), getChildByID("dankmeme.globed2/self-name"), unorderedMapStoringScales);
 }
 
 void SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
@@ -109,6 +110,7 @@ void SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*
 	ADD_SCALE(gjbgl, m_player2->m_playerGroundParticles, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player2->m_vehicleGroundParticles, unorderedMapStoringScales);
 	// ADD_SCALE(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales); // this line won't even work anyway because you need to constantly set its scale to 0.f which is simply not happening
+	ADD_SCALE(gjbgl->m_player2->getParent(), getChildByID("dankmeme.globed2/self-name-p2"), unorderedMapStoringScales);
 }
 
 void SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
@@ -130,6 +132,7 @@ void SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(std::unordered_map<CCNod
 	RES_SCALE(gjbgl, m_player1->m_playerGroundParticles, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player1->m_vehicleGroundParticles, unorderedMapStoringScales);
 	// RES_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales); // this line won't even work anyway because you need to constantly set its scale to 0.f which is simply not happening
+	RES_SCALE(gjbgl->m_player1->getParent(), getChildByID("dankmeme.globed2/self-name"), unorderedMapStoringScales);
 }
 
 void SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer *gjbgl) {
@@ -151,6 +154,7 @@ void SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(std::unordered_map<CCNod
 	RES_SCALE(gjbgl, m_player2->m_playerGroundParticles, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player2->m_vehicleGroundParticles, unorderedMapStoringScales);
 	// RES_SCALE(gjbgl, m_player2->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales); // this line won't even work anyway because you need to constantly set its scale to 0.f which is simply not happening
+	RES_SCALE(gjbgl->m_player2->getParent(), getChildByID("dankmeme.globed2/self-name-p2"), unorderedMapStoringScales);
 }
 
 void SharedScreenshotLogic::hidePartsOfPlayer(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, PlayerObject* player) {
@@ -193,6 +197,71 @@ void SharedScreenshotLogic::unhidePartsOfPlayer(std::unordered_map<CCNode*, floa
 	RES_OTHER_PLAYER_MEM(player->m_dashSpritesContainer, unorderedMapStoringScales);
 	RES_OTHER_PLAYER_MEM(player->m_playerGroundParticles, unorderedMapStoringScales);
 	RES_OTHER_PLAYER_MEM(player->m_vehicleGroundParticles, unorderedMapStoringScales);
+}
+
+void SharedScreenshotLogic::hideOtherPlayersIn(GJBaseGameLayer* gjbgl, CCNode* parentNode, std::unordered_map<CCNode*, bool>& otherPlayerVisibilities, std::unordered_map<CCNode*, float>& otherPlayerPointerScales) {
+	// thank you so much MasterXI for being my impromptu test subject for this code snippet --raydeeux
+	if (!parentNode || !gjbgl) return;
+	for (CCNode* maybePossiblyPlayer : CCArrayExt<CCNode*>(parentNode->getChildren())) {
+		if (!maybePossiblyPlayer) continue;
+		if (maybePossiblyPlayer == gjbgl->m_player1 || maybePossiblyPlayer == gjbgl->m_player2) continue;
+
+		if (SharedScreenshotLogic::belongsToEitherPlayer(maybePossiblyPlayer)) continue;
+		const std::string& nodeID = maybePossiblyPlayer->getID();
+		if (nodeID.empty() || utils::string::startsWith(nodeID, "dankmeme.globed2/remote-player-progress-")) continue;
+
+		bool isGlobed = utils::string::startsWith(nodeID, "dankmeme.globed2/remote-player-");
+		bool isChampion = utils::string::startsWith(nodeID, "ninxout.champions/player1-") || utils::string::startsWith(nodeID, "ninxout.champions/player2-");
+		if (maybePossiblyPlayer && (isGlobed || isChampion)) {
+			otherPlayerVisibilities[maybePossiblyPlayer] = maybePossiblyPlayer->isVisible();
+			maybePossiblyPlayer->setVisible(false);
+		}
+
+		if (isChampion && maybePossiblyPlayer) {
+			SharedScreenshotLogic::hidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(maybePossiblyPlayer));
+		} else if (isGlobed && maybePossiblyPlayer) {
+			if (CCNode* complexPlayerOne = maybePossiblyPlayer->getChildByID("dankmeme.globed2/visual-player1"); complexPlayerOne) {
+				CCNode* playerObjectOne = complexPlayerOne->getChildByID("PlayerObject");
+				if (playerObjectOne) SharedScreenshotLogic::hidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(playerObjectOne));
+			}
+			if (CCNode* complexPlayerTwo = maybePossiblyPlayer->getChildByID("dankmeme.globed2/visual-player2"); complexPlayerTwo) {
+				CCNode* playerObjectTwo = complexPlayerTwo->getChildByID("PlayerObject");
+				if (playerObjectTwo) SharedScreenshotLogic::hidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(playerObjectTwo));
+			}
+		}
+	}
+}
+
+void SharedScreenshotLogic::unhideOtherPlayersIn(GJBaseGameLayer* gjbgl, CCNode* parentNode, std::unordered_map<CCNode*, bool>& otherPlayerVisibilities, std::unordered_map<CCNode*, float>& otherPlayerPointerScales) {
+	// thank you so much MasterXI for being my impromptu test subject for this code snippet --raydeeux
+	if (!parentNode || !gjbgl) return;
+	for (CCNode* maybePossiblyPlayer : CCArrayExt<CCNode*>(parentNode->getChildren())) {
+		if (!maybePossiblyPlayer) continue;
+		if (maybePossiblyPlayer == gjbgl->m_player1 || maybePossiblyPlayer == gjbgl->m_player2) continue;
+
+		if (SharedScreenshotLogic::belongsToEitherPlayer(maybePossiblyPlayer)) continue;
+		const std::string& nodeID = maybePossiblyPlayer->getID();
+		if (nodeID.empty() || utils::string::startsWith(nodeID, "dankmeme.globed2/remote-player-progress-")) continue;
+
+		bool isGlobed = utils::string::startsWith(nodeID, "dankmeme.globed2/remote-player-");
+		bool isChampion = utils::string::startsWith(nodeID, "ninxout.champions/player1-") || utils::string::startsWith(nodeID, "ninxout.champions/player2-");
+		if (maybePossiblyPlayer && (isGlobed || isChampion)) {
+			maybePossiblyPlayer->setVisible(otherPlayerVisibilities[maybePossiblyPlayer]);
+		}
+
+		if (isChampion && maybePossiblyPlayer) {
+			SharedScreenshotLogic::unhidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(maybePossiblyPlayer));
+		} else if (isGlobed && maybePossiblyPlayer) {
+			if (CCNode* complexPlayerOne = maybePossiblyPlayer->getChildByID("dankmeme.globed2/visual-player1"); complexPlayerOne) {
+				CCNode* playerObjectOne = complexPlayerOne->getChildByID("PlayerObject");
+				if (playerObjectOne) SharedScreenshotLogic::unhidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(playerObjectOne));
+			}
+			if (CCNode* complexPlayerTwo = maybePossiblyPlayer->getChildByID("dankmeme.globed2/visual-player2"); complexPlayerTwo) {
+				CCNode* playerObjectTwo = complexPlayerTwo->getChildByID("PlayerObject");
+				if (playerObjectTwo) SharedScreenshotLogic::unhidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(playerObjectTwo));
+			}
+		}
+	}
 }
 
 void SharedScreenshotLogic::screenshot(CCNode* node) {
@@ -294,35 +363,10 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_MEM(gjbgl, m_player2);
 		SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
-	if (hideOT && ((pl && pl->m_objectLayer) || (lel && lel->m_objectLayer))) {
+	if (hideOT && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
-		for (CCNode* maybePossiblyPlayer : CCArrayExt<CCNode*>(gjbgl->m_objectLayer->getChildren())) {
-			if (!maybePossiblyPlayer) continue;
-			if (maybePossiblyPlayer == gjbgl->m_player1 || maybePossiblyPlayer == gjbgl->m_player2) continue;
-
-			if (SharedScreenshotLogic::belongsToEitherPlayer(maybePossiblyPlayer)) continue;
-			const std::string& nodeID = maybePossiblyPlayer->getID();
-			if (nodeID.empty() || utils::string::startsWith(nodeID, "dankmeme.globed2/remote-player-progress-")) continue;
-
-			bool isGlobed = utils::string::startsWith(nodeID, "dankmeme.globed2/remote-player-");
-			bool isChampion = utils::string::startsWith(nodeID, "ninxout.champions/player1-") || utils::string::startsWith(nodeID, "ninxout.champions/player2-");
-			if (maybePossiblyPlayer && (isGlobed || isChampion)) {
-				otherPlayerVisibilities[maybePossiblyPlayer] = maybePossiblyPlayer->isVisible();
-				maybePossiblyPlayer->setVisible(false);
-			}
-
-			if (isChampion && maybePossiblyPlayer) {
-				SharedScreenshotLogic::hidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(maybePossiblyPlayer));
-			} else if (isGlobed && maybePossiblyPlayer) {
-				if (CCNode* complexPlayerOne = maybePossiblyPlayer->getChildByID("dankmeme.globed2/visual-player1"); complexPlayerOne) {
-					CCNode* playerObjectOne = complexPlayerOne->getChildByID("PlayerObject");
-					if (playerObjectOne) SharedScreenshotLogic::hidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(playerObjectOne));
-				}
-				if (CCNode* complexPlayerTwo = maybePossiblyPlayer->getChildByID("dankmeme.globed2/visual-player2"); complexPlayerTwo) {
-					CCNode* playerObjectTwo = complexPlayerTwo->getChildByID("PlayerObject");
-					if (playerObjectTwo) SharedScreenshotLogic::hidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(playerObjectTwo));
-				}
-			}
+		if (gjbgl->m_player1 && gjbgl->m_player1->getParent()) {
+			SharedScreenshotLogic::hideOtherPlayersIn(gjbgl, gjbgl->m_player1->getParent(), otherPlayerVisibilities, otherPlayerPointerScales);
 		}
 	}
 	CCSize selectedSize = CCSize(Manager::get()->width, Manager::get()->height);
@@ -384,34 +428,10 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_MEM(gjbgl, m_player2);
 		SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
 	}
-	if (hideOT && ((pl && pl->m_objectLayer) || (lel && lel->m_objectLayer))) {
+	if (hideOT && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
-		for (CCNode* maybePossiblyPlayer : CCArrayExt<CCNode*>(gjbgl->m_objectLayer->getChildren())) {
-			if (!maybePossiblyPlayer) continue;
-			if (maybePossiblyPlayer == gjbgl->m_player1 || maybePossiblyPlayer == gjbgl->m_player2) continue;
-
-			if (SharedScreenshotLogic::belongsToEitherPlayer(maybePossiblyPlayer)) continue;
-			const std::string& nodeID = maybePossiblyPlayer->getID();
-			if (nodeID.empty() || utils::string::startsWith(nodeID, "dankmeme.globed2/remote-player-progress-")) continue;
-
-			bool isGlobed = utils::string::startsWith(nodeID, "dankmeme.globed2/remote-player-");
-			bool isChampion = utils::string::startsWith(nodeID, "ninxout.champions/player1-") || utils::string::startsWith(nodeID, "ninxout.champions/player2-");
-			if (maybePossiblyPlayer && (isGlobed || isChampion)) {
-				maybePossiblyPlayer->setVisible(otherPlayerVisibilities[maybePossiblyPlayer]);
-			}
-
-			if (isChampion && maybePossiblyPlayer) {
-				SharedScreenshotLogic::unhidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(maybePossiblyPlayer));
-			} else if (isGlobed && maybePossiblyPlayer) {
-				if (CCNode* complexPlayerOne = maybePossiblyPlayer->getChildByID("dankmeme.globed2/visual-player1"); complexPlayerOne) {
-					CCNode* playerObjectOne = complexPlayerOne->getChildByID("PlayerObject");
-					if (playerObjectOne) SharedScreenshotLogic::unhidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(playerObjectOne));
-				}
-				if (CCNode* complexPlayerTwo = maybePossiblyPlayer->getChildByID("dankmeme.globed2/visual-player2"); complexPlayerTwo) {
-					CCNode* playerObjectTwo = complexPlayerTwo->getChildByID("PlayerObject");
-					if (playerObjectTwo) SharedScreenshotLogic::unhidePartsOfPlayer(otherPlayerPointerScales, static_cast<PlayerObject*>(playerObjectTwo));
-				}
-			}
+		if (gjbgl->m_player1 && gjbgl->m_player1->getParent()) {
+			SharedScreenshotLogic::unhideOtherPlayersIn(gjbgl, gjbgl->m_player1->getParent(), otherPlayerVisibilities, otherPlayerPointerScales);
 		}
 	}
 
