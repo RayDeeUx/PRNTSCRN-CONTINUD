@@ -151,6 +151,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		eclipsePopup->setVisible(false);
 	}
 	if (isCtrl) ADD_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
+	ADD_NODE(pl, sawblade.dim_mode/dimOverlay);
 	if (hideUI && pl) {
 		ADD_NODE(pl, UILayer);
 		ADD_NODE(pl, debug-text);
@@ -159,7 +160,6 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(pl, mat.run-info/RunInfoWidget);
 		ADD_NODE(pl, cheeseworks.speedruntimer/timer);
 		ADD_NODE(pl, progress-bar);
-		ADD_NODE(pl, sawblade.dim_mode/dimOverlay);
 		ADD_NODE(pl, sawblade.dim_mode/opacityLabel);
 		ADD_NODE(pl, zilko.xdbot/state-label);
 		ADD_NODE(pl, zilko.xdbot/frame-label);
@@ -212,6 +212,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		eclipsePopup->setVisible(originalEclipsePopupVisibility);
 	}
 	if (isCtrl) RES_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
+	RES_NODE(pl, sawblade.dim_mode/dimOverlay);
 	if (hideUI && pl) {
 		RES_NODE(pl, UILayer);
 		RES_NODE(pl, debug-text);
@@ -220,7 +221,6 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(pl, mat.run-info/RunInfoWidget);
 		RES_NODE(pl, cheeseworks.speedruntimer/timer);
 		RES_NODE(pl, progress-bar);
-		RES_NODE(pl, sawblade.dim_mode/dimOverlay);
 		RES_NODE(pl, sawblade.dim_mode/opacityLabel);
 		RES_NODE(pl, zilko.xdbot/state-label);
 		RES_NODE(pl, zilko.xdbot/frame-label);
