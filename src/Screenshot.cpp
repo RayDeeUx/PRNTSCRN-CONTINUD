@@ -55,6 +55,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 	}).detach();
 	*/
 	std::thread([=, impl = m_impl]() {
+		bool isOK = true;
 		log::info("vertically flipping bytevector");
 		GLubyte* newData = new GLubyte[impl->m_width * impl->m_width * 4];
 		for (int i = 0; i < impl->m_height; ++i) {
@@ -75,7 +76,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		#elif defined(GEODE_IS_MOBILE)
 		log::info("calling prevter's image API");
 		auto encodeResult = imgp::encode::png((void*)(newData), impl->m_width, impl->m_height);
-		const bool isOK = encodeResult.isOk();
+		isOK = encodeResult.isOk();
 		if (isOK) {
 			log::info("encoding success! writing binary");
 			auto writeBinaryResult = geode::utils::file::writeBinary(filename, encodeResult.unwrap());
@@ -87,12 +88,8 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		log::info("memory leak prevented by prevter :fire:");
 		#endif
 
-		#ifdef GEODE_IS_WINDOWS
-		if (isFromPRNTSCRNAndWantsSFX) {
-		#elif defined(GEODE_IS_MOBILE)
 		log::info("checking for isFromPRNTSCRNAndWantsSFX");
 		if (isFromPRNTSCRNAndWantsSFX && isOK) {
-		#endif
 			log::info("queueing SFX");
 			Loader::get()->queueInMainThread([](){
 				auto system = FMODAudioEngine::get()->m_system;
