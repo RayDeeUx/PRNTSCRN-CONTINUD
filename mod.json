@@ -81,7 +81,7 @@
 		"hide-ui": {
 			"type": "bool",
 			"name": "Hide UI",
-			"description": "Hides the UI when taking a screenshot\nwhile playing a level or while inside the level editor.",
+			"description": "Hides the UI when taking a screenshot\nwhile playing a level or while inside the level editor.\n\n<cy>Note that this won't hide everything as the Geode index grows.</c>",
 			"default": true
 		},
 		"hide-attempts": {

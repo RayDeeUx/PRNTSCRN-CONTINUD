@@ -320,12 +320,13 @@ void SharedScreenshotLogic::screenshotLevelOrScene() {
 	PlayLayer* pl = PlayLayer::get();
 	LevelEditorLayer* lel = LevelEditorLayer::get();
 	if (pl && pl->getParent() == CCScene::get()) {
-		SharedScreenshotLogic::screenshot(pl);
+		SharedScreenshotLogic::screenshot(pl); // regular PlayLayer w/o "hidden" EndLevelLayer
 		if (CCNode* ell = pl->getChildByID("EndLevelLayer"); ell) {
 			float ellOriginalScale = ell->getScale();
 			ell->setScale(0.f);
-			SharedScreenshotLogic::screenshot(pl);
+			SharedScreenshotLogic::screenshot(pl); // regular PlayLayer w/"hidden" EndLevelLayer
 			ell->setScale(ellOriginalScale);
+			SharedScreenshotLogic::screenshot(CCScene::get()); // baseScene
 			return;
 		}
 		if (CCScene::get()->getChildByID("PauseLayer")) {

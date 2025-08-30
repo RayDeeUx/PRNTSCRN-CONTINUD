@@ -101,7 +101,7 @@ bool ScreenshotPopup::setup() {
 	#ifdef GEODE_IS_DESKTOP
 	settingsMenu->addChild(createSetting("Copy To Clipboard", "copy-clipboard"));
 	#endif
-	settingsMenu->addChild(createSetting("Hide UI Layer", "hide-ui"));
+	settingsMenu->addChild(createSetting("Hide UI", "hide-ui"));
 	settingsMenu->addChild(createSetting("Hide Player", "hide-player"));
 	if (pl) {
 		settingsMenu->addChild(createSetting("Hide Attempt Label", "hide-attempts"));
