@@ -103,6 +103,7 @@ bool ScreenshotPopup::setup() {
 	#endif
 	settingsMenu->addChild(createSetting("Hide UI", "hide-ui"));
 	settingsMenu->addChild(createSetting("Hide Player", "hide-player"));
+	settingsMenu->addChild(createSetting("Hide Other Players", "hide-multiplayers"));
 	if (pl) {
 		settingsMenu->addChild(createSetting("Hide Attempt Label", "hide-attempts"));
 		settingsMenu->addChild(createSetting("Hide Checkpoints", "hide-checkpoints"));
