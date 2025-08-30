@@ -151,7 +151,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		eclipsePopup->setVisible(false);
 	}
 	if (isCtrl) ADD_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
-	ADD_NODE(pl, sawblade.dim_mode/dimOverlay);
+	if (pl) ADD_NODE(pl, sawblade.dim_mode/dimOverlay);
 	if (hideUI && pl) {
 		ADD_NODE(pl, UILayer);
 		ADD_NODE(pl, debug-text);
@@ -212,7 +212,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		eclipsePopup->setVisible(originalEclipsePopupVisibility);
 	}
 	if (isCtrl) RES_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
-	RES_NODE(pl, sawblade.dim_mode/dimOverlay);
+	if (pl) RES_NODE(pl, sawblade.dim_mode/dimOverlay);
 	if (hideUI && pl) {
 		RES_NODE(pl, UILayer);
 		RES_NODE(pl, debug-text);
