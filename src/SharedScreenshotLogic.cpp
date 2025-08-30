@@ -13,7 +13,7 @@ namespace eclipse::gui::cocos {
 	};
 }
 
-namespace eclipse::hacks::Levels {
+namespace eclipse::hacks::Level {
 	class PauseCountdown final : public CCNode {
 		// dummy declaration
 	};
@@ -173,7 +173,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(pl, tobyadd.gdh/labels_bottom_right);
 		ADD_NODE(pl, tobyadd.gdh/labels_bottom);
 		ADD_NODE(pl, tobyadd.gdh/labels_top);
-		if (CCNode* eclipseCountdown = CCScene::get()->getChildByType<eclipse::hacks::Levels::PauseCountdown>(0); eclipseCountdown) {
+		if (CCNode* eclipseCountdown = CCScene::get()->getChildByType<eclipse::hacks::Level::PauseCountdown>(0); eclipseCountdown) {
 			originalEclipseCountdownVisibility = eclipseCountdown->isVisible();
 			eclipseCountdown->setVisible(false);
 		}
@@ -234,7 +234,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(pl, tobyadd.gdh/labels_bottom_right);
 		RES_NODE(pl, tobyadd.gdh/labels_bottom);
 		RES_NODE(pl, tobyadd.gdh/labels_top);
-		if (CCNode* eclipseCountdown = CCScene::get()->getChildByType<eclipse::hacks::Levels::PauseCountdown>(0); eclipseCountdown) {
+		if (CCNode* eclipseCountdown = CCScene::get()->getChildByType<eclipse::hacks::Level::PauseCountdown>(0); eclipseCountdown) {
 			eclipseCountdown->setVisible(originalEclipseCountdownVisibility);
 		}
 	}
