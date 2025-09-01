@@ -16,6 +16,11 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 	);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &m_oldFBO);
+	glGetIntegerv(GL_RENDERBUFFER_BINDING, &m_oldRBO);
 
 	glGenFramebuffers(1, &m_fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
@@ -40,18 +45,15 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 
 	// attach texture to framebuffer
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture, 0);
+
+	glBindRenderbuffer(GL_RENDERBUFFER, m_oldRBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, m_oldFBO);
 }
 
 RenderTexture::~RenderTexture() {
-	if (m_fbo) {
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glDeleteFramebuffers(1, &m_fbo);
-	}
+	if (m_fbo) glDeleteFramebuffers(1, &m_fbo);
 	if (m_texture) glDeleteTextures(1, &m_texture);
-	if (m_depthStencil) {
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
-		glDeleteRenderbuffers(1, &m_depthStencil);
-	}
+	if (m_depthStencil) glDeleteRenderbuffers(1, &m_depthStencil);
 }
 
 void RenderTexture::begin() {
@@ -70,6 +72,7 @@ void RenderTexture::begin() {
 	glview->m_fScaleY = m_height / director->getWinSize().height / geode::utils::getDisplayFactor();
 	
 	glViewport(0, 0, m_width, m_height);
+	glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencil);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 
 	// idk either tbh i just copied it from drawScene
