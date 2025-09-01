@@ -8,15 +8,15 @@ Tired of that clunky three-key screenshot hotkey? Don't like the window shadows 
 
 Let <cy>PRNTSCRN</c> make the screenshotting process easier for you!
 
-## Features:
-- <c-ff9a00>Screenshot levels</c> with options to <cy>hide</c> <cl>your UI</c>, <co>your</c> <cj>player</c>*, <cf>the attempt label</c>, <cg>Practice Mode checkpoints</c>, and even other players from <c-f0d47f>Globed</c> or <c-fe45ad>C</c><c-ff59b1>h</c><c-ff6888>a</c><c-fd8874>m</c><c-fd9660>p</c><c-fdaf4f>i</c><c-ffc03c>o</c><c-fed125>n</c><c-ffe220>s</c>!
-- <c-ff9a00>Automate level screenshots</c> by percentage or seconds intervals!
-- <c-ff9a00>Customize the dimensions</c> of your screenshots!
+## Features
+- <c-ff9a00>Screenshot levels</c> with options to <cy>hide</c> <cl>your UI</c>, <co>your</c> <cj>player</c><c-AAAAAA>\*</c>, <cf>the attempt label</c>, <cg>Practice Mode checkpoints</c>, and even other players<c-AAAAAA>\*</c> from <c-f0d47f>Globed</c> or <c-fe45ad>C</c><c-ff59b1>h</c><c-ff6888>a</c><c-fd8874>m</c><c-fd9660>p</c><c-fdaf4f>i</c><c-ffc03c>o</c><c-fed125>n</c><c-ffe220>s</c>!
+- <c-ff9a00>Automate level screenshots</c> in percentage or seconds intervals!
+- <c-ff9a00>Customizable dimensions</c> for screenshots!<c-999999>\*\*</c>
 - <c-ff9a00>An API</c> for other mods to take screenshots through this mod!
 - <c-40a2f5>Eclipse Menu</c> integration!
 - <cs>Rebindable</c> keybinds! (macOS, Windows, and Android only)
-- <cs>Save as JPG</c>! (macOS/Windows only; all devices support PNG)
-- <cs>Copy to clipboard</c>! (macOS/Windows only, <c-ff5555>might break if using Wine</c>)
+- <cs>Save as JPG</c>! (macOS/Windows only. All devices support PNG.)
+- <cs>Copy to clipboard</c>! (macOS/Windows only. <c-ff5555>Might break in Wine.</c>)
 
 ## Special Thanks
 - <c-ff6666>mat</c> for the original RenderTexture implementation and mod idea; without it, none of this would've been possible.
@@ -26,12 +26,13 @@ Let <cy>PRNTSCRN</c> make the screenshotting process easier for you!
 - <c-ff4444>CatXus</c> for beta-testing Android support.
 - <c-4c6e5d>Alp</c><c-73ab90>ha</c><c-bc419c>la</c><c-ce6087>n</c><c-ec9667>e</c><c-fcfc78>o</c><c-83da96>u</c><c-80d5dc>s</c>, <c-fcb5ff>hiim</c><c-00c8ff>jasmine</c><c-fcb5ff>00</c>, <c-7d00ff>Firee</c>, and <c-b680ff>slideglide</c> for beta-testing iOS support.
 
-### Memorial for those who gave up partway
+#### Memorial for those who gave up partway
 
 - <c-ff7d00>Tech</c><c-ffb900>Student</c><c-ff7d00>10</c> (o7)
 
-### Notice
+### Notes
 
-For best results (or if you just hate crashes in general), please use a conventional aspect ratio (16:9, 16:10, 4:3, etc.) for your game window sizes.
+- <c-AAAAAA>\**Not all parts of your player (or players from multiplayer mods) can be easily hidden, including player ghost trails, dash fire sprites, and spider teleport effects. To hide these effects more consistently during gameplay, see the featuresets in Eclipse Menu or KrazyPlayLayer.*</c>
+- <c-999999>\*\**For best results (or if you just hate crashes in general), please use a conventional aspect ratio (16:9, 16:10, 4:3, etc.) for your game window sizes.*</c>
 
 This [Geode mod](https://geode-sdk.org) is licensed under LGPLv2. [Join RayDeeUx's Discord server](https://discord.gg/WqZBYdBWZW) to report issues with using the mod.
