@@ -307,6 +307,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
 	bool originalEclipsePopupVisibility = false;
 	bool originalEclipseCountdownVisibility = false;
+	bool originalHeartsContainerVisibility = false;
 
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
 		originalEclipsePopupVisibility = eclipsePopup->isVisible();
@@ -335,9 +336,13 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(pl, tobyadd.gdh/labels_bottom_right);
 		ADD_NODE(pl, tobyadd.gdh/labels_bottom);
 		ADD_NODE(pl, tobyadd.gdh/labels_top);
-		if (CCNode* eclipseCountdown = CCScene::get()->getChildByType<eclipse::hacks::Level::PauseCountdown>(0); eclipseCountdown) {
+		if (CCNode* eclipseCountdown = pl->getChildByType<eclipse::hacks::Level::PauseCountdown>(0); eclipseCountdown) {
 			originalEclipseCountdownVisibility = eclipseCountdown->isVisible();
 			eclipseCountdown->setVisible(false);
+		}
+		if (CCNode* heartsContainer = pl->getChildByType<HeartsContainer>(0); heartsContainer) {
+			originalHeartsContainerVisibility = heartsContainer->isVisible();
+			heartsContainer->setVisible(false);
 		}
 	}
 	if (hideAL && pl && pl->m_attemptLabel) {
@@ -402,8 +407,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(pl, tobyadd.gdh/labels_bottom_right);
 		RES_NODE(pl, tobyadd.gdh/labels_bottom);
 		RES_NODE(pl, tobyadd.gdh/labels_top);
-		if (CCNode* eclipseCountdown = CCScene::get()->getChildByType<eclipse::hacks::Level::PauseCountdown>(0); eclipseCountdown) {
+		if (CCNode* eclipseCountdown = pl->getChildByType<eclipse::hacks::Level::PauseCountdown>(0); eclipseCountdown) {
 			eclipseCountdown->setVisible(originalEclipseCountdownVisibility);
+		}
+		if (CCNode* heartsContainer = pl->getChildByType<HeartsContainer>(0); heartsContainer) {
+			heartsContainer->setVisible(originalHeartsContainerVisibility);
 		}
 	}
 	if (hideAL && pl && pl->m_attemptLabel) {
