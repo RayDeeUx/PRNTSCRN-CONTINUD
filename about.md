@@ -26,7 +26,7 @@ Let <cy>PRNTSCRN</c> make the screenshotting process easier for you!
 - <c-ff4444>CatXus</c> for beta-testing Android support.
 - <c-4c6e5d>Alp</c><c-73ab90>ha</c><c-bc419c>la</c><c-ce6087>n</c><c-ec9667>e</c><c-fcfc78>o</c><c-83da96>u</c><c-80d5dc>s</c>, <c-fcb5ff>hiim</c><c-00c8ff>jasmine</c><c-fcb5ff>00</c>, <c-7d00ff>Firee</c>, and <c-b680ff>slideglide</c> for beta-testing iOS support.
 
-#### Memorial for those who gave up partway
+### Memorial for those who gave up partway
 
 - <c-ff7d00>Tech</c><c-ffb900>Student</c><c-ff7d00>10</c> (o7)
 
