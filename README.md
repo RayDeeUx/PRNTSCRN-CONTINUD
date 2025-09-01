@@ -4,7 +4,7 @@
 
 A screenshot tool inspired by Minecraft's F2 key!
 
-<c-e0e0e0>By</c> <c-009d9d>Ray</c><c-00ffff>Dee</c><c-009d9d>Ux</c><c-e0e0e0>,</c> <c-00ff00>nin</c><c-2222ff>X</c><c-00ff00>out</c><c-e0e0e0>,</c> <c-ff6666>mat</c><c-e0e0e0>, and</c> <c-7d7dff>Prev</c><c-ffa040>ter</c> <c-e0e0e0>and</c> <c-fcb5ff>hiim</c><c-00c8ff>jasmine</c><c-fcb5ff>00</c><c-e0e0e0><c-e0e0e0>.</c>
+<c-e0e0e0>By</c> <c-009d9d>Ray</c><c-00ffff>Dee</c><c-009d9d>Ux</c><c-e0e0e0>,</c> <c-00ff00>nin</c><c-2222ff>X</c><c-00ff00>out</c><c-e0e0e0>,</c> <c-ff6666>mat</c><c-e0e0e0>,</c> <c-7d7dff>Prev</c><c-ffa040>ter</c><c-e0e0e0>, and</c> <c-fcb5ff>hiim</c><c-00c8ff>jasmine</c><c-fcb5ff>00</c><c-e0e0e0><c-e0e0e0>.</c>
 
 Tired of that clunky three-key screenshot hotkey? Don't like the window shadows in macOS's windowed screenshots? Scrambling to hide items in DevTools to take the perfect screenshot?
 
