@@ -2,7 +2,38 @@
 
 using namespace geode::prelude;
 
-/// @note - PRNTSCRN: Pretty Rad, Nifty Tool; Screen Capture Right Now [v1.0.0]
+/*
+* Node IDs hidden in PlayLayer:
+* UILayer
+* debug-text
+* testmode-label
+* percentage-label
+* mat.run-info/RunInfoWidget
+* cheeseworks.speedruntimer/timer
+* progress-bar
+* sawblade.dim_mode/opacityLabel
+* zilko.xdbot/state-label
+* zilko.xdbot/frame-label
+* zilko.xdbot/recording-audio-label
+* zilko.xdbot/button-menu
+* dankmeme.globed2/game-overlay
+* thesillydoggo.qolmod/noclip-tint-popup
+* tobyadd.gdh/labels_top_left
+* tobyadd.gdh/labels_top_right
+* tobyadd.gdh/labels_bottom_left
+* tobyadd.gdh/labels_bottom_right
+* tobyadd.gdh/labels_bottom
+* tobyadd.gdh/labels_top
+*/
+
+/*
+* Node IDs hidden in LevelEditorLayer:
+* UILayer
+* EditorUI
+* EditorPauseLayer
+*/
+
+/// @brief PRNTSCRN: Pretty Rad, Nifty Tool; Screen Capture Right Now [v1.0.0]
 /// @note - API by Erymanthus | RayDeeUx (Discord: @erymanthus, GitHub/Codeberg: @RayDeeUx), with advice from Prevter
 /// @note - scroll down for a TL;DR!
 /// @note - this namespace is not designed to screenshot any specific pointers belonging to the GJBaseGameLayer (GJBGL), PlayLayer (PL), or LevelEditorLayer (LEL) classes.
@@ -230,5 +261,29 @@ namespace PRNTSCRN {
 			return Err(fmt::format("[PRNTSCRN API] unable to reference node of type {} and index {} using screenshotNodeByTypeFrom", PRNTSCRN::__demangle__(typeid(T).name()), index));
 		}
 		return PRNTSCRN::screenshotNode(node);
+	}
+
+	/// @brief screenshot PlayLayer using the user's own PRNTSCRN visibility settings, since, yknow, yall are hella lazy sometimes
+	/// @note - this tells PRNTSCRN to take a screenshot of PlayLayer USING the user's node visibility filters in their PRNTSCRN settings.
+	/// @note - the length of this function name is intentionally long in order for you to perform your own cost/benefit analyses from calling this function.
+	inline geode::Result<> screenshotPlayLayerUsingUsersOwnPRNTSCRNPreferences() {
+		PlayLayer* pl = PlayLayer::get();
+		if (!pl) {
+			log::error("[PRNTSCRN API] screenshotPlayLayerUsingUsersOwnPRNTSCRNPreferences failed, NO PLAYLAYER FOUND!");
+			return Err(fmt::format("[PRNTSCRN API] screenshotPlayLayerUsingUsersOwnPRNTSCRNPreferences failed, NO PLAYLAYER FOUND!"));
+		}
+		return PRNTSCRN::screenshotNode(pl);
+	}
+
+	/// @brief screenshot LevelEditorLayer using the user's own PRNTSCRN visibility settings, since, yknow, yall are hella lazy sometimes
+	/// @note - this tells PRNTSCRN to take a screenshot of LevelEditorLayer USING the user's node visibility filters in their PRNTSCRN settings.
+	/// @note - the length of this function name is intentionally long in order for you to perform your own cost/benefit analyses from calling this function.
+	inline geode::Result<> screenshotLevelEditorLayerUsingUsersOwnPRNTSCRNPreferences() {
+		LevelEditorLayer* lel = LevelEditorLayer::get();
+		if (!lel) {
+			log::error("[PRNTSCRN API] screenshotLevelEditorLayerUsingUsersOwnPRNTSCRNPreferences failed, NO LEVELEDITORLAYER FOUND!");
+			return Err(fmt::format("[PRNTSCRN API] screenshotLevelEditorLayerUsingUsersOwnPRNTSCRNPreferences failed, NO LEVELEDITORLAYER FOUND!"));
+		}
+		return PRNTSCRN::screenshotNode(lel);
 	}
 }
