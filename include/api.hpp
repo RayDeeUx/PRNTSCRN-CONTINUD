@@ -104,6 +104,30 @@ namespace PRNTSCRN {
 		return Ok();
 	}
 
+	/// @brief screenshot PlayLayer without any node visibility filters, since, yknow, yall are hella lazy sometimes
+	/// @note - this tells PRNTSCRN to take a screenshot of PlayLayer WHILE completely ignoring the user's node visibility filters in their PRNTSCRN settings.
+	/// @note - the length of this function name is intentionally long in order for you to perform your own cost/benefit analyses from calling this function.
+	inline geode::Result<> screenshotPlayLayerWithoutAnyVisibilityFilters() {
+		PlayLayer* pl = PlayLayer::get();
+		if (!pl) {
+			log::error("[PRNTSCRN API] screenshotPlayLayerWithoutAnyVisibilityFilters failed, NO PLAYLAYER FOUND!");
+			return Err(fmt::format("[PRNTSCRN API] screenshotPlayLayerWithoutAnyVisibilityFilters failed, NO PLAYLAYER FOUND!"));
+		}
+		return PRNTSCRN::screenshotNodeAdvanced(pl, {}, {});
+	}
+
+	/// @brief screenshot LevelEditorLayer without any node visibility filters, since, yknow, yall are hella lazy sometimes
+	/// @note - this tells PRNTSCRN to take a screenshot of LevelEditorLayer WHILE completely ignoring the user's node visibility filters in their PRNTSCRN settings.
+	/// @note - the length of this function name is intentionally long in order for you to perform your own cost/benefit analyses from calling this function.
+	inline geode::Result<> screenshotLevelEditorLayerWithoutAnyVisibilityFilters() {
+		LevelEditorLayer* lel = LevelEditorLayer::get();
+		if (!lel) {
+			log::error("[PRNTSCRN API] screenshotLevelEditorLayerWithoutAnyVisibilityFilters failed, NO LEVELEDITORLAYER FOUND!");
+			return Err(fmt::format("[PRNTSCRN API] screenshotLevelEditorLayerWithoutAnyVisibilityFilters failed, NO LEVELEDITORLAYER FOUND!"));
+		}
+		return PRNTSCRN::screenshotNodeAdvanced(lel, {}, {});
+	}
+
 	/// @brief screenshot a node as seen on the screen.
 	/// @param node CCNode* being screenshotted. you are responsible for filling in the CCNode* parameter.
 	/// @returns a Result of Err if something is wrong with the node (null), otherwise returns Ok().
