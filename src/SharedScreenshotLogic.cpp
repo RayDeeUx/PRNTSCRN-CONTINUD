@@ -9,15 +9,19 @@ using namespace geode::prelude;
 
 namespace eclipse::gui::cocos {
 	class Popup final : public CCNode {
-		// dummy declaration
+		// dummy declaration for eclipse support (when are y'all adding node IDs?) --raydeeux
 	};
 }
 
 namespace eclipse::hacks::Level {
 	class PauseCountdown final : public CCNode {
-		// dummy declaration
+		// dummy declaration for eclipse support (when are y'all adding node IDs?) --raydeeux
 	};
 }
+
+class HeartsContainer final : public CCNode {
+	// dummy declaration because rainix is either allergic to CCNode::setID() or was never aware of it --raydeeux
+};
 
 std::string SharedScreenshotLogic::getFormattedDate() {
 	auto nowTimeT = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
