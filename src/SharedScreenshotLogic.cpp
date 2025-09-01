@@ -92,7 +92,7 @@ void SharedScreenshotLogic::hideOtherPartsOfPlayerOne(std::unordered_map<CCNode*
 	ADD_SCALE(gjbgl, m_player1->m_playerGroundParticles, unorderedMapStoringScales);
 	ADD_SCALE(gjbgl, m_player1->m_vehicleGroundParticles, unorderedMapStoringScales);
 	// ADD_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales); // this line won't even work anyway because you need to constantly set its scale to 0.f which is simply not happening
-	ADD_SCALE(gjbgl->m_player1->getParent(), getChildByID("dankmeme.globed2/self-name"), unorderedMapStoringScales);
+	ADD_SCALE(gjbgl->m_objectLayer, getChildByID("dankmeme.globed2/self-name"), unorderedMapStoringScales);
 }
 
 void SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer* gjbgl) {
@@ -136,7 +136,7 @@ void SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(std::unordered_map<CCNod
 	RES_SCALE(gjbgl, m_player1->m_playerGroundParticles, unorderedMapStoringScales);
 	RES_SCALE(gjbgl, m_player1->m_vehicleGroundParticles, unorderedMapStoringScales);
 	// RES_SCALE(gjbgl, m_player1->m_dashFireSprite->getChildByType<CCSprite>(0), unorderedMapStoringScales); // this line won't even work anyway because you need to constantly set its scale to 0.f which is simply not happening
-	RES_SCALE(gjbgl->m_player1->getParent(), getChildByID("dankmeme.globed2/self-name"), unorderedMapStoringScales);
+	RES_SCALE(gjbgl->m_objectLayer, getChildByID("dankmeme.globed2/self-name"), unorderedMapStoringScales);
 }
 
 void SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, GJBaseGameLayer *gjbgl) {
@@ -374,8 +374,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	}
 	if (hideOT && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
-		if (gjbgl->m_player1 && gjbgl->m_player1->getParent()) {
-			SharedScreenshotLogic::hideOtherPlayersIn(gjbgl, gjbgl->m_player1->getParent(), otherPlayerVisibilities, otherPlayerPointerScales);
+		if (gjbgl->m_objectLayer) {
+			SharedScreenshotLogic::hideOtherPlayersIn(gjbgl, gjbgl->m_objectLayer, otherPlayerVisibilities, otherPlayerPointerScales);
 		}
 	}
 	CCSize selectedSize = CCSize(Manager::get()->width, Manager::get()->height);
@@ -442,8 +442,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	}
 	if (hideOT && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
-		if (gjbgl->m_player1 && gjbgl->m_player1->getParent()) {
-			SharedScreenshotLogic::unhideOtherPlayersIn(gjbgl, gjbgl->m_player1->getParent(), otherPlayerVisibilities, otherPlayerPointerScales);
+		if (gjbgl->m_objectLayer) {
+			SharedScreenshotLogic::unhideOtherPlayersIn(gjbgl, gjbgl->m_objectLayer, otherPlayerVisibilities, otherPlayerPointerScales);
 		}
 	}
 
