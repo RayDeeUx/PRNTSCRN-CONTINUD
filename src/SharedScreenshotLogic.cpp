@@ -329,7 +329,6 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(pl, zilko.xdbot/recording-audio-label);
 		ADD_NODE(pl, zilko.xdbot/button-menu);
 		ADD_NODE(pl, dankmeme.globed2/game-overlay);
-		ADD_NODE(pl, thesillydoggo.qolmod/noclip-tint-popup);
 		ADD_NODE(pl, tobyadd.gdh/labels_top_left);
 		ADD_NODE(pl, tobyadd.gdh/labels_top_right);
 		ADD_NODE(pl, tobyadd.gdh/labels_bottom_left);
@@ -400,7 +399,6 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(pl, zilko.xdbot/recording-audio-label);
 		RES_NODE(pl, zilko.xdbot/button-menu);
 		RES_NODE(pl, dankmeme.globed2/game-overlay);
-		RES_NODE(pl, thesillydoggo.qolmod/noclip-tint-popup);
 		RES_NODE(pl, tobyadd.gdh/labels_top_left);
 		RES_NODE(pl, tobyadd.gdh/labels_top_right);
 		RES_NODE(pl, tobyadd.gdh/labels_bottom_left);
