@@ -244,7 +244,7 @@ class $modify(NewEditorPauseLayer, EditorPauseLayer) {
 class $modify(MyCCEGLViewProtocol, CCEGLViewProtocol) {
 	void setFrameSize(float p0, float p1) {
 		CCEGLViewProtocol::setFrameSize(p0, p1);
-		if (Mod::get()->getSettingValue<bool>("use-window-width")) Manager::get()->width = this->getFrameSize().width;
-		if (Mod::get()->getSettingValue<bool>("use-window-height")) Manager::get()->height = this->getFrameSize().height;
+		if (Mod::get()->getSettingValue<bool>("use-window-width")) Manager::get()->width = CCDirector::get()->getWinSizeInPixels().width;
+		if (Mod::get()->getSettingValue<bool>("use-window-height")) Manager::get()->height = CCDirector::get()->getWinSizeInPixels().height;
 	}
 };
