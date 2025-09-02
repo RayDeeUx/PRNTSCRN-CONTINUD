@@ -296,6 +296,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	std::unordered_map<std::string, GLubyte> checkpointOpacities = {};
 	std::unordered_map<CCNode*, bool> otherPlayerVisibilities = {};
 	std::unordered_map<CCNode*, float> otherPlayerPointerScales = {};
+	std::unordered_map<CCNode*, bool> otherPlayerUIVisibilities = {};
 
 	bool hideUI = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-ui");
 	bool hidePL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-player");
@@ -335,6 +336,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(pl, tobyadd.gdh/labels_bottom_right);
 		ADD_NODE(pl, tobyadd.gdh/labels_bottom);
 		ADD_NODE(pl, tobyadd.gdh/labels_top);
+
 		if (CCNode* eclipseCountdown = pl->getChildByType<eclipse::hacks::Level::PauseCountdown>(0); eclipseCountdown) {
 			originalEclipseCountdownVisibility = eclipseCountdown->isVisible();
 			eclipseCountdown->setVisible(false);
@@ -342,6 +344,16 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		if (CCNode* heartsContainer = pl->getChildByType<HeartsContainer>(0); heartsContainer) {
 			originalHeartsContainerVisibility = heartsContainer->isVisible();
 			heartsContainer->setVisible(false);
+		}
+
+		if (pl->m_level && pl->m_level->isPlatformer()) {
+			for (CCNode* potentiallyPlayer : CCArrayExt<CCNode*>(pl->getChildren())) {
+				if (!potentiallyPlayer) continue;
+				const std::string& potentialNodeID = potentiallyPlayer->getID();
+				if (potentialNodeID.empty() || !utils::string::startsWith(potentialNodeID, "dankmeme.globed2/remote-player-progress-")) continue;
+				otherPlayerUIVisibilities[potentiallyPlayer] = potentiallyPlayer->isVisible();
+				potentiallyPlayer->setVisible(false);
+			}
 		}
 	}
 	if (hideAL && pl && pl->m_attemptLabel) {
@@ -406,11 +418,19 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(pl, tobyadd.gdh/labels_bottom_right);
 		RES_NODE(pl, tobyadd.gdh/labels_bottom);
 		RES_NODE(pl, tobyadd.gdh/labels_top);
+
 		if (CCNode* eclipseCountdown = pl->getChildByType<eclipse::hacks::Level::PauseCountdown>(0); eclipseCountdown) {
 			eclipseCountdown->setVisible(originalEclipseCountdownVisibility);
 		}
 		if (CCNode* heartsContainer = pl->getChildByType<HeartsContainer>(0); heartsContainer) {
 			heartsContainer->setVisible(originalHeartsContainerVisibility);
+		}
+
+		if (pl->m_level && pl->m_level->isPlatformer() && !otherPlayerUIVisibilities.empty()) {
+			for (auto [potentiallyPlayer, formerVisibility] : otherPlayerUIVisibilities) {
+				if (!potentiallyPlayer) continue;
+				potentiallyPlayer->setVisible(formerVisibility);
+			}
 		}
 	}
 	if (hideAL && pl && pl->m_attemptLabel) {
