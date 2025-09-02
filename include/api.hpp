@@ -31,19 +31,34 @@ using namespace geode::prelude;
 * UILayer
 * EditorUI
 * EditorPauseLayer
+* dankmeme.globed2/game-overlay
+*/
+
+/*
+* Node IDs hidden when hiding the attempt label:
+* raydeeux.attemptlabeltweaks/custom-attempt-label
+*/
+
+/*
+* Node ID prefixes when hiding players from multiplayer mods (Globed, Champions) [parent node containing players is "GJBaseGameLayer::m_objectLayer"]:
+* "dankmeme.globed2/remote-player-" (make sure to filter out node ID "dankmeme.globed2/remote-player-progress-") (then querySelector("dankmeme.globed2/visual-player1 > PlayerObject") or querySelector("dankmeme.globed2/visual-player2 > PlayerObject") for the actual player object)
+* "ninxout.champions/player1-"
+* "ninxout.champions/player2-"
 */
 
 /// @brief PRNTSCRN: Pretty Rad, Nifty Tool; Screen Capture Right Now [v1.0.0]
 /// @note - API by Erymanthus | RayDeeUx (Discord: @erymanthus, GitHub/Codeberg: @RayDeeUx), with advice from Prevter
 /// @note - scroll down for a TL;DR!
-/// @note - this namespace is not designed to screenshot any specific pointers belonging to the GJBaseGameLayer (GJBGL), PlayLayer (PL), or LevelEditorLayer (LEL) classes.
+/// @note - this namespace is not designed to screenshot any specific pointer variables belonging to the GJBaseGameLayer (GJBGL), PlayLayer (PL), or LevelEditorLayer (LEL) classes.
 /// @note - anyone found attempting to screenshot node pointers in GJBGL, PL, or LEL will most likely be met with severe disappointment.
 /// @note - anyone found using this API to screenshot any node whose content size does not match the content size of the current running scene will also most likely be met with severe disappointment.
 /// @note - screenshots of nodes with transparent backgrounds and/or content sizes smaller than the content size of the current running scene will have black backgrounds, not transparent backgrounds. this is because OpenGL is the kind of language with a higher barrier of entry that rarely takes kindly to noobs. if anyone has any suggestions on how to improve the OpenGL calls in this function, good luck.
 /// @note - all screenshots using this API will use the window size.
-/// @note - all screenshots using this API will be sent to the config directory for the mod `ninxout.prntscrn`.
+/// @note - all screenshots using this API will be saved within (a subfolder of) the config directory for the mod `ninxout.prntscrn`. the subfolder will be prefixed with your mod ID.
 /// @note - all screenshots using this API will NOT (READ: NOT!!!) be copied to the user's clipboard.
-/// @note - all screenshots using this API MUST (READ: MUST!!!) be spaced apart by at least two (2) seconds. this is a technical limitation known as "computers are not physically capable of saving raw byte data to image files instantaneously", and by using this API you *must* assume that PRNTSCRN has not found a workaround for this issue internally; even if PRNTSCRN's changelogs indicate otherwise. [TL;DR: you shouldn't be requesting screenshots by constructing and posting ScreenshotEvents very frequently.]
+/// @note - all screenshots using this API will NOT (READ: NOT!!!) play any SFX.
+/// @note - try your absolute darndest to space out your screenshots. this is a technical limitation known as "computers are not physically capable of saving raw byte data to image files on their disks instantaneously", and by using this API you *must* assume that PRNTSCRN has not found a workaround for this issue internally; even if PRNTSCRN's changelogs indicate otherwise.
+/// @note - you shouldn't be requesting screenshots incredibly frequently. if you are, please consider implementing a screen recorder instead.
 /// @note - TL;DR: even though any CCNode* is theoretically supported, the PRNTSCRN namespace is best used to screenshot nodes with non-transparent backgrounds whose contents fill the whole screen.
 namespace PRNTSCRN {
 	class ScreenshotEvent final : public Event {
