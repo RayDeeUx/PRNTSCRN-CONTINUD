@@ -24,6 +24,7 @@ using namespace geode::prelude;
 * tobyadd.gdh/labels_bottom_right
 * tobyadd.gdh/labels_bottom
 * tobyadd.gdh/labels_top
+* ANY NODE ID PREFIXED WITH "dankmeme.globed2/remote-player-progress-" IN PLATFORMER LEVELS SPECIFICALLY
 */
 
 /*
@@ -44,6 +45,27 @@ using namespace geode::prelude;
 * "dankmeme.globed2/remote-player-" (make sure to filter out node ID "dankmeme.globed2/remote-player-progress-") (then querySelector("dankmeme.globed2/visual-player1 > PlayerObject") or querySelector("dankmeme.globed2/visual-player2 > PlayerObject") for the actual player object)
 * "ninxout.champions/player1-"
 * "ninxout.champions/player2-"
+*/
+
+/*
+* PlayerObject member variables whose scales are reduced to 0 then restored after a screenshot:
+* m_waveTrail
+* m_ghostTrail
+* m_shipStreak
+* m_regularTrail
+* m_dashParticles
+* m_dashFireSprite
+* m_landParticles0
+* m_landParticles1
+* m_ufoClickParticles
+* m_trailingParticles
+* m_shipClickParticles
+* m_robotBurstParticles
+* m_swingBurstParticles1
+* m_swingBurstParticles2
+* m_dashSpritesContainer
+* m_playerGroundParticles
+* m_vehicleGroundParticles
 */
 
 /// @brief PRNTSCRN: Pretty Rad, Nifty Tool; Screen Capture Right Now [v1.0.0]

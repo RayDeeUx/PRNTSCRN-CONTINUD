@@ -1,6 +1,9 @@
+// ReSharper disable CppTooWideScope
+// ReSharper disable CppDFAUnusedValue
 // ReSharper disable CppDFAUnreachableCode
 // ReSharper disable CppDFAConstantConditions
-// yeah that's right clion stop saying my code is unreachable >:(
+// ReSharper disable CppLocalVariableMayBeConst
+// yeah that's right clion stop shitting on my code >:(
 #include "SharedScreenshotLogic.hpp"
 #include "Screenshot.hpp"
 #include "Manager.hpp"
