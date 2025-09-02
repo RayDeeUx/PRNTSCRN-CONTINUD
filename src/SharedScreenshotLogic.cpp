@@ -390,9 +390,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			SharedScreenshotLogic::hideOtherPlayersIn(gjbgl, gjbgl->m_objectLayer, otherPlayerVisibilities, otherPlayerPointerScales);
 		}
 	}
+
 	CCSize selectedSize = CCSize(Manager::get()->width, Manager::get()->height);
 	if (!screenshotterIsSelf) selectedSize = CCDirector::get()->getWinSizeInPixels();
 	Screenshot ss = Screenshot(selectedSize, node);
+
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
 		eclipsePopup->setVisible(originalEclipsePopupVisibility);
 	}
