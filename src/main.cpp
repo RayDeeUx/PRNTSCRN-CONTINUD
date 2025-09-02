@@ -110,7 +110,9 @@ $on_mod(Loaded) {
 				theNodeToHide->setVisible(false);
 			}
 		}
+
 		SharedScreenshotLogic::screenshot(nodeBeingScreenshotted);
+
 		if (!hideThesePointers.empty() && !formerNodePointersVisibilityStates.empty()) {
 			for (auto [nodeToRestore, formerVisibility] : formerNodePointersVisibilityStates) {
 				if (!nodeToRestore) continue;

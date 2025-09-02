@@ -471,7 +471,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	bool jpeg = false;
 	#ifdef GEODE_IS_DESKTOP
-	jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia");
+	jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia") && screenshotterIsSelf;
 	#endif
 	std::string extension = jpeg ? ".jpg" : ".png";
 
