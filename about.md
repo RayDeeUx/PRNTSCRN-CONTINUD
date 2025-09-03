@@ -30,6 +30,7 @@ Let <cy>PRNTSCRN</c> make the screenshotting process easier for you!
 ### Memorial for those who gave up partway
 
 - <c-ff7d00>Tech</c><c-ffb900>Student</c><c-ff7d00>10</c> (o7)
+- <c-49457c>k</c><c-51477a>m</c><c-5a4b79>7</c><c-634d78>d</c><c-6d5076>e</c><c-765475>v</c> (o7)
 
 ### Notes
 
