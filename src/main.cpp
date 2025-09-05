@@ -244,6 +244,18 @@ class $modify(NewEditorPauseLayer, EditorPauseLayer) {
 class $modify(MyCCEGLViewProtocol, CCEGLViewProtocol) {
 	void setFrameSize(float p0, float p1) {
 		CCEGLViewProtocol::setFrameSize(p0, p1);
+		log::info("p0: {}", p0);
+		log::info("p1: {}", p1);
+		if (Mod::get()->getSettingValue<bool>("use-window-width")) Manager::get()->width = CCDirector::get()->getWinSizeInPixels().width;
+		if (Mod::get()->getSettingValue<bool>("use-window-height")) Manager::get()->height = CCDirector::get()->getWinSizeInPixels().height;
+	}
+};
+
+#include <Geode/modify/CCDirector.hpp>
+class $modify(MyCCDirector, CCDirector) {
+	void updateContentScale(cocos2d::TextureQuality quality) {
+		log::info("quality: {}", fmt::underlying(quality));
+		CCDirector::updateContentScale(quality);
 		if (Mod::get()->getSettingValue<bool>("use-window-width")) Manager::get()->width = CCDirector::get()->getWinSizeInPixels().width;
 		if (Mod::get()->getSettingValue<bool>("use-window-height")) Manager::get()->height = CCDirector::get()->getWinSizeInPixels().height;
 	}
