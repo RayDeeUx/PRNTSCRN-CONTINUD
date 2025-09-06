@@ -320,13 +320,15 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (isCtrl) ADD_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
 	if (pl) ADD_NODE(pl, sawblade.dim_mode/dimOverlay);
 	if (hideUI && pl) {
-		ADD_NODE(pl, UILayer);
-		ADD_NODE(pl, debug-text);
-		ADD_NODE(pl, testmode-label);
-		ADD_NODE(pl, percentage-label);
+		ADD_MEM(pl, m_uiLayer);
+		ADD_MEM(pl, m_infoLabel);
+		ADD_MEM(pl, m_percentageLabel);
+		ADD_MEM(pl, m_progressBar);
+		ADD_MEM(pl, m_progressFill);
+		ADD_MEM(pl, m_statusLabel);
+
 		ADD_NODE(pl, mat.run-info/RunInfoWidget);
 		ADD_NODE(pl, cheeseworks.speedruntimer/timer);
-		ADD_NODE(pl, progress-bar);
 		ADD_NODE(pl, sawblade.dim_mode/opacityLabel);
 		ADD_NODE(pl, zilko.xdbot/state-label);
 		ADD_NODE(pl, zilko.xdbot/frame-label);
@@ -404,13 +406,15 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (isCtrl) RES_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
 	if (pl) RES_NODE(pl, sawblade.dim_mode/dimOverlay);
 	if (hideUI && pl) {
-		RES_NODE(pl, UILayer);
-		RES_NODE(pl, debug-text);
-		RES_NODE(pl, testmode-label);
-		RES_NODE(pl, percentage-label);
+		RES_MEM(pl, m_uiLayer);
+		RES_MEM(pl, m_infoLabel);
+		RES_MEM(pl, m_percentageLabel);
+		RES_MEM(pl, m_progressBar);
+		RES_MEM(pl, m_progressFill);
+		RES_MEM(pl, m_statusLabel);
+
 		RES_NODE(pl, mat.run-info/RunInfoWidget);
 		RES_NODE(pl, cheeseworks.speedruntimer/timer);
-		RES_NODE(pl, progress-bar);
 		RES_NODE(pl, sawblade.dim_mode/opacityLabel);
 		RES_NODE(pl, zilko.xdbot/state-label);
 		RES_NODE(pl, zilko.xdbot/frame-label);
