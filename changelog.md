@@ -1,4 +1,6 @@
 # <cy>PRNTSCRN</c> Changelog
+## v1.0.3
+- Consistently hide checkpoint objects.
 ## v1.0.2
 - Consistently hide UI elements.
 ## v1.0.1

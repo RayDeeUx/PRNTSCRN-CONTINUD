@@ -296,10 +296,10 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	// event filter from main.cpp will have already hidden the nodes by this point
 	std::unordered_map<const char*, bool> uiNodes = {};
 	std::unordered_map<CCNode*, float> playerPointerScales = {};
-	std::unordered_map<std::string, GLubyte> checkpointOpacities = {};
 	std::unordered_map<CCNode*, bool> otherPlayerVisibilities = {};
 	std::unordered_map<CCNode*, float> otherPlayerPointerScales = {};
 	std::unordered_map<CCNode*, bool> otherPlayerUIVisibilities = {};
+	std::unordered_map<GameObject*, GLubyte> checkpointOpacities = {};
 
 	bool hideUI = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-ui");
 	bool hidePL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-player");
@@ -366,13 +366,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		if (pl->m_attemptLabel->getParent()) ADD_NODE(pl->m_attemptLabel->getParent(), raydeeux.attemptlabeltweaks/custom-attempt-label);
 	}
 	if (hideCK && pl && pl->m_checkpointArray && pl->m_checkpointArray->count() > 0) {
-		int i = 0;
 		for (CheckpointObject* ckpt : CCArrayExt<CheckpointObject*>(pl->m_checkpointArray)) {
 			if (ckpt && ckpt->m_physicalCheckpointObject) {
-				checkpointOpacities[fmt::format("checkpoint_{}", i).c_str()] = ckpt->m_physicalCheckpointObject->getOpacity();
+				checkpointOpacities[ckpt->m_physicalCheckpointObject] = ckpt->m_physicalCheckpointObject->getOpacity();
 				ckpt->m_physicalCheckpointObject->setOpacity(0);
 			}
-			i++;
 		}
 	}
 	if (hideUI && lel) {
@@ -447,12 +445,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		if (pl->m_attemptLabel->getParent()) RES_NODE(pl->m_attemptLabel->getParent(), raydeeux.attemptlabeltweaks/custom-attempt-label);
 	}
 	if (hideCK && pl && pl->m_checkpointArray && pl->m_checkpointArray->count() > 0) {
-		int i = 0;
-		for (CheckpointObject* ckpt : CCArrayExt<CheckpointObject*>(pl->m_checkpointArray)) {
-			if (ckpt && ckpt->m_physicalCheckpointObject) {
-				ckpt->m_physicalCheckpointObject->setOpacity(checkpointOpacities[fmt::format("checkpoint_{}", i).c_str()]);
-			}
-			i++;
+		for (auto [ckptObject, opacity] : checkpointOpacities) {
+			if (ckptObject) ckptObject->setOpacity(opacity);
 		}
 	}
 	if (hideUI && lel) {
