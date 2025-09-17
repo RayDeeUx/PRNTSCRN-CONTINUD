@@ -1,6 +1,6 @@
 # <cy>PRNTSCRN</c> Changelog
 ## v1.0.4
-- Minor bugfixes. Hopefully.
+- Minor bugfixes related to the API. Hopefully.
 ## v1.0.3
 - Consistently hide checkpoint objects.
 ## v1.0.2
