@@ -74,6 +74,9 @@ $on_mod(Loaded) {
 			log::error("[PRNTSCRN API] THE MOD ID WAS EMPTY.");
 			return ListenerResult::Stop;
 		}
+
+		// log::info("[PRNTSCRN API] ev->getSenderModID(): {}", ev->getSenderModID());
+
 		std::unordered_map<std::string, bool> formerNodeIDsVisibilityStates = {};
 		std::unordered_map<CCNode*, bool> formerNodePointersVisibilityStates = {};
 		std::unordered_map<CCNode*, float> formerPlayerOnePointersScaleStates = {};
@@ -86,7 +89,7 @@ $on_mod(Loaded) {
 		std::vector<CCNode*> hideThesePointers = ev->getPointersToHide();
 		std::vector<std::string> hideTheseQuerySelectors = ev->getQuerysToHide();
 		if (!hideThesePointers.empty() || !hideTheseQuerySelectors.empty()) {
-			static_cast<CCBool*>(nodeBeingScreenshotted->getUserObject("has-custom-nodes-to-hide"_spr))->setValue(true);
+			nodeBeingScreenshotted->setUserObject("has-custom-nodes-to-hide"_spr, CCBool::create(true));
 		}
 		if (!hideThesePointers.empty()) {
 			for (CCNode* nodeToHide : hideThesePointers) {
@@ -130,11 +133,7 @@ $on_mod(Loaded) {
 				theNodeToRestore->setVisible(formerVisibility);
 			}
 		}
-		if (!hideThesePointers.empty() || !hideTheseQuerySelectors.empty()) {
-			static_cast<CCBool*>(nodeBeingScreenshotted->getUserObject("has-custom-nodes-to-hide"_spr))->setValue(false);
-			nodeBeingScreenshotted->setUserObject("mod-asking-for-screenshot"_spr, CCString::create(""));
-		}
-		return ListenerResult::Stop;
+		return ListenerResult::Propagate;
 	});
 }
 

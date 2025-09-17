@@ -470,6 +470,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		}
 	}
 
+	// log::info("modIDAskingForScreenshot: {}", modIDAskingForScreenshot);
+	// log::info("pauseMenuTypeForSetting: {}", pauseMenuTypeForSetting);
+
 	bool jpeg = false;
 	#ifdef GEODE_IS_DESKTOP
 	jpeg = Mod::get()->getSettingValue<bool>("jpeg-mafia") && screenshotterIsSelf;
@@ -501,7 +504,13 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	std::string filename = geode::utils::string::pathToString(folder / (numToString(index) + extension));
 	bool shouldPlaySFX = screenshotterIsSelf && Mod::get()->getSettingValue<bool>("play-sfx");
+	// log::info("filename: {}", filename);
 	ss.intoFile(filename, shouldPlaySFX, jpeg);
+
+	if (node->getUserObject("has-custom-nodes-to-hide"_spr)) node->setUserObject("has-custom-nodes-to-hide"_spr, nullptr);
+	if (node->getUserObject("mod-asking-for-screenshot"_spr)) node->setUserObject("mod-asking-for-screenshot"_spr, nullptr);
+	if (node->getUserObject("is-plain-ss-from-popup"_spr)) node->setUserObject("is-plain-ss-from-popup"_spr, nullptr);
+	if (node->getUserObject("pause-menu-type"_spr)) node->setUserObject("pause-menu-type"_spr, nullptr);
 
 	#ifdef GEODE_IS_DESKTOP
 	if (Mod::get()->getSettingValue<bool>("copy-clipboard") && screenshotterIsSelf) {
