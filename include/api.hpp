@@ -181,7 +181,7 @@ namespace PRNTSCRN {
 			log::error("[PRNTSCRN API] screenshotPlayLayerWithoutAnyVisibilityFilters failed, NO PLAYLAYER FOUND!");
 			return Err(fmt::format("[PRNTSCRN API] screenshotPlayLayerWithoutAnyVisibilityFilters failed, NO PLAYLAYER FOUND!"));
 		}
-		return PRNTSCRN::screenshotNodeAdvanced(pl, {}, {});
+		return PRNTSCRN::screenshotNodeAdvanced(pl, {FMODAudioEngine::get()}, {""_spr}); // neither of these nodes would exist on the node tree anyway so it gets the job done
 	}
 
 	/// @brief screenshot LevelEditorLayer without any node visibility filters, since, yknow, yall are hella lazy sometimes
@@ -193,7 +193,7 @@ namespace PRNTSCRN {
 			log::error("[PRNTSCRN API] screenshotLevelEditorLayerWithoutAnyVisibilityFilters failed, NO LEVELEDITORLAYER FOUND!");
 			return Err(fmt::format("[PRNTSCRN API] screenshotLevelEditorLayerWithoutAnyVisibilityFilters failed, NO LEVELEDITORLAYER FOUND!"));
 		}
-		return PRNTSCRN::screenshotNodeAdvanced(lel, {}, {});
+		return PRNTSCRN::screenshotNodeAdvanced(lel, {FMODAudioEngine::get()}, {""_spr}); // neither of these nodes would exist on the node tree anyway so it gets the job done
 	}
 
 	/// @brief screenshot a node as seen on the screen.

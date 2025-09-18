@@ -1,4 +1,6 @@
 # <cy>PRNTSCRN</c> Changelog
+## v1.0.5
+- Minor bugfixes related to the API. Hopefully.
 ## v1.0.4
 - Minor bugfixes related to the API. Hopefully.
 ## v1.0.3
