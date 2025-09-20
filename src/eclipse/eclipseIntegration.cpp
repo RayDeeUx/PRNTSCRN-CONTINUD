@@ -73,8 +73,8 @@ $on_mod(Loaded) {
 				tab.addLabel(fmt::format("Auto Screenshot Seconds Interval (Plat. levels): {} seconds", mod->getSettingValue<int64_t>("auto-seconds")));
 			}
 			#ifndef GEODE_IS_IOS
-			tab.addLabel(fmt::format("Screenshot the level: {}", Manager::getColorlessBindsStringFor("screenshot"_spr)));
-			tab.addLabel(fmt::format("Screenshot the screen: {}", Manager::getColorlessBindsStringFor("plain-screenshot"_spr)));
+			(void) tab.addLabel("Screenshot the level: ` or F2");
+			(void) tab.addLabel("Screenshot the screen: Ctrl + ` OR Ctrl + F2");
 			#endif
 		}
 	});
