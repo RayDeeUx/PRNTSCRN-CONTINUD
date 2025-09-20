@@ -27,11 +27,14 @@ void setHeight() {
 	}
 }
 
+/*
 #ifndef GEODE_IS_IOS
 #include <geode.custom-keybinds/include/Keybinds.hpp>
 using namespace keybinds;
 #endif
+*/
 $on_mod(Loaded) {
+	/*
 	#ifndef GEODE_IS_IOS
 	BindManager::get()->registerBindable({
 		"screenshot"_spr,
@@ -55,6 +58,7 @@ $on_mod(Loaded) {
 		return ListenerResult::Propagate;
 	}, InvokeBindFilter(nullptr, "plain-screenshot"_spr));
 	#endif
+	*/
 	setWidth();
 	setHeight();
 	listenForSettingChanges("resolution-width", [](int64_t unused) { setWidth(); });
@@ -257,5 +261,16 @@ class $modify(MyCCDirector, CCDirector) {
 		CCDirector::updateContentScale(quality);
 		if (Mod::get()->getSettingValue<bool>("use-window-width")) Manager::get()->width = CCDirector::get()->getWinSizeInPixels().width;
 		if (Mod::get()->getSettingValue<bool>("use-window-height")) Manager::get()->height = CCDirector::get()->getWinSizeInPixels().height;
+	}
+};
+
+#include <Geode/modify/CCKeyboardDispatcher.hpp>
+class $modify(MyCCKeyboardDispatcher, CCKeyboardDispatcher) {
+	bool dispatchKeyboardMSG(enumKeyCodes key, bool down, bool repeat) {
+		if (down && (key == enumKeyCodes::KEY_F2 || key == enumKeyCodes::KEY_GraveAccent)) {
+			if (this->getControlKeyPressed()) SharedScreenshotLogic::screenshot(CCScene::get());
+			else SharedScreenshotLogic::screenshotLevelOrScene();
+		}
+		return CCKeyboardDispatcher::dispatchKeyboardMSG(key, down, repeat);
 	}
 };

@@ -7,10 +7,10 @@
 		"android": "2.2074"
 	},
 	"id": "ninxout.prntscrn",
-	"name": "PRNTSCRN",
-	"version": "v1.0.5",
+	"name": "PRNTSCRN (The \"I Hate Custom Keybinds\" Edition)",
+	"version": "v72308.2025.920-alpha.1",
 	"developers": ["RayDeeUx", "ninXout", "mat", "Prevter", "hiimjasmine00"],
-	"description": "Quick and easy screenshot tool!",
+	"description": "Quick and easy screenshot tool! (Now without Custom Keybinds dependency!)",
 	"links": {
 		"source": "https://github.com/RayDeeUx/PRNTSCRN-CONTINUD",
 		"community": "https://discord.gg/WqZBYdBWZW",
@@ -26,10 +26,6 @@
 	},
 	"dependencies": {
 		"geode.node-ids": ">=1.20.0",
-		"geode.custom-keybinds": {
-			"version": ">=1.10.3",
-			"platforms": ["win", "mac", "android"]
-		},
 		"prevter.imageplus": {
 			"version": ">=1.0.0",
 			"platforms": ["android", "ios"]
