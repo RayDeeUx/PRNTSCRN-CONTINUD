@@ -319,8 +319,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	bool originalEclipseCountdownVisibility = false;
 	bool originalHeartsContainerVisibility = false;
 
-	bool robtopIsAFuckingDumbass = false; // FUCKING HELL MAN
-	bool alreadySaidRobtopIsAFuckingDumbass = false;
+	bool robtopIsAFuckingDumbass = false; // YOU HAVE NO FUCKING IDEA HOW MUCH PAIN AND SUFFERING I HAD TO GO THROUGH TO JUSTIFY ADDING THIS FUCKING LOCAL VARIABLE. WHY THE ***__FUCK__*** DID ROBTOP DECIDED TO STORE EDITOR OBJECT HITBOXES AND THE EDITOR PLAYTEST PATH AND THE EDITOR PLAYTEST CLICK INDICATORS IN THE SAME FUCKING CCDRAWNODE WHY THE FUCK BRO HOW THE FUCK DOES THAT SHIT MAKE ANY FUCKING SENSE I WILL FUCKING THROW MYSELF INTO NIAGRA FALLS IF I HAVE TO PUT UP WITH EQUALLY ASININE BULLSHIT AS THIS I SWEAR TO FUCKING GOD ROBTOP
 
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
 		originalEclipsePopupVisibility = eclipsePopup->isVisible();
@@ -411,6 +410,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			ADD_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-trail);
 			ADD_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
 		}
+		ADD_MEM(lel, m_playtestDeathSprite);
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
@@ -509,6 +509,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			RES_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-trail);
 			RES_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
 		}
+		RES_MEM(lel, m_playtestDeathSprite);
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);

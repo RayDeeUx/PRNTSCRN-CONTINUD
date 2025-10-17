@@ -1,4 +1,7 @@
 # <cy>PRNTSCRN</c> Changelog
+## v1.0.6
+- Added options to hide the editor grid, editor playtest path, and editor object hitboxes.
+  - These options were inspired by <c-ff007d>Au</c><c-fffa7f>sk</c>.
 ## v1.0.5
 - Minor bugfixes related to the API. Hopefully.
 ## v1.0.4

@@ -31,6 +31,9 @@ $on_mod(Loaded) {
 		addSetting(tab, "hide-multiplayers");
 		addSetting(tab, "hide-attempts");
 		addSetting(tab, "hide-checkpoints");
+		addSetting(tab, "hide-draw-grid-layer");
+		addSetting(tab, "hide-debug-draw");
+		addSetting(tab, "hide-playtest-path-clicks");
 		#ifdef GEODE_IS_DESKTOP
 		addSetting(tab, "jpeg-mafia");
 		#endif
