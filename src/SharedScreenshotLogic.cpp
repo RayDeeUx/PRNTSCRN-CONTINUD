@@ -319,6 +319,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	bool originalEclipseCountdownVisibility = false;
 	bool originalHeartsContainerVisibility = false;
 
+	bool robtopIsAFuckingDumbass = false; // FUCKING HELL MAN
+	bool alreadySaidRobtopIsAFuckingDumbass = false;
+
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
 		originalEclipsePopupVisibility = eclipsePopup->isVisible();
 		eclipsePopup->setVisible(false);
@@ -388,7 +391,13 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (hideDD && lel) {
 		if (lel->m_debugDrawNode) ADD_NODE(lel->m_debugDrawNode->getParent(), eclipse.eclipse-menu/hitboxes);
 		ADD_GAMEVARIABLE("0045", false);
+		alreadySaidRobtopIsAFuckingDumbass = true;
+		robtopIsAFuckingDumbass = lel->m_isDebugDrawEnabled;
+		lel->m_isDebugDrawEnabled = false;
 		lel->updateOptions();
+		lel->m_isDebugDrawEnabled = false;
+		lel->updateDebugDraw();
+		lel->m_isDebugDrawEnabled = false;
 	}
 	if (hideDG && lel) {
 		ADD_MEM(lel, m_drawGridLayer);
@@ -396,11 +405,12 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (hidePT && lel) {
 		ADD_GAMEVARIABLE("0152", true);
 		ADD_GAMEVARIABLE("0149", false);
+		lel->updateOptions();
+		lel->updateDebugDraw();
 		if (lel->m_debugDrawNode) {
 			ADD_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-trail);
 			ADD_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
 		}
-		lel->updateOptions();
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
@@ -481,7 +491,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (hideDD && lel) {
 		if (lel->m_debugDrawNode) RES_NODE(lel->m_debugDrawNode->getParent(), eclipse.eclipse-menu/hitboxes);
 		RES_GAMEVARIABLE("0045");
+		lel->m_isDebugDrawEnabled = robtopIsAFuckingDumbass;
 		lel->updateOptions();
+		lel->m_isDebugDrawEnabled = robtopIsAFuckingDumbass;
+		lel->updateDebugDraw();
+		lel->m_isDebugDrawEnabled = robtopIsAFuckingDumbass;
 	}
 	if (hideDG && lel) {
 		RES_MEM(lel, m_drawGridLayer);
@@ -489,11 +503,12 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (hidePT && lel) {
 		RES_GAMEVARIABLE("0152");
 		RES_GAMEVARIABLE("0149");
+		lel->updateOptions();
+		lel->updateDebugDraw();
 		if (lel->m_debugDrawNode) {
 			RES_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-trail);
 			RES_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
 		}
-		lel->updateOptions();
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
