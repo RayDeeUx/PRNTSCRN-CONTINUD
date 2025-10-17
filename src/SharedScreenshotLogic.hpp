@@ -58,6 +58,13 @@ using namespace geode::prelude;
 		cocosNodePointer->setScale(unorderedMap[cocosNodePointer]); \
 	}
 
+#define ADD_GAMEVARIABLE(gameVariableKey, desiredValue) \
+	gameVariablesAndTheirFormerValues[gameVariableKey] = GameManager::sharedState()->getGameVariable(gameVariableKey); \
+	GameManager::sharedState()->setGameVariable(gameVariableKey, desiredValue); \
+
+#define RES_GAMEVARIABLE(gameVariableKey) \
+	GameManager::sharedState()->setGameVariable(gameVariableKey, gameVariablesAndTheirFormerValues[gameVariableKey]); \
+
 namespace SharedScreenshotLogic {
 
 	std::string getFormattedDate();

@@ -58,6 +58,7 @@ bool ScreenshotPopup::setup() {
 	this->m_title->setID("title"_spr);
 
 	PlayLayer* pl = PlayLayer::get();
+	LevelEditorLayer* lel = LevelEditorLayer::get();
 	bool isPlatformerLevel = pl && pl->m_level && pl->m_level->isPlatformer();
 
 	CCMenu* resolutionMenu = CCMenu::create();
@@ -107,6 +108,10 @@ bool ScreenshotPopup::setup() {
 	if (pl) {
 		settingsMenu->addChild(createSetting("Hide Attempt Label", "hide-attempts"));
 		settingsMenu->addChild(createSetting("Hide Checkpoints", "hide-checkpoints"));
+	} else if (lel) {
+		settingsMenu->addChild(createSetting("Hide Editor Grid", "hide-draw-grid-layer"));
+		settingsMenu->addChild(createSetting("Hide Editor Hitboxes/Debug Draw", "hide-debug-draw"));
+		settingsMenu->addChild(createSetting("Hide Editor Playtest Path and Clicks", "hide-playtest-path-clicks"));
 	}
 	#ifdef GEODE_IS_DESKTOP
 	settingsMenu->addChild(createSetting("JPEG", "jpeg-mafia"));

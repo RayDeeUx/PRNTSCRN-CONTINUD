@@ -301,11 +301,17 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	std::unordered_map<CCNode*, bool> otherPlayerUIVisibilities = {};
 	std::unordered_map<GameObject*, GLubyte> checkpointOpacities = {};
 
+	std::unordered_map<const char*, bool> gameVariablesAndTheirFormerValues = {};
+
 	bool hideUI = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-ui");
 	bool hidePL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-player");
 	bool hideAL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-attempts");
 	bool hideCK = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-checkpoints");
 	bool hideOT = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-multiplayers");
+
+	bool hideDD = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-debug-draw");
+	bool hideDG = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-draw-grid-layer");
+	bool hidePT = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-playtest-path-clicks");
 
 	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
 	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
@@ -378,6 +384,21 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(lel, EditorUI);
 		ADD_NODE(lel, EditorPauseLayer);
 		ADD_NODE(lel, dankmeme.globed2/game-overlay);
+	}
+	if (hideDD && lel) {
+		if (lel->m_debugDrawNode) ADD_NODE(lel->m_debugDrawNode->getParent(), eclipse.eclipse-menu/hitboxes);
+		ADD_GAMEVARIABLE("0045", false);
+	}
+	if (hideDG && lel) {
+		ADD_MEM(lel, m_drawGridLayer);
+	}
+	if (hidePT && lel) {
+		ADD_GAMEVARIABLE("0152", true);
+		ADD_GAMEVARIABLE("0149", false);
+		if (lel->m_debugDrawNode) {
+			ADD_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-trail);
+			ADD_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
+		}
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
@@ -454,6 +475,21 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(lel, EditorUI);
 		RES_NODE(lel, EditorPauseLayer);
 		RES_NODE(lel, dankmeme.globed2/game-overlay);
+	}
+	if (hideDD && lel) {
+		if (lel->m_debugDrawNode) RES_NODE(lel->m_debugDrawNode->getParent(), eclipse.eclipse-menu/hitboxes);
+		RES_GAMEVARIABLE("0045");
+	}
+	if (hideDG && lel) {
+		RES_MEM(lel, m_drawGridLayer);
+	}
+	if (hidePT && lel) {
+		RES_GAMEVARIABLE("0152");
+		RES_GAMEVARIABLE("0149");
+		if (lel->m_debugDrawNode) {
+			RES_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-trail);
+			RES_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
+		}
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);

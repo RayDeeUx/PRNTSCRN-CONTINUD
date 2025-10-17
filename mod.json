@@ -8,7 +8,7 @@
 	},
 	"id": "ninxout.prntscrn",
 	"name": "PRNTSCRN",
-	"version": "v1.0.5",
+	"version": "v1.0.6",
 	"developers": ["RayDeeUx", "ninXout", "mat", "Prevter", "hiimjasmine00"],
 	"description": "Quick and easy screenshot tool!",
 	"links": {
@@ -102,6 +102,24 @@
 			"description": "Hides checkpoints from Practice Mode when taking a screenshot\nwhile playing a level.",
 			"default": false
 		},
+		"hide-draw-grid-layer": {
+			"type": "bool",
+			"name": "Hide Editor Grid",
+			"description": "Hides the editor grid when taking a screenshot while inside the level editor.\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
+			"default": true
+		},
+		"hide-debug-draw": {
+			"type": "bool",
+			"name": "Hide Editor Hitboxes/Debug Draw",
+			"description": "Hides object hitboxes when taking a screenshot while inside the level editor.\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
+			"default": true
+		},
+		"hide-playtest-path-clicks": {
+			"type": "bool",
+			"name": "Hide Editor Playtest Path and Clicks",
+			"description": "Hides the playtest path and clicks when taking a screenshot while inside the level editor.\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
+			"default": true
+		},
 		"use-window-width": {
 			"type": "bool",
 			"name": "Use Window Width For Resolution Width",
@@ -112,7 +130,8 @@
 			"name": "Resolution Width",
 			"description": "The width of your screenshot, if not using the window's width.",
 			"default": 1920,
-			"min": 1
+			"min": 1,
+			"enable-if": "!use-window-width"
 		},
 		"use-window-height": {
 			"type": "bool",
@@ -124,7 +143,8 @@
 			"name": "Resolution Height",
 			"description": "The height of your screenshot, if not using the window's height.",
 			"default": 1080,
-			"min": 1
+			"min": 1,
+			"enable-if": "!use-window-height"
 		},
 		"jpeg-mafia": {
 			"type": "bool",
