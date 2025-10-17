@@ -388,6 +388,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (hideDD && lel) {
 		if (lel->m_debugDrawNode) ADD_NODE(lel->m_debugDrawNode->getParent(), eclipse.eclipse-menu/hitboxes);
 		ADD_GAMEVARIABLE("0045", false);
+		lel->updateOptions();
 	}
 	if (hideDG && lel) {
 		ADD_MEM(lel, m_drawGridLayer);
@@ -399,6 +400,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			ADD_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-trail);
 			ADD_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
 		}
+		lel->updateOptions();
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
@@ -479,6 +481,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (hideDD && lel) {
 		if (lel->m_debugDrawNode) RES_NODE(lel->m_debugDrawNode->getParent(), eclipse.eclipse-menu/hitboxes);
 		RES_GAMEVARIABLE("0045");
+		lel->updateOptions();
 	}
 	if (hideDG && lel) {
 		RES_MEM(lel, m_drawGridLayer);
@@ -490,6 +493,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			RES_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-trail);
 			RES_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
 		}
+		lel->updateOptions();
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
