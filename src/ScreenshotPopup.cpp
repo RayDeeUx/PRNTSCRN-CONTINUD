@@ -109,9 +109,9 @@ bool ScreenshotPopup::setup() {
 		settingsMenu->addChild(createSetting("Hide Attempt Label", "hide-attempts"));
 		settingsMenu->addChild(createSetting("Hide Checkpoints", "hide-checkpoints"));
 	} else if (lel) {
-		settingsMenu->addChild(createSetting("Hide Editor Grid", "hide-draw-grid-layer"));
-		settingsMenu->addChild(createSetting("Hide Editor Hitboxes/Debug Draw", "hide-debug-draw"));
-		settingsMenu->addChild(createSetting("Hide Editor Playtest Path and Clicks", "hide-playtest-path-clicks"));
+		settingsMenu->addChild(createSetting("Hide Grid", "hide-draw-grid-layer"));
+		settingsMenu->addChild(createSetting("Hide Hitboxes/Debug Draw", "hide-debug-draw"));
+		settingsMenu->addChild(createSetting("Hide Playtest Path and Clicks", "hide-playtest-path-clicks"));
 	}
 	#ifdef GEODE_IS_DESKTOP
 	settingsMenu->addChild(createSetting("JPEG", "jpeg-mafia"));
