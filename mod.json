@@ -105,19 +105,19 @@
 		"hide-draw-grid-layer": {
 			"type": "bool",
 			"name": "Hide Editor Grid",
-			"description": "<cp>Inspired by Ausk.</c>\n\nHides the editor grid when taking a screenshot while inside the level editor.\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
+			"description": "<cp>Inspired by Ausk, with MASSIVE help from Zilko.</c>\n\nHides the editor grid when taking a screenshot while inside the level editor.\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
 			"default": true
 		},
 		"hide-debug-draw": {
 			"type": "bool",
 			"name": "Hide Editor Hitboxes/Debug Draw",
-			"description": "<cp>Inspired by Ausk.</c>\n\nHides object hitboxes when taking a screenshot while inside the level editor.\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
+			"description": "<cp>Inspired by Ausk, with MASSIVE help from Zilko.</c>\n\nHides object hitboxes when taking a screenshot while inside the level editor.\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
 			"default": false
 		},
 		"hide-playtest-path-clicks": {
 			"type": "bool",
 			"name": "Hide Editor Playtest Path and Clicks",
-			"description": "<cp>Inspired by Ausk.</c>\n\nHides the playtest path and clicks when taking a screenshot while inside the level editor.\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
+			"description": "<cp>Inspired by Ausk, with MASSIVE help from Zilko.</c>\n\nHides the playtest path and clicks when taking a screenshot while inside the level editor.\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
 			"default": false
 		},
 		"use-window-width": {
