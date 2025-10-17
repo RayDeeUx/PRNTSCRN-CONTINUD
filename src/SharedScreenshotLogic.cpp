@@ -390,7 +390,6 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (hideDD && lel) {
 		if (lel->m_debugDrawNode) ADD_NODE(lel->m_debugDrawNode->getParent(), eclipse.eclipse-menu/hitboxes);
 		ADD_GAMEVARIABLE("0045", false);
-		alreadySaidRobtopIsAFuckingDumbass = true;
 		robtopIsAFuckingDumbass = lel->m_isDebugDrawEnabled;
 		lel->m_isDebugDrawEnabled = false;
 		lel->updateOptions();
