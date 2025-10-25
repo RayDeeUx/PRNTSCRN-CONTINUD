@@ -10,7 +10,7 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 	CCMenu* quickToggleMenu = Build<CCMenu>(CCMenu::create())
 		.id(fmt::format("{}-quick-toggle-setting"_spr, key))
 		.layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(5.f))
-		.width(230.f)
+		.width(240.f)
 		.collect();
 
 	CCMenuItemToggler* toggler = Build<CCMenuItemToggler>::createToggle(CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png"), CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png"),
@@ -95,8 +95,8 @@ bool ScreenshotPopup::setup() {
 
 	CCMenu* settingsMenu = CCMenu::create();
 	settingsMenu->setID("quick-settings"_spr);
-	settingsMenu->setPosition(ccp(245.f, 145.f));
-	settingsMenu->setContentSize({180.f, 175.f});
+	settingsMenu->setPosition(ccp(245.f, 142.5f));
+	settingsMenu->setContentSize({180.f, 185.f});
 	settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(true)->setAxisReverse(true)->setAxisAlignment(AxisAlignment::Center));
 
 	#ifdef GEODE_IS_DESKTOP
