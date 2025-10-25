@@ -6,7 +6,7 @@
 class ScreenshotPopup : public geode::Popup<>, public TextInputDelegate {
 public:
 	constexpr static float POPUP_WIDTH = 360.f;
-	constexpr static float POPUP_HEIGHT = 260.f;
+	constexpr static float POPUP_HEIGHT = 270.f;
 
 	static ScreenshotPopup* create();
 
