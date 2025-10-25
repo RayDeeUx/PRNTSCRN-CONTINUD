@@ -9,7 +9,7 @@ using namespace geode::prelude;
 
 void addSetting(MenuTab& tab, const std::string& settingsKey) {
 	if (std::shared_ptr<SettingV3> setting = Mod::get()->getSetting(settingsKey); setting) {
-		const std::string& colorlessDesc = string::replace(string::replace(string::replace(setting->getDescription().value_or("Copy screenshots to the clipboard."), "</c>", ""), "<cl>", ""), "<cy>", "");
+		const std::string& colorlessDesc = string::replace(string::replace(string::replace(string::replace(setting->getDescription().value_or("Copy screenshots to the clipboard."), "</c>", ""), "<cl>", ""), "<cy>", ""), "<cp>", "");
 		tab.addModSettingToggle(setting).setDescription(colorlessDesc);
 	}
 }
