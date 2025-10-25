@@ -10,7 +10,7 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 	CCMenu* quickToggleMenu = Build<CCMenu>(CCMenu::create())
 		.id(fmt::format("{}-quick-toggle-setting"_spr, key))
 		.layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(5.f))
-		.width(180.f)
+		.width(190.f)
 		.collect();
 
 	CCMenuItemToggler* toggler = Build<CCMenuItemToggler>::createToggle(CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png"), CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png"),
@@ -42,7 +42,7 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 			.id(fmt::format("{}-info"_spr, key))
 			.parent(quickToggleMenu)
 			.collect();
-		const std::string parsedDesc = string::replace(string::replace(string::replace(trueDesc, "</c>", ""), "<cl>", ""), "<cy>", "");
+		const std::string parsedDesc = string::replace(string::replace(string::replace(string::replace(trueDesc, "</c>", ""), "<cl>", ""), "<cy>", ""), "<cp>", "");
 		infoBtn->setUserObject("alphalaneous.tooltips/tooltip", CCString::create(parsedDesc));
 	}
 
@@ -95,8 +95,8 @@ bool ScreenshotPopup::setup() {
 
 	CCMenu* settingsMenu = CCMenu::create();
 	settingsMenu->setID("quick-settings"_spr);
-	settingsMenu->setPosition(ccp(240.f, 125.f));
-	settingsMenu->setContentSize({180.f, 145.f});
+	settingsMenu->setPosition(ccp(240.f, 135.f));
+	settingsMenu->setContentSize({180.f, 175.f});
 	settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(true)->setAxisReverse(true)->setAxisAlignment(AxisAlignment::Center));
 
 	#ifdef GEODE_IS_DESKTOP
@@ -111,7 +111,7 @@ bool ScreenshotPopup::setup() {
 	} else if (lel) {
 		settingsMenu->addChild(createSetting("Hide Grid", "hide-draw-grid-layer"));
 		settingsMenu->addChild(createSetting("Hide Hitboxes/Debug Draw", "hide-debug-draw"));
-		settingsMenu->addChild(createSetting("Hide Playtest Path and Clicks", "hide-playtest-path-clicks"));
+		settingsMenu->addChild(createSetting("Hide Playtest Path + Clicks", "hide-playtest-path-clicks"));
 	}
 	#ifdef GEODE_IS_DESKTOP
 	settingsMenu->addChild(createSetting("JPEG", "jpeg-mafia"));
@@ -163,7 +163,7 @@ bool ScreenshotPopup::setup() {
 		this, menu_selector(ScreenshotPopup::onScreenshot)
 	);
 	screenshotButton->setID("screenshot-button"_spr);
-	screenshotButton->setPosition(ccp(170, 30));
+	screenshotButton->setPosition(ccp(this->getContentWidth() / 2.f, 30));
 	m_buttonMenu->addChild(screenshotButton);
 
 	CCMenuItemSpriteExtra* configDirButton = CCMenuItemSpriteExtra::create(
@@ -225,7 +225,6 @@ ScreenshotPopup* ScreenshotPopup::create() {
 		ret->autorelease();
 		return ret;
 	}
-
 	delete ret;
 	return nullptr;
 }
