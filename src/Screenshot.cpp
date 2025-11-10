@@ -78,7 +78,7 @@ void Screenshot::intoFile(const std::string& filename, bool isFromPRNTSCRNAndWan
 		if (isOK) {
 			auto writeBinaryResult = geode::utils::file::writeBinary(filename, encodeResult.unwrap());
 			if (writeBinaryResult.isOk()) {
-				log::info("binary write success!");
+				// log::info("binary write success!");
 			} else log::error("binary write error! filename: {}, error: {}", filename, writeBinaryResult.unwrapErr());
 		} else log::error("error: {}", encodeResult.unwrapErr());
 		delete[] newData; // prevent memory leak (prevter)
