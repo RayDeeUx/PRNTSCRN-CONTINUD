@@ -487,6 +487,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		}
 		ADD_MEM(lel, m_playtestDeathSprite);
 	}
+	if (hideTN && lel) {
+		// funny story: i was supposed to add this far earlier, but forgot. oops! --raydeeux
+		ADD_NODE(lel, thesillydoggo.qolmod/noclip-tint-popup); // QOLMod v1
+		ADD_NODE(lel, thesillydoggo.qolmod/noclip-tint-overlay); // QOLMod v2
+	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
 		ADD_MEM(gjbgl, m_player1);
@@ -623,6 +628,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			RES_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
 		}
 		RES_MEM(lel, m_playtestDeathSprite);
+	}
+	if (hideTN && lel) {
+		// funny story: i was supposed to add this far earlier, but forgot. oops! --raydeeux
+		RES_NODE(lel, thesillydoggo.qolmod/noclip-tint-popup); // QOLMod v1
+		RES_NODE(lel, thesillydoggo.qolmod/noclip-tint-overlay); // QOLMod v2
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
