@@ -456,6 +456,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (hideOT && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
 		if (gjbgl->m_objectLayer) {
+			ADD_NODE(gjbgl->m_objectLayer, dankmeme.globed2/player-node)
 			SharedScreenshotLogic::hideOtherPlayersIn(gjbgl, gjbgl->m_objectLayer, otherPlayerVisibilities, otherPlayerPointerScales);
 		}
 	}
@@ -565,6 +566,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (hideOT && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
 		if (gjbgl->m_objectLayer) {
+			RES_NODE(gjbgl->m_objectLayer, dankmeme.globed2/player-node)
 			SharedScreenshotLogic::unhideOtherPlayersIn(gjbgl, gjbgl->m_objectLayer, otherPlayerVisibilities, otherPlayerPointerScales);
 		}
 	}
