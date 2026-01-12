@@ -17,7 +17,9 @@ using namespace geode::prelude;
 * zilko.xdbot/recording-audio-label
 * zilko.xdbot/button-menu
 * dankmeme.globed2/game-overlay
-* thesillydoggo.qolmod/noclip-tint-popup
+* thesillydoggo.qolmod/noclip-tint-popup [OUTDATED] [because no one should be using QOLMod v1.x]
+* thesillydoggo.qolmod/noclip-tint-overlay [QOLMod v2.x]
+* eclipse.eclipse-menu/nocliptint (child of UILayer)
 * tobyadd.gdh/labels_top_left
 * tobyadd.gdh/labels_top_right
 * tobyadd.gdh/labels_bottom_left
@@ -45,6 +47,7 @@ using namespace geode::prelude;
 * "dankmeme.globed2/remote-player-" (make sure to filter out node ID "dankmeme.globed2/remote-player-progress-") (then querySelector("dankmeme.globed2/visual-player1 > PlayerObject") or querySelector("dankmeme.globed2/visual-player2 > PlayerObject") for the actual player object)
 * "ninxout.champions/player1-"
 * "ninxout.champions/player2-"
+* "dankmeme.globed2/player-node" [FOR "GLOBED V3" ONLY] (this node contains all PlayerObject nodes of remote players; hiding the whole thing is enough) (THIS IS FOR GLOBED'S NEXT MAJOR VERSION. YOU CAN ADD IT NOW, BUT GLOBED DOES NOT ASSIGN ANY NODE WITH THIS NODE ID YET [as of January 12, 2025])
 */
 
 /*
@@ -66,6 +69,16 @@ using namespace geode::prelude;
 * m_dashSpritesContainer
 * m_playerGroundParticles
 * m_vehicleGroundParticles
+*/
+
+/*
+* Node typeinfos of certain interest [the mod + version the node typeinfo comes from] {additional commentary if applicable} (AKA, people who dont add their stuff to UILayer for whatever reason)
+* status::Manager + status::Label [MegaHack v9.x] {Come on, Absolute. You did things correctly the first time around with v8.x. Was this change really necessary?}
+* NoclipTint [MegaHack v9.x]
+* eclipse::gui::cocos::cocos [Eclipse v1.x] {This is actually a child of CCScene::get(), but is included here so PRNTSCRN can screenshot the scene without Eclipse's mobile UI getting in the way.}
+* eclipse::hacks::Level::PauseCountdown [Eclipse v1.x] {Part of the "Hide UI" filter}
+* HeartsContainer [Lives in GD v1.x]
+* LevelProgressionLives [Difficulty Progression v1.x] {dogotrigger actually gives this node the ID "lp-overlay", but there is no mod ID prefix. hiding by typeinfo name for consistency.}
 */
 
 /// @brief PRNTSCRN: Pretty Rad, Nifty Tool; Screen Capture Right Now [v1.0.0]

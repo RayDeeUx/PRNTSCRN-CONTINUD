@@ -36,6 +36,10 @@ namespace status {
 	};
 }
 
+class NoclipTint final : public CCNode {
+	// dummy declarations because megahack --raydeeux
+};
+
 class LevelProgressionLives final : public CCNode {
 	// dummy declaration because dogotrigger never gave an _spr suffix to the node and i do not want to tempt fate --raydeeux
 };
@@ -322,6 +326,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	bool hideAL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-attempts");
 	bool hideCK = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-checkpoints");
 	bool hideOT = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-multiplayers");
+	bool hideTN = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-noclip-tints");
 
 	bool hideDD = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-debug-draw");
 	bool hideDG = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-draw-grid-layer");
@@ -333,11 +338,16 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	bool originalEclipseCountdownVisibility = false;
 	bool originalHeartsContainerVisibility = false;
 	bool originalDifficultyProgressionVisibility = false;
+	bool originalGDHNoclipTintVisibility = false;
+	bool originalPrismMenuTintVisibility = false;
 
 	// i dont trust absolute and i dont have the tools to load megahack on a macbook and i need this update out quick, leave me alone --raydeeux
 	bool originalMegaHackLabelContainerVisibility = false;
 	CCPoint originalMegaHackLabelContainerPosition = {};
 	float originalMegaHackLabelContainerScale = 0;
+	bool originalMegaHackLabelNoclipTintVisibility = false;
+	CCPoint originalMegaHackLabelNoclipTintPosition = {};
+	float originalMegaHackLabelNoclipTintScale = 0;
 
 	bool robtopIsAFuckingDumbass = false; // YOU HAVE NO FUCKING IDEA HOW MUCH PAIN AND SUFFERING I HAD TO GO THROUGH TO JUSTIFY ADDING THIS FUCKING LOCAL VARIABLE. WHY THE ***__FUCK__*** DID ROBTOP DECIDED TO STORE EDITOR OBJECT HITBOXES AND THE EDITOR PLAYTEST PATH AND THE EDITOR PLAYTEST CLICK INDICATORS IN THE SAME FUCKING CCDRAWNODE WHY THE FUCK BRO HOW THE FUCK DOES THAT SHIT MAKE ANY FUCKING SENSE I WILL FUCKING THROW MYSELF INTO NIAGRA FALLS IF I HAVE TO PUT UP WITH EQUALLY ASININE BULLSHIT AS THIS I SWEAR TO FUCKING GOD ROBTOP
 
@@ -413,6 +423,38 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 				checkpointOpacities[ckpt->m_physicalCheckpointObject] = ckpt->m_physicalCheckpointObject->getOpacity();
 				ckpt->m_physicalCheckpointObject->setOpacity(0);
 			}
+		}
+	}
+	if (hideTN && pl) {
+		if (pl->m_uiLayer) ADD_NODE(pl->m_uiLayer, eclipse.eclipse-menu/nocliptint);
+
+		// funny story: i was supposed to add this far earlier, but forgot. oops! --raydeeux
+		ADD_NODE(pl, thesillydoggo.qolmod/noclip-tint-popup); // QOLMod v1
+		ADD_NODE(pl, thesillydoggo.qolmod/noclip-tint-overlay); // QOLMod v2
+
+		// toby toby toby why do you make me do this --raydeeux
+		if (CCNode* tobyAddGDHNoclipTint = geode::cocos::getChildBySpriteName(pl, "game_bg_13_001.png"); tobyAddGDHNoclipTint && tobyAddGDHNoclipTint->getZOrder() == 999) {
+			originalGDHNoclipTintVisibility = tobyAddGDHNoclipTint->isVisible();
+			tobyAddGDHNoclipTint->setVisible(false);
+		}
+
+		// oh my fucking god are eclipse menu and qolmod the only mod menus to do this shit correctly holy fuck --raydeeux
+		if (CCNode* prismNode = pl->getChildByTag(10420); prismNode && prismNode->getZOrder() == 1) {
+			// that conditional was so goddamn brittle it's not even funny at this rate --raydeeux
+			if (CCNode* prismMenuNoclipTint = geode::cocos::getChildBySpriteName(prismNode, "square02b_001.png"); prismMenuNoclipTint && prismMenuNoclipTint->getTag() == 10420 && prismMenuNoclipTint->getZOrder() == 999) {
+				originalPrismMenuTintVisibility = prismMenuNoclipTint->isVisible();
+				prismMenuNoclipTint->setVisible(false);
+			}
+		}
+
+		// god motherfucking damn it you've got to be fucking kidding me right --raydeeux
+		if (CCNode* megahackNoclipTint = pl->getChildByType<NoclipTint>(0); megahackNoclipTint) {
+			originalMegaHackLabelNoclipTintVisibility = megahackNoclipTint->isVisible();
+			originalMegaHackLabelNoclipTintPosition = megahackNoclipTint->getPosition();
+			originalMegaHackLabelNoclipTintScale = megahackNoclipTint->getScale();
+			megahackNoclipTint->setVisible(false);
+			megahackNoclipTint->setPosition({-99999, -99999});
+			megahackNoclipTint->setScale(0.f);
 		}
 	}
 	if (hideUI && lel) {
@@ -524,6 +566,33 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (hideCK && pl && pl->m_checkpointArray && pl->m_checkpointArray->count() > 0) {
 		for (auto [ckptObject, opacity] : checkpointOpacities) {
 			if (ckptObject) ckptObject->setOpacity(opacity);
+		}
+	}
+	if (hideTN && pl) {
+		if (pl->m_uiLayer) RES_NODE(pl->m_uiLayer, eclipse.eclipse-menu/nocliptint);
+
+		// funny story: i was supposed to add this far earlier, but forgot. oops! --raydeeux
+		RES_NODE(pl, thesillydoggo.qolmod/noclip-tint-popup); // QOLMod v1
+		RES_NODE(pl, thesillydoggo.qolmod/noclip-tint-overlay); // QOLMod v2
+
+		// toby toby toby why do you make me do this --raydeeux
+		if (CCNode* tobyAddGDHNoclipTint = geode::cocos::getChildBySpriteName(pl, "game_bg_13_001.png"); tobyAddGDHNoclipTint && tobyAddGDHNoclipTint->getZOrder() == 999) {
+			tobyAddGDHNoclipTint->setVisible(originalGDHNoclipTintVisibility);
+		}
+
+		// oh my fucking god are eclipse menu and qolmod the only mod menus to do this shit correctly holy fuck --raydeeux
+		if (CCNode* prismNode = pl->getChildByTag(10420); prismNode && prismNode->getZOrder() == 1) {
+			// that conditional was so goddamn brittle it's not even funny at this rate --raydeeux
+			if (CCNode* prismMenuNoclipTint = geode::cocos::getChildBySpriteName(prismNode, "square02b_001.png"); prismMenuNoclipTint && prismMenuNoclipTint->getTag() == 10420 && prismMenuNoclipTint->getZOrder() == 999) {
+				prismMenuNoclipTint->setVisible(originalPrismMenuTintVisibility);
+			}
+		}
+
+		// god motherfucking damn it you've got to be fucking kidding me right --raydeeux
+		if (CCNode* megahackNoclipTint = pl->getChildByType<NoclipTint>(0); megahackNoclipTint) {
+			megahackNoclipTint->setVisible(originalMegaHackLabelNoclipTintVisibility);
+			megahackNoclipTint->setPosition(originalMegaHackLabelNoclipTintPosition);
+			megahackNoclipTint->setScale(originalMegaHackLabelNoclipTintScale);
 		}
 	}
 	if (hideUI && lel) {

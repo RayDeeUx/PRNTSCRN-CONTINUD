@@ -1,5 +1,5 @@
 {
-	"geode": "4.10.0",
+	"geode": "4.7.0",
 	"gd": {
 		"win": "2.2074",
 		"mac": "2.2074",
@@ -100,6 +100,12 @@
 			"type": "bool",
 			"name": "Hide Practice Mode Checkpoints",
 			"description": "Hides checkpoints from Practice Mode when taking a screenshot\nwhile playing a level.",
+			"default": false
+		},
+		"hide-noclip-tints": {
+			"type": "bool",
+			"name": "Hide Noclip Tints",
+			"description": "Hides Noclip tints from other mod menus when taking a screenshot\nwhile playing a level or while inside the level editor.\n\n<cy>Note that this won't hide everything as the Geode index grows.</c>",
 			"default": false
 		},
 		"hide-draw-grid-layer": {

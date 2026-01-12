@@ -29,6 +29,7 @@ $on_mod(Loaded) {
 		addSetting(tab, "hide-ui");
 		addSetting(tab, "hide-player");
 		addSetting(tab, "hide-multiplayers");
+		addSetting(tab, "hide-noclip-tints");
 		addSetting(tab, "hide-attempts");
 		addSetting(tab, "hide-checkpoints");
 		addSetting(tab, "hide-draw-grid-layer");
