@@ -26,6 +26,20 @@ class HeartsContainer final : public CCNode {
 	// dummy declaration because rainix is either allergic to CCNode::setID() or was never aware of it --raydeeux
 };
 
+namespace status {
+	// dummy declarations because WHY DOESNT ABSOLUTE PUT HIS LABELS INSIDE UILAYER LIKE A NORMAL PERSON --raydeeux
+	class Manager final : public CCNode {
+		// AND WHY IS THIS SHIT AT ANCHORPOINT 0, 0 AND POSITION 0, 0 ????? --raydeeux
+	};
+	class Label final : public CCNode {
+		// WAS CCLABELMBFONT NOT ENOUGH BRO ????? --raydeeux
+	};
+}
+
+class LevelProgressionLives final : public CCNode {
+	// dummy declaration because dogotrigger never gave an _spr suffix to the node and i do not want to tempt fate --raydeeux
+};
+
 std::string SharedScreenshotLogic::getFormattedDate() {
 	auto nowTimeT = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 	auto now = std::localtime(&nowTimeT);
@@ -318,6 +332,12 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	bool originalEclipsePopupVisibility = false;
 	bool originalEclipseCountdownVisibility = false;
 	bool originalHeartsContainerVisibility = false;
+	bool originalDifficultyProgressionVisibility = false;
+
+	// i dont trust absolute and i dont have the tools to load megahack on a macbook and i need this update out quick, leave me alone --raydeeux
+	bool originalMegaHackLabelContainerVisibility = false;
+	CCPoint originalMegaHackLabelContainerPosition = {};
+	float originalMegaHackLabelContainerScale = 0;
 
 	bool robtopIsAFuckingDumbass = false; // YOU HAVE NO FUCKING IDEA HOW MUCH PAIN AND SUFFERING I HAD TO GO THROUGH TO JUSTIFY ADDING THIS FUCKING LOCAL VARIABLE. WHY THE ***__FUCK__*** DID ROBTOP DECIDED TO STORE EDITOR OBJECT HITBOXES AND THE EDITOR PLAYTEST PATH AND THE EDITOR PLAYTEST CLICK INDICATORS IN THE SAME FUCKING CCDRAWNODE WHY THE FUCK BRO HOW THE FUCK DOES THAT SHIT MAKE ANY FUCKING SENSE I WILL FUCKING THROW MYSELF INTO NIAGRA FALLS IF I HAVE TO PUT UP WITH EQUALLY ASININE BULLSHIT AS THIS I SWEAR TO FUCKING GOD ROBTOP
 
@@ -357,6 +377,20 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		if (CCNode* heartsContainer = pl->getChildByType<HeartsContainer>(0); heartsContainer) {
 			originalHeartsContainerVisibility = heartsContainer->isVisible();
 			heartsContainer->setVisible(false);
+		}
+		if (CCNode* difficultyProgression = pl->getChildByType<LevelProgressionLives>(0); difficultyProgression) {
+			originalDifficultyProgressionVisibility = difficultyProgression->isVisible();
+			difficultyProgression->setVisible(false);
+		}
+
+		// i dont trust absolute and i dont have the tools to load megahack on a macbook and i need this update out quick, leave me alone --raydeeux
+		if (CCNode* megaHackLabelContainer = pl->getChildByType<status::Manager>(0); megaHackLabelContainer) {
+			originalMegaHackLabelContainerPosition = megaHackLabelContainer->getPosition();
+			originalMegaHackLabelContainerScale = megaHackLabelContainer->getScale();
+			originalMegaHackLabelContainerVisibility = megaHackLabelContainer->isVisible();
+			megaHackLabelContainer->setPosition({-999999, -999999});
+			megaHackLabelContainer->setScale(0);
+			megaHackLabelContainer->setVisible(false);
 		}
 
 		if (pl->m_level && pl->m_level->isPlatformer()) {
@@ -463,6 +497,16 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		}
 		if (CCNode* heartsContainer = pl->getChildByType<HeartsContainer>(0); heartsContainer) {
 			heartsContainer->setVisible(originalHeartsContainerVisibility);
+		}
+		if (CCNode* difficultyProgression = pl->getChildByType<LevelProgressionLives>(0); difficultyProgression) {
+			difficultyProgression->setVisible(originalDifficultyProgressionVisibility);
+		}
+
+		// i dont trust absolute and i dont have the tools to load megahack on a macbook and i need this update out quick, leave me alone --raydeeux
+		if (CCNode* megaHackLabelContainer = pl->getChildByType<status::Manager>(0); megaHackLabelContainer) {
+			megaHackLabelContainer->setPosition(originalMegaHackLabelContainerPosition);
+			megaHackLabelContainer->setScale(originalMegaHackLabelContainerScale);
+			megaHackLabelContainer->setVisible(originalMegaHackLabelContainerVisibility);
 		}
 
 		if (pl->m_level && pl->m_level->isPlatformer() && !otherPlayerUIVisibilities.empty()) {
