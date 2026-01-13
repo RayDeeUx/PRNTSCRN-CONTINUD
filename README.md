@@ -21,7 +21,7 @@ Let <cy>PRNTSCRN</c> make the screenshotting process easier for you!
 - <cs>Copy to clipboard</c>! (macOS/Windows only. <c-ff5555>Might break in Wine.</c>)
 
 ## Special Thanks
-- <c-ff6666>mat</c> for the original RenderTexture implementation and mod idea; without it, none of this would've been possible.
+- <c-ff6666>mat</c> for the original RenderTexture implementation (licensed under the MIT License) and mod idea; without it, none of this would've been possible.
 - <c-00ff00>nin</c><c-2222ff>X</c><c-00ff00>out</c> for fleshing out this mod even further while he still could, and adding macOS support.
 - <c-7d7dff>Prev</c><c-ffa040>ter</c> for help in writing the API for this mod, fixing Windows image clipboard copying, refactoring some code, and generously lending his C++ expertise and his [ImagePlus API](https://geode-sdk.org/mods/prevter.imageplus) to make iOS/Android support possible.
 - <c-fcb5ff>hiim</c><c-00c8ff>jasmine</c><c-fcb5ff>00</c> for fixing iOS support.
