@@ -155,12 +155,23 @@ class $modify(AutoScreenshotPlayLayer, PlayLayer) {
 		return false;
 	}
 
+	void resetFields() {
+		Fields* fields = m_fields.self();
+		if (!fields) return;
+		fields->autoScreenshot = Mod::get()->getSettingValue<bool>("auto-screenshot");
+		fields->autoPercent = std::clamp(static_cast<int>(Mod::get()->getSettingValue<int64_t>("auto-percent")), 5, 100);
+		fields->autoSeconds = std::clamp(static_cast<int>(Mod::get()->getSettingValue<int64_t>("auto-seconds")), 5, 604800); // 1 week == 604800 seconds
+		fields->lastScreenshot = 0;
+	}
+
 	void resetLevel() {
 		PlayLayer::resetLevel();
-		m_fields->autoScreenshot = Mod::get()->getSettingValue<bool>("auto-screenshot");
-		m_fields->autoPercent = std::clamp(static_cast<int>(Mod::get()->getSettingValue<int64_t>("auto-percent")), 5, 100);
-		m_fields->autoSeconds = std::clamp(static_cast<int>(Mod::get()->getSettingValue<int64_t>("auto-seconds")), 5, 604800); // 1 week == 604800 seconds
-		m_fields->lastScreenshot = 0;
+		AutoScreenshotPlayLayer::resetFields();
+	}
+
+	void fullReset() {
+		PlayLayer::fullReset();
+		AutoScreenshotPlayLayer::resetFields();
 	}
 
 	void postUpdate(float dt) {
