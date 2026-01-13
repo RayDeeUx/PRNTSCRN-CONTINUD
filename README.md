@@ -6,7 +6,7 @@ A screenshot tool inspired by Minecraft's F2 key!
 
 <c-e0e0e0>By</c> <c-009d9d>Ray</c><c-00ffff>Dee</c><c-009d9d>Ux</c><c-e0e0e0>,</c> <c-00ff00>nin</c><c-2222ff>X</c><c-00ff00>out</c><c-e0e0e0>,</c> <c-ff6666>mat</c><c-e0e0e0>,</c> <c-7d7dff>Prev</c><c-ffa040>ter</c><c-e0e0e0>, and</c> <c-fcb5ff>hiim</c><c-00c8ff>jasmine</c><c-fcb5ff>00</c><c-e0e0e0><c-e0e0e0>.</c>
 
-Tired of that clunky three-key screenshot hotkey? Don't like the window shadows in macOS's windowed screenshots? Scrambling to hide items in DevTools to take the perfect screenshot?
+Tired of that clunky three-key screenshot hotkey? Don't like the window shadows in macOS's windowed screenshots? Scrambling to hide items in DevTools to take the perfect screenshot? Disappointed by the low-resolution pictures from Steam's screenshotting options?
 
 Let <cy>PRNTSCRN</c> make the screenshotting process easier for you!
 
@@ -31,6 +31,7 @@ Let <cy>PRNTSCRN</c> make the screenshotting process easier for you!
 ### Memorial for those who gave up partway
 
 - <c-ff7d00>Tech</c><c-ffb900>Student</c><c-ff7d00>10</c> (o7)
+- <c-49457c>k</c><c-51477a>m</c><c-5a4b79>7</c><c-634d78>d</c><c-6d5076>e</c><c-765475>v</c> (o7)
 
 ### Notes
 
