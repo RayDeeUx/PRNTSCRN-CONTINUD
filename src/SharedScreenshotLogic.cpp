@@ -298,9 +298,8 @@ void SharedScreenshotLogic::findSorkosShaderNodesAndScaleThemToSixSeven(CCNode* 
 	for (CCNode* child : node->getChildrenExt<CCNode*>()) {
 		if (!child) continue;
 		if (child->getContentSize() == node->getContentSize() && child->getScale() == node->getScale() && geode::cocos::getObjectName(child) == std::string_view("ShaderNode")) {
-			log::info("shaderNode found! nodeID: {}", child->getID());
 			sorkosShaderNodesAndTheirScales[child] = child->getScale();
-			child->setScale(67.f);
+			child->setScale(67.f); // filler number. leave me alone
 			child->draw(); // necessary so the new scale is reflected properly
 		}
 		if (child->getChildrenCount() < 1) continue;
