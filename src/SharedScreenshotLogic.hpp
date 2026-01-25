@@ -77,7 +77,7 @@ namespace SharedScreenshotLogic {
 	void unhidePartsOfPlayer(std::unordered_map<CCNode*, float>& unorderedMapStoringScales, PlayerObject* player);
 	void hideOtherPlayersIn(GJBaseGameLayer* gjbgl, CCNode* parentNode, std::unordered_map<CCNode*, bool>& otherPlayerVisibilities, std::unordered_map<CCNode*, float>& otherPlayerPointerScales);
 	void unhideOtherPlayersIn(GJBaseGameLayer* gjbgl, CCNode* parentNode, std::unordered_map<CCNode*, bool>& otherPlayerVisibilities, std::unordered_map<CCNode*, float>& otherPlayerPointerScales);
-	void findSorkosShaderNodesAndScaleThemToSixSeven(CCNode* node, std::unordered_map<CCNode*, float>& sorkosShaderNodesAndTheirScales);
+	void findSorkosShaderNodesAndScaleThemToSixSeven(CCNode* node, std::unordered_map<CCNode*, CCSize>& sorkosShaderNodesAndTheirContentSizes);
 	void screenshot(CCNode* node);
 	void screenshotLevelOrScene();
 

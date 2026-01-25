@@ -289,17 +289,19 @@ void SharedScreenshotLogic::unhideOtherPlayersIn(GJBaseGameLayer* gjbgl, CCNode*
 	}
 }
 
-void SharedScreenshotLogic::findSorkosShaderNodesAndScaleThemToSixSeven(CCNode* node, std::unordered_map<CCNode*, float>& sorkosShaderNodesAndTheirScales) {
+void SharedScreenshotLogic::findSorkosShaderNodesAndScaleThemToSixSeven(CCNode* node, std::unordered_map<CCNode*, CCSize>& sorkosShaderNodesAndTheirContentSizes) {
 	if (!node) return;
+	const float ratio = CCDirector::get()->getWinSizeInPixels().width / CCScene::get()->getContentSize().width;
 	for (CCNode* child : node->getChildrenExt<CCNode*>()) {
 		if (!child) continue;
-		if (child->getContentSize() == node->getContentSize() && child->getScale() == node->getScale() && geode::cocos::getObjectName(child) == std::string_view("ShaderNode")) {
-			sorkosShaderNodesAndTheirScales[child] = child->getScale();
-			child->setScale(67.f); // filler number. leave me alone
+		if (geode::cocos::getObjectName(child) == std::string_view("ShaderNode")) {
+			CCSize origSize = child->getContentSize();
+			sorkosShaderNodesAndTheirContentSizes[child] = origSize;
+			child->setContentSize(node->getContentSize() * ratio);
 			child->draw(); // necessary so the new scale is reflected properly
 		}
 		if (child->getChildrenCount() < 1) continue;
-		SharedScreenshotLogic::findSorkosShaderNodesAndScaleThemToSixSeven(child, sorkosShaderNodesAndTheirScales);
+		SharedScreenshotLogic::findSorkosShaderNodesAndScaleThemToSixSeven(child, sorkosShaderNodesAndTheirContentSizes);
 	}
 }
 
@@ -332,7 +334,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	std::unordered_map<CCNode*, float> otherPlayerPointerScales = {};
 	std::unordered_map<CCNode*, bool> otherPlayerUIVisibilities = {};
 	std::unordered_map<GameObject*, GLubyte> checkpointOpacities = {};
-	std::unordered_map<CCNode*, float> sorkosShaderNodesAndTheirScales = {};
+	std::unordered_map<CCNode*, CCSize> sorkosShaderNodesAndTheirContentSizes = {};
 
 	std::unordered_map<const char*, bool> gameVariablesAndTheirFormerValues = {};
 
@@ -366,7 +368,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	bool robtopIsAFuckingDumbass = false; // YOU HAVE NO FUCKING IDEA HOW MUCH PAIN AND SUFFERING I HAD TO GO THROUGH TO JUSTIFY ADDING THIS FUCKING LOCAL VARIABLE. WHY THE ***__FUCK__*** DID ROBTOP DECIDED TO STORE EDITOR OBJECT HITBOXES AND THE EDITOR PLAYTEST PATH AND THE EDITOR PLAYTEST CLICK INDICATORS IN THE SAME FUCKING CCDRAWNODE WHY THE FUCK BRO HOW THE FUCK DOES THAT SHIT MAKE ANY FUCKING SENSE I WILL FUCKING THROW MYSELF INTO NIAGRA FALLS IF I HAVE TO PUT UP WITH EQUALLY ASININE BULLSHIT AS THIS I SWEAR TO FUCKING GOD ROBTOP
 
-	SharedScreenshotLogic::findSorkosShaderNodesAndScaleThemToSixSeven(node, sorkosShaderNodesAndTheirScales);
+	SharedScreenshotLogic::findSorkosShaderNodesAndScaleThemToSixSeven(node, sorkosShaderNodesAndTheirContentSizes);
 
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
 		originalEclipsePopupVisibility = eclipsePopup->isVisible();
@@ -529,9 +531,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (!screenshotterIsSelf) selectedSize = CCDirector::get()->getWinSizeInPixels();
 	Screenshot ss = Screenshot(selectedSize, node);
 
-	for (auto& [node, formerScale] : sorkosShaderNodesAndTheirScales) {
+	for (auto& [node, formerContentSize] : sorkosShaderNodesAndTheirContentSizes) {
 		if (!node) continue;
-		node->setScale(formerScale);
+		node->setContentSize(formerContentSize);
 		node->draw();
 	}
 
