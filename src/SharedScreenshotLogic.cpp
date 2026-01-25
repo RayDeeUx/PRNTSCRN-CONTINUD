@@ -44,6 +44,10 @@ class LevelProgressionLives final : public CCNode {
 	// dummy declaration because dogotrigger never gave an _spr suffix to the node and i do not want to tempt fate --raydeeux
 };
 
+class ShaderNode final : public CCNode {
+	// dummy declaration because sorko's going to make his own library that i haven't looked into deep enough to find an actual solution yet :P --raydeeux
+};
+
 std::string SharedScreenshotLogic::getFormattedDate() {
 	auto nowTimeT = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 	auto now = std::localtime(&nowTimeT);
