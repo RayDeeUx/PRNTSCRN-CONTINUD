@@ -44,6 +44,10 @@ class LevelProgressionLives final : public CCNode {
 	// dummy declaration because dogotrigger never gave an _spr suffix to the node and i do not want to tempt fate --raydeeux
 };
 
+class ShaderNode final : public CCNode {
+	// dummy declaration because sorko's going to make his own library that i haven't looked into deep enough to find an actual solution yet :P --raydeeux
+};
+
 std::string SharedScreenshotLogic::getFormattedDate() {
 	auto nowTimeT = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 	auto now = std::localtime(&nowTimeT);
@@ -289,6 +293,20 @@ void SharedScreenshotLogic::unhideOtherPlayersIn(GJBaseGameLayer* gjbgl, CCNode*
 	}
 }
 
+void SharedScreenshotLogic::findSorkosShaderNodesAndScaleThemToSixSeven(CCNode* node, std::unordered_map<CCNode*, float>& sorkosShaderNodesAndTheirScales) {
+	if (!node) return;
+	for (CCNode* child : node->getChildrenExt<CCNode*>()) {
+		if (!child) continue;
+		if (geode::cocos::getObjectName(child) == std::string_view("ShaderNode")) {
+			sorkosShaderNodesAndTheirScales[child] = child->getScale();
+			child->setScale(67.f);
+			child->draw(); // necessary so the new scale is reflected properly
+		}
+		if (child->getChildrenCount() < 1) continue;
+		SharedScreenshotLogic::findSorkosShaderNodesAndScaleThemToSixSeven(child, sorkosShaderNodesAndTheirScales);
+	}
+}
+
 void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (!node) return log::error("invalid node!");
 	bool hasCustomNodesToHide = false;
@@ -318,6 +336,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	std::unordered_map<CCNode*, float> otherPlayerPointerScales = {};
 	std::unordered_map<CCNode*, bool> otherPlayerUIVisibilities = {};
 	std::unordered_map<GameObject*, GLubyte> checkpointOpacities = {};
+	std::unordered_map<CCNode*, float> sorkosShaderNodesAndTheirScales = {};
 
 	std::unordered_map<const char*, bool> gameVariablesAndTheirFormerValues = {};
 
@@ -350,6 +369,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	float originalMegaHackLabelNoclipTintScale = 0;
 
 	bool robtopIsAFuckingDumbass = false; // YOU HAVE NO FUCKING IDEA HOW MUCH PAIN AND SUFFERING I HAD TO GO THROUGH TO JUSTIFY ADDING THIS FUCKING LOCAL VARIABLE. WHY THE ***__FUCK__*** DID ROBTOP DECIDED TO STORE EDITOR OBJECT HITBOXES AND THE EDITOR PLAYTEST PATH AND THE EDITOR PLAYTEST CLICK INDICATORS IN THE SAME FUCKING CCDRAWNODE WHY THE FUCK BRO HOW THE FUCK DOES THAT SHIT MAKE ANY FUCKING SENSE I WILL FUCKING THROW MYSELF INTO NIAGRA FALLS IF I HAVE TO PUT UP WITH EQUALLY ASININE BULLSHIT AS THIS I SWEAR TO FUCKING GOD ROBTOP
+
+	SharedScreenshotLogic::findSorkosShaderNodesAndScaleThemToSixSeven(node, sorkosShaderNodesAndTheirScales);
 
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
 		originalEclipsePopupVisibility = eclipsePopup->isVisible();
@@ -511,6 +532,12 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	CCSize selectedSize = CCSize(Manager::get()->width, Manager::get()->height);
 	if (!screenshotterIsSelf) selectedSize = CCDirector::get()->getWinSizeInPixels();
 	Screenshot ss = Screenshot(selectedSize, node);
+
+	for (auto& [node, formerScale] : sorkosShaderNodesAndTheirScales) {
+		if (!node) continue;
+		node->setScale(formerScale);
+		node->draw();
+	}
 
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
 		eclipsePopup->setVisible(originalEclipsePopupVisibility);
