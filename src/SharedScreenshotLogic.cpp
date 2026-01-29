@@ -507,6 +507,10 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 		ADD_MEM(gjbgl, m_player2);
 		SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
+
+		if (pl->m_objectLayer) {
+			ADD_NODE(pl->m_objectLayer, zilko.editor_trail_in_game/drawy-node);
+		}
 	}
 	if (hideOT && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
@@ -654,6 +658,10 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 		RES_MEM(gjbgl, m_player2);
 		SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
+
+		if (pl->m_objectLayer) {
+			RES_NODE(pl->m_objectLayer, zilko.editor_trail_in_game/drawy-node);
+		}
 	}
 	if (hideOT && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);

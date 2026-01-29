@@ -26,6 +26,8 @@ using namespace geode::prelude;
 * tobyadd.gdh/labels_bottom_right
 * tobyadd.gdh/labels_bottom
 * tobyadd.gdh/labels_top
+* zilko.grayscale/grayscale-mode-sprite
+* zilko.editor_trail_in_game/drawy-node (THIS IS PART OF THE "HIDE PLAYER" FILTER. ITS PARENT NODE IS THE PLAYLAYER'S BATCH NODE.)
 * ANY NODE ID PREFIXED WITH "dankmeme.globed2/remote-player-progress-" IN PLATFORMER LEVELS SPECIFICALLY
 */
 
