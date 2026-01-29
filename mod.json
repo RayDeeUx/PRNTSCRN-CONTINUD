@@ -81,7 +81,7 @@
 		"hide-multiplayers": {
 			"type": "bool",
 			"name": "Hide Other Players",
-			"description": "Hide other players when taking a screenshot\nwhile playing a level or while inside the level editor.\n\n<cy>Useful for those using Globed, Champions, and Editor Collab.</c>\n\n<cy>This still won't hide every possible part of a player; see \"Hide Player\" for more info.</c>",
+			"description": "Hide other players when taking a screenshot\nwhile playing a level or while inside the level editor.\n\n<co>If \"Editor Trail In-Game\" by Zilko is installed, the Editor Trail that Zilko's mod adds will also be hidden.</c>\n\n<cy>Useful for those using Globed, Champions, and Editor Collab.</c>\n\n<cy>This still won't hide every possible part of a player; see \"Hide Player\" for more info.</c>",
 			"default": true
 		},
 		"hide-ui": {
