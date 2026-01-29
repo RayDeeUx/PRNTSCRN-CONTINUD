@@ -349,6 +349,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	CCPoint originalMegaHackLabelNoclipTintPosition = {};
 	float originalMegaHackLabelNoclipTintScale = 0;
 
+	float originalZilkoGrayscaleScale = 0;
+
 	bool robtopIsAFuckingDumbass = false; // YOU HAVE NO FUCKING IDEA HOW MUCH PAIN AND SUFFERING I HAD TO GO THROUGH TO JUSTIFY ADDING THIS FUCKING LOCAL VARIABLE. WHY THE ***__FUCK__*** DID ROBTOP DECIDED TO STORE EDITOR OBJECT HITBOXES AND THE EDITOR PLAYTEST PATH AND THE EDITOR PLAYTEST CLICK INDICATORS IN THE SAME FUCKING CCDRAWNODE WHY THE FUCK BRO HOW THE FUCK DOES THAT SHIT MAKE ANY FUCKING SENSE I WILL FUCKING THROW MYSELF INTO NIAGRA FALLS IF I HAVE TO PUT UP WITH EQUALLY ASININE BULLSHIT AS THIS I SWEAR TO FUCKING GOD ROBTOP
 
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
@@ -356,7 +358,13 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		eclipsePopup->setVisible(false);
 	}
 	if (isCtrl) ADD_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
-	if (pl) ADD_NODE(pl, sawblade.dim_mode/dimOverlay);
+	if (pl) {
+		ADD_NODE(pl, sawblade.dim_mode/dimOverlay);
+		if (pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")) {
+			originalZilkoGrayscaleScale = pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")->getScale();
+			pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")->setScale(0.f);
+		}
+	}
 	if (hideUI && pl) {
 		ADD_MEM(pl, m_uiLayer);
 		ADD_MEM(pl, m_infoLabel);
@@ -516,7 +524,12 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		eclipsePopup->setVisible(originalEclipsePopupVisibility);
 	}
 	if (isCtrl) RES_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
-	if (pl) RES_NODE(pl, sawblade.dim_mode/dimOverlay);
+	if (pl) {
+		RES_NODE(pl, sawblade.dim_mode/dimOverlay);
+		if (pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")) {
+			pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")->setScale(originalZilkoGrayscaleScale);
+		}
+	}
 	if (hideUI && pl) {
 		RES_MEM(pl, m_uiLayer);
 		RES_MEM(pl, m_infoLabel);
