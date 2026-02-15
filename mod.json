@@ -1,10 +1,10 @@
 {
-	"geode": "4.10.0",
+	"geode": "5.0.0-beta.2",
 	"gd": {
-		"win": "2.2074",
-		"mac": "2.2074",
-		"ios": "2.2074",
-		"android": "2.2074"
+		"win": "2.2081",
+		"mac": "2.2081",
+		"ios": "2.2081",
+		"android": "2.2081"
 	},
 	"id": "ninxout.prntscrn",
 	"name": "PRNTSCRN",
@@ -25,11 +25,7 @@
 		]
 	},
 	"dependencies": {
-		"geode.node-ids": ">=1.20.0",
-		"geode.custom-keybinds": {
-			"version": ">=1.10.3",
-			"platforms": ["win", "mac", "android"]
-		},
+		"geode.node-ids": ">=1.22.0",
 		"prevter.imageplus": {
 			"version": ">=1.0.0",
 			"platforms": ["android", "ios"]
@@ -52,6 +48,18 @@
 		"developer"
 	],
 	"settings": {
+		"screenshot": {
+			"type": "keybind",
+			"name": "Take a Screenshot!",
+			"description": "Takes a screenshot of the level on screen, if there is one. Otherwise, takes a screenshot of the screen itself.",
+			"default": ["F2", "Grave"]
+		},
+		"plain-screenshot": {
+			"type": "keybind",
+			"name": "Take a Plain Screenshot!",
+			"description": "Takes a screenshot of the screen itself, even if there's a level on screen. Useful for taking a screenshot of the pause menu.",
+			"default": ["Ctrl + F2", "Ctrl + Grave"]
+		},
 		"copy-clipboard": {
 			"type": "bool",
 			"name": "Copy to Clipboard",

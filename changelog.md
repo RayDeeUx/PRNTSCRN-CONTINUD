@@ -1,5 +1,6 @@
 # <cy>PRNTSCRN</c> Changelog
 ## v1.0.8
+- Port to Geode v5.0.0-beta.1 and GD 2.2081.
 - Added a new option to hide Noclip Tints from most major mod menus during screenshot.
   - This is to compensate for a few node IDs this mod claimed to filter, only to never actually do anything to them.
   - These options might also prove useful in a number of niche scenarios not worth discussing here.
