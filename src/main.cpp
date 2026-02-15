@@ -69,10 +69,10 @@ $on_mod(Loaded) {
     });
 	setWidth();
 	setHeight();
-	listenForSettingChanges("resolution-width", [](int64_t unused) { setWidth(); });
-	listenForSettingChanges("resolution-height", [](int64_t unused) { setHeight(); });
-	listenForSettingChanges("use-window-width", [](bool unused) { setWidth(); });
-	listenForSettingChanges("use-window-height", [](bool unused) { setHeight(); });
+	listenForSettingChanges<int64_t>("resolution-width", [](int64_t unused) { setWidth(); });
+	listenForSettingChanges<int64_t>("resolution-height", [](int64_t unused) { setHeight(); });
+	listenForSettingChanges<bool>("use-window-width", [](bool unused) { setWidth(); });
+	listenForSettingChanges<bool>("use-window-height", [](bool unused) { setHeight(); });
 	new EventListener<EventFilter<PRNTSCRN::ScreenshotEvent>>(+[](PRNTSCRN::ScreenshotEvent* ev) {
 		if (!ev) {
 			log::error("[PRNTSCRN API] THE EVENT WAS NULLPTR.");

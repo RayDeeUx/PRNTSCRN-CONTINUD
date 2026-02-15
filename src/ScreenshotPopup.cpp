@@ -52,7 +52,9 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 	return quickToggleMenu;
 }
 
-bool ScreenshotPopup::setup() {
+bool ScreenshotPopup::init() {
+	if (!geode::init(360.f, 270.f, "GJ_square02.png")) return false;
+
 	this->setTitle("Screenshot");
 	this->setID("ScreenshotPopup"_spr);
 	this->m_title->setID("title"_spr);
@@ -222,7 +224,7 @@ void ScreenshotPopup::textChanged(CCTextInputNode* p0) {
 
 ScreenshotPopup* ScreenshotPopup::create() {
 	auto ret = new ScreenshotPopup;
-	if (ret->initAnchored(POPUP_WIDTH, POPUP_HEIGHT, "GJ_square02.png")) {
+	if (ret->init()) {
 		ret->autorelease();
 		return ret;
 	}

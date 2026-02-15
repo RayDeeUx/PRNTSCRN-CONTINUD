@@ -3,13 +3,9 @@
 #include <Geode/ui/TextInput.hpp>
 #include <Geode/ui/Popup.hpp>
 
-class ScreenshotPopup : public geode::Popup<>, public TextInputDelegate {
+class ScreenshotPopup : public geode::Popup, public TextInputDelegate {
 public:
-	constexpr static float POPUP_WIDTH = 360.f;
-	constexpr static float POPUP_HEIGHT = 270.f;
-
 	static ScreenshotPopup* create();
-
 protected:
 	bool copyToClipboard = false;
 
@@ -20,7 +16,7 @@ protected:
 	geode::TextInput* resolutionWidthInput {};
 	geode::TextInput* resolutionHeightInput {};
 
-	bool setup() override;
+	bool init() override;
 
 	cocos2d::CCMenu* createSetting(const std::string& title, const std::string& key);
 
