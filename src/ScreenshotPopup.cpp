@@ -54,7 +54,7 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 
 bool ScreenshotPopup::init() {
 	constexpr float popupWidth = 360.f;
-	if (!geode::init(popupWidth, 270.f, "GJ_square02.png")) return false;
+	if (!geode::Popup::init(popupWidth, 270.f, "GJ_square02.png")) return false;
 
 	this->setTitle("Screenshot");
 	this->setID("ScreenshotPopup"_spr);
