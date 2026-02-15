@@ -686,7 +686,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	GJGameLevel* level = nullptr;
 	if (pl || lel) level = static_cast<GJBaseGameLayer*>(node)->m_level;
 	if (level) {
-		const std::string& lvlIDString = level->m_levelType == GJLevelType::Editor ? "Editor level" : numToString(level->m_levelID);
+		const std::string& lvlIDString = level->m_levelType == GJLevelType::Editor ? "Editor level" : numToString(level->m_levelID.value());
 		targetFolderName += fmt::format("{} - {} ({})", lvlIDString, level->m_levelName, formattedDate);
 	} else targetFolderName += formattedDate;
 

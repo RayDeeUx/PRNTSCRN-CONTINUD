@@ -98,7 +98,7 @@ using namespace geode::prelude;
 /// @note - you shouldn't be requesting screenshots incredibly frequently. if you are, please consider implementing a screen recorder instead.
 /// @note - TL;DR: even though any CCNode* is theoretically supported, the PRNTSCRN namespace is best used to screenshot nodes with non-transparent backgrounds whose contents fill the whole screen.
 namespace PRNTSCRN {
-	class ScreenshotEvent final : public geode::Event<ScreenshotEvent, bool(CCNode*), bool(std::vector<CCNode*>), bool(std::vector<std::string>), bool(std::string)> {
+	class ScreenshotEvent final : public geode::Event<ScreenshotEvent, bool(CCNode*, std::vector<CCNode*>, std::vector<std::string>, std::string)> {
 		public:
 			using Event::Event;
 			CCNode* nodeToScreenshot {};
