@@ -73,7 +73,8 @@ $on_mod(Loaded) {
 	listenForSettingChanges<int64_t>("resolution-height", [](int64_t unused) { setHeight(); });
 	listenForSettingChanges<bool>("use-window-width", [](bool unused) { setWidth(); });
 	listenForSettingChanges<bool>("use-window-height", [](bool unused) { setHeight(); });
-	new EventListener<EventFilter<PRNTSCRN::ScreenshotEvent>>(+[](PRNTSCRN::ScreenshotEvent* ev) {
+	// new EventListener<EventFilter<PRNTSCRN::ScreenshotEvent>>(+[](PRNTSCRN::ScreenshotEvent* ev) {
+	auto listener = PRNTSCRN::ScreenshotEvent().listen([]() {
 		if (!ev) {
 			log::error("[PRNTSCRN API] THE EVENT WAS NULLPTR.");
 			return ListenerResult::Stop;
@@ -147,6 +148,7 @@ $on_mod(Loaded) {
 		}
 		return ListenerResult::Propagate;
 	});
+	listener.leak();
 }
 
 #include <Geode/modify/PlayLayer.hpp>
