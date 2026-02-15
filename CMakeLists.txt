@@ -13,8 +13,8 @@ project(PRNTSCRN VERSION 1.0.0)
 file(GLOB_RECURSE SOURCES
     src/*.cpp
 
-    src/eclipse/*.hpp
-    src/eclipse/*.cpp
+    # src/eclipse/*.hpp
+    # src/eclipse/*.cpp
 )
 
 add_library(${PROJECT_NAME} SHARED ${SOURCES} src/Screenshot.mm)
