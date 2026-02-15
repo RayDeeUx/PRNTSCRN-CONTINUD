@@ -1,3 +1,4 @@
+/*
 #include <Geode/ui/GeodeUI.hpp>
 #include "eclipse.hpp"
 #include "../Manager.hpp"
@@ -83,3 +84,4 @@ $on_mod(Loaded) {
 		}
 	});
 }
+*/
