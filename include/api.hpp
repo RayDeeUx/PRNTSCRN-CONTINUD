@@ -106,6 +106,7 @@ namespace PRNTSCRN {
 			std::vector<std::string> querySelectorsToHide {};
 			std::string senderModID;
 
+			/*
 			/// @note base ScreenshotEvent constructor
 			explicit ScreenshotEvent(CCNode* node) : nodeToScreenshot(node) {
 				nodePointersToHide = {};
@@ -140,6 +141,7 @@ namespace PRNTSCRN {
 			[[nodiscard]] std::vector<CCNode*> getPointersToHide() const { return nodePointersToHide; }
 			[[nodiscard]] std::vector<std::string> getQuerysToHide() const { return querySelectorsToHide; }
 			[[nodiscard]] std::string getSenderModID() const { return senderModID; }
+			*/
 	};
 
 	enum ReferenceType {
@@ -184,7 +186,7 @@ namespace PRNTSCRN {
 			log::error("[PRNTSCRN API] unable to reference node from screenshotNodeAdvanced");
 			return Err(fmt::format("[PRNTSCRN API] unable to reference node from screenshotNodeAdvanced"));
 		}
-		ScreenshotEvent().send(node, pointersToHide, querySelectorsToHide);
+		ScreenshotEvent().send(node, pointersToHide, querySelectorsToHide, geode::getMod()->getID());
 		return Ok();
 	}
 
@@ -221,7 +223,7 @@ namespace PRNTSCRN {
 			log::error("[PRNTSCRN API] unable to reference node from screenshotNode");
 			return Err(fmt::format("[PRNTSCRN API] unable to reference node from screenshotNode"));
 		}
-		ScreenshotEvent().send(node);
+		ScreenshotEvent().send(node, {}, {}, geode::getMod()->getID());
 		return Ok();
 	}
 
