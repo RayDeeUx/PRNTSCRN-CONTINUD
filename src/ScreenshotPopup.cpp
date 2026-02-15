@@ -53,7 +53,8 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 }
 
 bool ScreenshotPopup::init() {
-	if (!geode::init(360.f, 270.f, "GJ_square02.png")) return false;
+	constexpr float popupWidth = 360.f;
+	if (!geode::init(popupWidth, 270.f, "GJ_square02.png")) return false;
 
 	this->setTitle("Screenshot");
 	this->setID("ScreenshotPopup"_spr);
@@ -166,7 +167,7 @@ bool ScreenshotPopup::init() {
 		this, menu_selector(ScreenshotPopup::onScreenshot)
 	);
 	screenshotButton->setID("screenshot-button"_spr);
-	screenshotButton->setPosition(ccp(POPUP_WIDTH / 2.f, 30));
+	screenshotButton->setPosition(ccp(popupWidth / 2.f, 30));
 	m_buttonMenu->addChild(screenshotButton);
 
 	CCMenuItemSpriteExtra* configDirButton = CCMenuItemSpriteExtra::create(
