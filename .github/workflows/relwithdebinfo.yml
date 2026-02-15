@@ -39,7 +39,7 @@ jobs:
       - name: Build the mod (RelWithDebInfo)
         uses: geode-sdk/build-geode-mod@main
         with:
-          sdk: nightly
+          # sdk: nightly
           # bindings: RayDeeUx/bindings
           # bindings-ref: "foobar"
           combine: true
