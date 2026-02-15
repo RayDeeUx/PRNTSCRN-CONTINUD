@@ -75,15 +75,19 @@ $on_mod(Loaded) {
 	listenForSettingChanges<bool>("use-window-height", [](bool unused) { setHeight(); });
 	// new EventListener<EventFilter<PRNTSCRN::ScreenshotEvent>>(+[](PRNTSCRN::ScreenshotEvent* ev) {
 	auto listener = PRNTSCRN::ScreenshotEvent().listen([](CCNode* nodeBeingScreenshotted, std::vector<CCNode*> hideThesePointers, std::vector<std::string> hideTheseQuerySelectors, std::string senderModID) {
+		/*
 		if (!ev) {
 			log::error("[PRNTSCRN API] THE EVENT WAS NULLPTR.");
 			return ListenerResult::Stop;
 		}
-		if (!ev->getNode()) {
+		*/
+		// if (!ev->getNode()) {
+		if (!nodeBeingScreenshotted) {
 			log::error("[PRNTSCRN API] THE NODE WAS NULLPTR.");
 			return ListenerResult::Stop;
 		}
-		if (ev->getSenderModID().empty()) {
+		// if (ev->getSenderModID().empty()) {
+		if (senderModID.empty()) {
 			log::error("[PRNTSCRN API] THE MOD ID WAS EMPTY.");
 			return ListenerResult::Stop;
 		}
