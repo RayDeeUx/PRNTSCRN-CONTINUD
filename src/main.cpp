@@ -74,7 +74,7 @@ $on_mod(Loaded) {
 	listenForSettingChanges<bool>("use-window-width", [](bool unused) { setWidth(); });
 	listenForSettingChanges<bool>("use-window-height", [](bool unused) { setHeight(); });
 	// new EventListener<EventFilter<PRNTSCRN::ScreenshotEvent>>(+[](PRNTSCRN::ScreenshotEvent* ev) {
-	auto listener = PRNTSCRN::ScreenshotEvent().listen([]() {
+	auto listener = PRNTSCRN::ScreenshotEvent().listen([](CCNode* nodeBeingScreenshotted, std::vector<CCNode*> hideThesePointers, std::vector<std::string> hideTheseQuerySelectors, std::string senderModID) {
 		if (!ev) {
 			log::error("[PRNTSCRN API] THE EVENT WAS NULLPTR.");
 			return ListenerResult::Stop;
@@ -95,12 +95,12 @@ $on_mod(Loaded) {
 		std::unordered_map<CCNode*, float> formerPlayerOnePointersScaleStates = {};
 		std::unordered_map<CCNode*, float> formerPlayerTwoPointersScaleStates = {};
 
-		CCNode* nodeBeingScreenshotted = ev->getNode();
+		// CCNode* nodeBeingScreenshotted = ev->getNode();
 		nodeBeingScreenshotted->setUserObject("has-custom-nodes-to-hide"_spr, CCBool::create(false));
-		nodeBeingScreenshotted->setUserObject("mod-asking-for-screenshot"_spr, CCString::create(ev->getSenderModID()));
+		nodeBeingScreenshotted->setUserObject("mod-asking-for-screenshot"_spr, CCString::create(senderModID /* ev->getSenderModID() */));
 
-		std::vector<CCNode*> hideThesePointers = ev->getPointersToHide();
-		std::vector<std::string> hideTheseQuerySelectors = ev->getQuerysToHide();
+		// std::vector<CCNode*> hideThesePointers = ev->getPointersToHide();
+		// std::vector<std::string> hideTheseQuerySelectors = ev->getQuerysToHide();
 		if (!hideThesePointers.empty() || !hideTheseQuerySelectors.empty()) {
 			nodeBeingScreenshotted->setUserObject("has-custom-nodes-to-hide"_spr, CCBool::create(true));
 		}
