@@ -59,11 +59,11 @@ $on_mod(Loaded) {
 	}, InvokeBindFilter(nullptr, "plain-screenshot"_spr));
 	#endif
 	*/
-	listenForKeybindSettingPresses("screenshot", [](Keybind const& keybind, bool down, bool repeat) {
+	listenForKeybindSettingPresses("screenshot", [](Keybind const& keybind, bool down, bool repeat, double timestamp) {
         if (!down || repeat) return;
 		SharedScreenshotLogic::screenshotLevelOrScene();
     });
-	listenForKeybindSettingPresses("plain-screenshot", [](Keybind const& keybind, bool down, bool repeat) {
+	listenForKeybindSettingPresses("plain-screenshot", [](Keybind const& keybind, bool down, bool repeat, double timestamp) {
         if (!down || repeat || !CCScene::get()) return;
 		SharedScreenshotLogic::screenshot(CCScene::get());
     });
