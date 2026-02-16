@@ -26,7 +26,10 @@
 	},
 	"dependencies": {
 		"geode.node-ids": ">=1.22.0",
-		"prevter.imageplus": ">=1.0.5"
+		"prevter.imageplus": {
+			"version": ">=1.0.5",
+			"platforms": ["android", "ios"]
+		}
 	},
 	"api": {
 		"include": [
