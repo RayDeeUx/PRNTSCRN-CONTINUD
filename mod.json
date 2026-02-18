@@ -28,7 +28,8 @@
 		"geode.node-ids": ">=1.22.0",
 		"prevter.imageplus": {
 			"version": ">=1.0.5",
-			"platforms": ["android", "ios"]
+			"platforms": ["android", "ios"],
+			"required": true
 		}
 	},
 	"api": {
