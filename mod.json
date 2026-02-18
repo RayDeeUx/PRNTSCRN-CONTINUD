@@ -28,11 +28,13 @@
 		"geode.node-ids": ">=1.21.0",
 		"geode.custom-keybinds": {
 			"version": ">=1.10.3",
-			"platforms": ["win", "mac", "android"]
+			"platforms": ["win", "mac", "android"],
+			"required": true
 		},
 		"prevter.imageplus": {
 			"version": ">=1.0.0",
-			"platforms": ["android", "ios"]
+			"platforms": ["android", "ios"],
+			"required": true
 		}
 	},
 	"api": {
