@@ -25,7 +25,7 @@
 		]
 	},
 	"dependencies": {
-		"geode.node-ids": ">=1.20.0",
+		"geode.node-ids": ">=1.21.0",
 		"geode.custom-keybinds": ">=1.10.3",
 		"prevter.imageplus": ">=1.0.3"
 	},
