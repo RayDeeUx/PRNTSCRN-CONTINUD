@@ -49,12 +49,18 @@
 			"type": "keybind",
 			"name": "Take a Screenshot!",
 			"description": "Takes a screenshot of the level on screen, if there is one. Otherwise, takes a screenshot of the screen itself.",
+			"migrate-from": "ninxout.prntscrn/screenshot",
+			"category": "universal",
+			"priority": -4000,
 			"default": ["F2", "Grave"]
 		},
 		"plain-screenshot": {
 			"type": "keybind",
 			"name": "Take a Plain Screenshot!",
 			"description": "Takes a screenshot of the screen itself, even if there's a level on screen. Useful for taking a screenshot of the pause menu.",
+			"migrate-from": "ninxout.prntscrn/plain-screenshot",
+			"category": "universal",
+			"priority": -4000,
 			"default": ["Ctrl + F2", "Ctrl + Grave"]
 		},
 		"copy-clipboard": {
