@@ -10,7 +10,7 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 	CCMenu* quickToggleMenu = Build<CCMenu>(CCMenu::create())
 		.id(fmt::format("{}-quick-toggle-setting"_spr, key))
 		.layout(RowLayout::create()->setAutoScale(false)->setAxisAlignment(AxisAlignment::Start)->setGap(5.f))
-		.width(240.f)
+		.width(185.f)
 		.collect();
 
 	CCMenuItemToggler* toggler = Build<CCMenuItemToggler>::createToggle(CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png"), CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png"),
