@@ -1,4 +1,5 @@
 #define ECLIPSE_MODULES_HPP
+#include <eclipse.eclipse-menu/include/eclipse.hpp>
 #include <Geode/ui/GeodeUI.hpp>
 #include "../Manager.hpp"
 #include "../ScreenshotPopup.hpp"
