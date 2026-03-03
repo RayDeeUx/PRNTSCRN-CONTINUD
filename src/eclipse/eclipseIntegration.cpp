@@ -58,7 +58,10 @@ $on_mod(Loaded) {
 						static_cast<FLAlertLayer*>(alert)->keyBackClicked();
 					}
 				}
-				static_cast<ScreenshotPopup*>(ssPopup)->keyBackClicked();
+				geode::Popup::CloseEvent(static_cast<ScreenshotPopup*>(ssPopup)).send();
+				static_cast<ScreenshotPopup*>(ssPopup)->setKeypadEnabled(false);
+				static_cast<ScreenshotPopup*>(ssPopup)->setTouchEnabled(false);
+				static_cast<ScreenshotPopup*>(ssPopup)->removeFromParent();
 			}
 			geode::openSettingsPopup(mod);
 		});
