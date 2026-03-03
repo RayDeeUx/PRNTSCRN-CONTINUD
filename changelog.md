@@ -1,6 +1,7 @@
 # <cy>PRNTSCRN</c> Changelog
 ## v1.0.9
 - Restore Eclipse Menu integration.
+  - That's the whole update.
 ## v1.0.8
 - Port to Geode v5.0.0-beta.3 and GD 2.2081.
 - Temporarily remove Eclipse Menu integration.
