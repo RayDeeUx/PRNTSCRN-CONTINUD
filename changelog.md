@@ -1,5 +1,5 @@
 # <cy>PRNTSCRN</c> Changelog
-## v1.0.9
+## v1.0.10 and v1.0.9
 - Restore Eclipse Menu integration.
   - That's the whole update.
 ## v1.0.8
