@@ -30,13 +30,13 @@
 class RenderTexture {
 	unsigned int m_width = 0;
 	unsigned int m_height = 0;
-	GLint m_oldFBO = 0;
-	GLint m_oldRBO = 0;
+	GLint m_oldFBO = -1;
 	GLuint m_fbo = 0;
-	GLuint m_depthStencil = 0;
 	GLuint m_texture = 0;
-	float m_oldScaleX = 0;
-	float m_oldScaleY = 0;
+	GLuint m_depthStencil = 0;
+	cocos2d::CCSize m_oldScale = {0, 0};
+	cocos2d::CCSize m_oldResolution = {0, 0};
+	cocos2d::CCSize m_oldScreenSize = {0, 0};
 public:
 	RenderTexture(unsigned width, unsigned height);
 	~RenderTexture();
@@ -62,9 +62,6 @@ public:
 	// creates a CCTexture2D from the internal texture. this class should not be used after this
 	// as cocos now owns the texture, and a new one isnt created
 	cocos2d::CCTexture2D* intoTexture();
-
-	void applyWinSize();
-	void restoreWinSize();
 };
 
 void screenshot(std::unique_ptr<uint8_t[]> data, const cocos2d::CCSize& size, bool copy, const std::string& filename, unsigned int x = 0, unsigned int y = 0, unsigned int a = 0, unsigned int b = 0);

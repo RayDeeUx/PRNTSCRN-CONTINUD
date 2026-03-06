@@ -20,7 +20,6 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &m_oldFBO);
-	glGetIntegerv(GL_RENDERBUFFER_BINDING, &m_oldRBO);
 
 	glGenFramebuffers(1, &m_fbo);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
@@ -46,7 +45,6 @@ RenderTexture::RenderTexture(unsigned int width, unsigned int height) : m_width(
 	// attach texture to framebuffer
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, m_texture, 0);
 
-	glBindRenderbuffer(GL_RENDERBUFFER, m_oldRBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_oldFBO);
 }
 
@@ -59,20 +57,29 @@ RenderTexture::~RenderTexture() {
 void RenderTexture::begin() {
 	// save old buffers
 	glGetIntegerv(GL_FRAMEBUFFER_BINDING, &m_oldFBO);
-	glGetIntegerv(GL_RENDERBUFFER_BINDING, &m_oldRBO);
 
-	auto* glview = CCEGLView::get();
-	auto* director = CCDirector::get();
+	auto glview = cocos2d::CCEGLView::get();
+	auto director = cocos2d::CCDirector::get();
+	auto winSize = director->getWinSize();
 
-	m_oldScaleX = glview->m_fScaleX;
-	m_oldScaleY = glview->m_fScaleY;
+	m_oldScale = cocos2d::CCSize{ glview->m_fScaleX, glview->m_fScaleY };
+	m_oldResolution = glview->getDesignResolutionSize();
+
 	// this is used for scissoring, so otherwise clipping nodes would be wrong
 	// need to divide by `geode::utils::getDisplayFactor()` as well for macOS Retina display compat--thank you prevter! --raydeeux
-	glview->m_fScaleX = m_width / director->getWinSize().width / geode::utils::getDisplayFactor();
-	glview->m_fScaleY = m_height / director->getWinSize().height / geode::utils::getDisplayFactor();
-	
+	auto displayFactor = geode::utils::getDisplayFactor();
+	glview->m_fScaleX = static_cast<float>(m_width) / winSize.width / displayFactor;
+	glview->m_fScaleY = static_cast<float>(m_height) / winSize.height / displayFactor;
+
+	auto aspectRatio = static_cast<float>(m_width) / m_height;
+	auto newRes = cocos2d::CCSize{ std::round(320.f * aspectRatio), 320.f };
+
+	director->m_obWinSizeInPoints = newRes;
+	m_oldScreenSize = glview->m_obScreenSize;
+	glview->m_obScreenSize = cocos2d::CCSize{ static_cast<float>(m_width), static_cast<float>(m_height) };
+	glview->setDesignResolutionSize(newRes.width, newRes.height, kResolutionExactFit);
+
 	glViewport(0, 0, m_width, m_height);
-	glBindRenderbuffer(GL_RENDERBUFFER, m_depthStencil);
 	glBindFramebuffer(GL_FRAMEBUFFER, m_fbo);
 
 	// idk either tbh i just copied it from drawScene
@@ -80,17 +87,21 @@ void RenderTexture::begin() {
 }
 
 void RenderTexture::end() {
-	auto* glview = CCEGLView::get();
-	auto* director = CCDirector::get();
-
-	// restore saved buffers
-	glBindRenderbuffer(GL_RENDERBUFFER, m_oldRBO);
-	glBindFramebuffer(GL_FRAMEBUFFER, m_oldFBO);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-
-	glview->m_fScaleX = m_oldScaleX;
-	glview->m_fScaleY = m_oldScaleY;
-	director->setViewport();
+	if (m_oldFBO != -1) {
+		glBindFramebuffer(GL_FRAMEBUFFER, m_oldFBO);
+		m_oldFBO = -1;
+	}
+	if (m_oldScale.width != 0 && m_oldScale.height != 0) {
+		auto view = cocos2d::CCEGLView::get();
+		auto director = cocos2d::CCDirector::get();
+		view->m_fScaleX = m_oldScale.width;
+		view->m_fScaleY = m_oldScale.height;
+		director->m_obWinSizeInPoints = m_oldResolution;
+		view->m_obScreenSize = m_oldScreenSize;
+		view->setDesignResolutionSize(m_oldResolution.width, m_oldResolution.height, kResolutionExactFit);
+		director->setViewport();
+		m_oldScale = cocos2d::CCSize{0, 0};
+	}
 }
 
 std::unique_ptr<uint8_t[]> RenderTexture::capture(CCNode* node, PixelFormat format) {
