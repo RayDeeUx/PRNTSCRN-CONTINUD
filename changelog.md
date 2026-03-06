@@ -1,9 +1,10 @@
 # <cy>PRNTSCRN</c> Changelog
 ## v1.0.11
+<c-aaaaaa>*Disclaimer: For a number of reasons (especially legal), the first sub-bullet point in this changelog should be taken with no less than 40 trillion kilograms of salt and 60 billion mana orbs (or your real-life local currency's equivalent value). The first sub-bullet point only represents RayDeeUx's (Erymanthus') opinions, and no one else's. They should not be treated as fact or gospel, and should not be quoted out of context, as they were written during a state of deep frustration.*</c>
 - Fix that darn bug where scrollable layers would be partially cropped out in screenshots taken by PRNTSCRN itself.
-  - This bug would've been noticed and fixed sooner had it not been for a number of choices that others had made, primarily RobTop's decision to type "hi please duct-tape popular community-requested features to my game without any regard to the context of my game's codebase" into his friendly neighborhood clanker, and then copy-paste the resulting codeblocks without any consideration for the consequences. But I digress (even if the low-quality code that came out of this decision forced me to stay on 2.2074).
+  - This bug would've been noticed and fixed sooner had it not been for a number of choices that others besides PRNTSCRN's contributors had made, primarily RobTop's decision to duct-tape popular community-requested features with the end result so poor in quality that it's worth wondering if someone else (perhaps a clanker) wrote the code responsible for it. But I digress (even if the low-quality code that came out of this strongly influenced my personal decision to stay on Geode v4 and GD 2.2074).
   - There were also some smaller changes within Geode v5 itself that caused this issue, but it was a long-overdue (though quietly articulated) fix that would've happened one way or another. But I digress (again).
-  - What I'm trying to say is that my decision to not update to Geode v5 and GD 2.2081 came back to bite me (as seen with the bug this update aims to fix), and I probably should've fixed this sooner despite these circumstances.
+  - Point being that my decision to not update to Geode v5 and GD 2.2081 came back to bite me (as seen with the bug this update aims to fix), and I probably should've fixed this sooner despite these circumstances.
   - TODO: fill this line in with credit to whoever fixes the bug
 ## v1.0.10 and v1.0.9
 - Restore Eclipse Menu integration.
