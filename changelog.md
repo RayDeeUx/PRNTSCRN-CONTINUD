@@ -4,7 +4,7 @@
 - Fix that darn bug where scrollable layers would be partially cropped out in screenshots taken by PRNTSCRN itself.
   - This bug would've been noticed and fixed sooner if the source code changes for Update 2.2081 had been written by humans instead of being held together by duct tape.
   - There were also some smaller changes within Geode v5 itself that caused this issue, one of which hadn't been passed along to me until later.
-  - Point being: my decision to not update to Geode v5 and GD 2.2081 came back to bite me (as seen with the bug this update aims to fix), and I probably should've fixed this sooner despite these circumstances.
+  - Point being: my decision to not update to Geode v5 and GD 2.2081 on my own machine came back to bite me (as seen with the bug this update aims to fix), and I probably should've fixed this sooner despite these circumstances.
   - TODO: fill this line in with credit to whoever fixes the bug
 ## v1.0.10 and v1.0.9
 - Restore Eclipse Menu integration.
