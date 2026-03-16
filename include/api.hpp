@@ -37,6 +37,7 @@ using namespace geode::prelude;
 * EditorUI
 * EditorPauseLayer
 * dankmeme.globed2/game-overlay
+* sorkopiko.levelpath/level-path-node
 */
 
 /*

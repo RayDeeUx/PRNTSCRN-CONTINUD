@@ -1,4 +1,8 @@
 # <cy>PRNTSCRN</c> Changelog
+## v1.0.12
+- Added LevelPath's player trail to the "" filter toggle.
+  - This mod is not yet on the index as of publishing this update, but will be available soon.
+- Fixed a really blatant typo in one of the mod setting descriptions.
 ## v1.0.11
 <c-aaaaaa>*Disclaimer: For a number of reasons (especially legal), any sub-bullet points referring to Update 2.2081 in this changelog represents RayDeeUx's (Erymanthus') opinions on Update 2.2081, and no one else's.*</c>
 - Fix that darn bug where scrollable layers would be partially cropped out in screenshots taken by PRNTSCRN itself.

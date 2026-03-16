@@ -94,13 +94,13 @@
 		"hide-player": {
 			"type": "bool",
 			"name": "Hide Player",
-			"description": "Hides both players when taking a screenshot\nwhile playing a level or while inside the level editor.\n\n<cy>Note that not everything can be hidden;</c>\n<cy>dash fire sprites, spider teleportation trails, and ghost icon trails</c>\n<cy>may still be visible in some cases.</c>\n<cy>To hide them more consistently during gameplay,</c>\n<cy>find the</c> <cl>\"No Ghost Trail\"</c> <cy>toggle in</c> <cl>Eclipse Menu</c>\n<cy>and the</c> <cl>\"Hide Player Dash Fire\"</c> <cy>toggle in</c> <cl>KrazyPlayLayer</c><cy>.</c>",
+			"description": "Hides both players when taking a screenshot\nwhile playing a level or while inside the level editor.\n\n<co>If \"Editor Trail In-Game\" by Zilko is installed, the Editor Trail that Zilko's mod adds will also be hidden in the screenshot.</c>\n\n<cy>Note that not everything can be hidden;</c>\n<cy>dash fire sprites, spider teleportation trails, and ghost icon trails</c>\n<cy>may still be visible in some cases.</c>\n<cy>To hide them more consistently during gameplay,</c>\n<cy>find the</c> <cl>\"No Ghost Trail\"</c> <cy>toggle in</c> <cl>Eclipse Menu</c>\n<cy>and the</c> <cl>\"Hide Player Dash Fire\"</c> <cy>toggle in</c> <cl>KrazyPlayLayer</c><cy>.</c>",
 			"default": false
 		},
 		"hide-multiplayers": {
 			"type": "bool",
 			"name": "Hide Other Players",
-			"description": "Hide other players when taking a screenshot\nwhile playing a level or while inside the level editor.\n\n<co>If \"Editor Trail In-Game\" by Zilko is installed, the Editor Trail that Zilko's mod adds will also be hidden.</c>\n\n<cy>Useful for those using Globed, Champions, and Editor Collab.</c>\n\n<cy>This still won't hide every possible part of a player; see \"Hide Player\" for more info.</c>",
+			"description": "Hide other players when taking a screenshot\nwhile playing a level or while inside the level editor.\n\n<cy>Useful for those using Globed, Champions, and Editor Collab.</c>\n\n<cy>This still won't hide every possible part of a player; see \"Hide Player\" for more info.</c>",
 			"default": true
 		},
 		"hide-ui": {
@@ -136,13 +136,13 @@
 		"hide-debug-draw": {
 			"type": "bool",
 			"name": "Hide Editor Hitboxes/Debug Draw",
-			"description": "<cp>Inspired by Ausk, with MASSIVE help from Zilko.</c>\n\nHides object hitboxes when taking a screenshot while inside the level editor.\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
+			"description": "<cp>Inspired by Ausk, with MASSIVE help from Zilko.\n\n</c>Hides object hitboxes when taking a screenshot while inside the level editor.\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
 			"default": false
 		},
 		"hide-playtest-path-clicks": {
 			"type": "bool",
 			"name": "Hide Editor Playtest Path and Clicks",
-			"description": "<cp>Inspired by Ausk, with MASSIVE help from Zilko.</c>\n\nHides the playtest path and clicks when taking a screenshot while inside the level editor.\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
+			"description": "<cp>Inspired by Ausk, with MASSIVE help from Zilko.</c>\n\nHides the playtest path and clicks when taking a screenshot while inside the level editor.\n\n<co>If \"LevelPath\" by SorkoPiko is installed, the trail of player icons that SorkoPiko's mod adds will also be hidden in the screenshot.</c>\n\n<cy>Note that this won't hide everything visible in the level editor as the Geode index grows.</c>",
 			"default": false
 		},
 		"use-window-width": {

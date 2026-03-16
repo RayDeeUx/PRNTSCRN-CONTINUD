@@ -494,6 +494,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			ADD_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
 		}
 		ADD_MEM(lel, m_playtestDeathSprite);
+		ADD_NODE(lel, sorkopiko.levelpath/level-path-node);
 	}
 	if (hideTN && lel) {
 		// funny story: i was supposed to add this far earlier, but forgot. oops! --raydeeux
@@ -645,6 +646,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			RES_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
 		}
 		RES_MEM(lel, m_playtestDeathSprite);
+		RES_NODE(lel, sorkopiko.levelpath/level-path-node);
 	}
 	if (hideTN && lel) {
 		// funny story: i was supposed to add this far earlier, but forgot. oops! --raydeeux
