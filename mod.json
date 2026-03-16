@@ -148,7 +148,7 @@
 		"hide-geode-overlay-manager": {
 			"type": "bool",
 			"name": "Hide Geode's Overlay Manager",
-			"description": "Hides Geode's Overlay Manager when taking <cl>Plain Screenshots</c><co>/</c><cl>screenshots of the screen itself</c>, the UI element that displays many of the persistent UI elements from your loaded Geode mods.\n\n<co>This setting only applies when taking</c> <cl>Plain Screenshots</c><co>/</c><cl>screenshots of the screen itself</c><co>; screenshots of the current level or the level editor already ignore Geode's Overlay Manager to begin with.</c>\n\nDefault value is  `false`  to preserve behavior from past versions of PRNTSCRN.",
+			"description": "Hides Geode's Overlay Manager when taking <cl>Plain Screenshots</c><co>/</c><cl>screenshots of the screen itself</c>, the UI element that displays many of the persistent UI elements from your loaded Geode mods.\n\n<co>This setting only applies when taking</c> <cl>Plain Screenshots</c><co>/</c><cl>screenshots of the screen itself</c><co>; screenshots of the current level or the level editor already ignore Geode's Overlay Manager to begin with.</c>\n\nThis setting is disabled by default to preserve behavior from past versions of PRNTSCRN.",
 			"default": false
 		},
 		"use-window-width": {
