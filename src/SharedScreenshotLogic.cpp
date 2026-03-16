@@ -332,6 +332,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	bool hideDG = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-draw-grid-layer");
 	bool hidePT = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-playtest-path-clicks");
 
+	bool hideOM = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-geode-overlay-manager");
+
 	PlayLayer* pl = typeinfo_cast<PlayLayer*>(node);
 	LevelEditorLayer* lel = typeinfo_cast<LevelEditorLayer*>(node);
 	bool originalEclipsePopupVisibility = false;
@@ -351,6 +353,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	float originalZilkoGrayscaleScale = 0;
 
+	bool originalGeodeOverlayManagerVisibility = false;
+
 	bool robtopIsAFuckingDumbass = false; // YOU HAVE NO FUCKING IDEA HOW MUCH PAIN AND SUFFERING I HAD TO GO THROUGH TO JUSTIFY ADDING THIS FUCKING LOCAL VARIABLE. WHY THE ***__FUCK__*** DID ROBTOP DECIDED TO STORE EDITOR OBJECT HITBOXES AND THE EDITOR PLAYTEST PATH AND THE EDITOR PLAYTEST CLICK INDICATORS IN THE SAME FUCKING CCDRAWNODE WHY THE FUCK BRO HOW THE FUCK DOES THAT SHIT MAKE ANY FUCKING SENSE I WILL FUCKING THROW MYSELF INTO NIAGRA FALLS IF I HAVE TO PUT UP WITH EQUALLY ASININE BULLSHIT AS THIS I SWEAR TO FUCKING GOD ROBTOP
 
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
@@ -358,6 +362,10 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		eclipsePopup->setVisible(false);
 	}
 	if (isCtrl) ADD_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
+	if (hideOM && node == CCScene::get() && geode::OverlayManager::get()) {
+		originalGeodeOverlayManagerVisibility = geode::OverlayManager::get()->isVisible();
+		geode::OverlayManager::get()->setVisible(false);
+	}
 	if (pl) {
 		ADD_NODE(pl, sawblade.dim_mode/dimOverlay);
 		if (pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")) {
@@ -529,6 +537,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		eclipsePopup->setVisible(originalEclipsePopupVisibility);
 	}
 	if (isCtrl) RES_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
+	if (hideOM && node == CCScene::get() && geode::OverlayManager::get()) {
+		geode::OverlayManager::get()->setVisible(originalGeodeOverlayManagerVisibility);
+	}
 	if (pl) {
 		RES_NODE(pl, sawblade.dim_mode/dimOverlay);
 		if (pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")) {

@@ -117,10 +117,13 @@ bool ScreenshotPopup::init() {
 		settingsMenu->addChild(createSetting("Hide Hitboxes/Debug Draw", "hide-debug-draw"));
 		settingsMenu->addChild(createSetting("Hide Playtest Path + Clicks", "hide-playtest-path-clicks"));
 	}
+	settingsMenu->addChild(createSetting("Hide Overlay Manager", "hide-geode-overlay-manager"));
 	#ifdef GEODE_IS_DESKTOP
 	settingsMenu->addChild(createSetting("JPEG", "jpeg-mafia"));
 	#endif
-	settingsMenu->addChild(createSetting("Auto Screenshot", "auto-screenshot"));
+	if (pl) {
+		settingsMenu->addChild(createSetting("Auto Screenshot", "auto-screenshot"));
+	}
 	// settingsMenu->addChild(createSetting("Use Window Width", "use-window-width")); // ninxout insisted that this stay separate
 	// settingsMenu->addChild(createSetting("Use Window Height", "use-window-height")); // ninxout insisted that this stay separate
 

@@ -36,6 +36,7 @@ $on_mod(Loaded) {
 		addSetting(tab, "hide-draw-grid-layer");
 		addSetting(tab, "hide-debug-draw");
 		addSetting(tab, "hide-playtest-path-clicks");
+		addSetting(tab, "hide-geode-overlay-manager");
 		#ifdef GEODE_IS_DESKTOP
 		addSetting(tab, "jpeg-mafia");
 		#endif

@@ -1,6 +1,9 @@
 # <cy>PRNTSCRN</c> Changelog
 ## v1.0.12
-- Added LevelPath's player trail to the "" filter toggle.
+- Added a new option to hide Geode's Overlay Manager when taking screenshots.
+  - This setting only hides Geode's Overlay Manager when taking screenshots of what's on the screen itself (and not when screenshotting a specific level or the level editor).
+  - This setting is disabled by default to preserve past behavior.
+- Added LevelPath's player trail to the "Hide Playtest Path + Clicks" filter toggle.
   - This mod is not yet on the index as of publishing this update, but will be available soon.
 - Fixed a really blatant typo in one of the mod setting descriptions.
 ## v1.0.11
