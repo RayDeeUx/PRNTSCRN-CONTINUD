@@ -84,12 +84,12 @@ $on_mod(Loaded) {
 		// if (!ev->getNode()) {
 		if (!nodeBeingScreenshotted) {
 			log::error("[PRNTSCRN API] THE NODE WAS NULLPTR.");
-			return ListenerResult::Stop;
+			return ListenerResult::Propagate;
 		}
 		// if (ev->getSenderModID().empty()) {
 		if (senderModID.empty()) {
 			log::error("[PRNTSCRN API] THE MOD ID WAS EMPTY.");
-			return ListenerResult::Stop;
+			return ListenerResult::Propagate;
 		}
 
 		// log::info("[PRNTSCRN API] ev->getSenderModID(): {}", ev->getSenderModID());
