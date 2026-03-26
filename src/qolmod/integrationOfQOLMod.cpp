@@ -21,7 +21,6 @@ $on_mod(Loaded) {
 	Loader::get()->queueInMainThread([]() {
 		GameManager::get()->schedule(schedule_selector(QOLModAndroidUITrackerDummyNodeForPRNTSCRN::trackAndroidUIScheduler));
 		qolmod::ext::addCustomCategory({1, Mod::get()->getName(), "qolmod.png"_spr, Mod::get()->getID(), [](cocos2d::CCMenu* layer) {
-			geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");
 			if (!layer) return;
 
 			if (ScreenshotPopup* foo = CCScene::get()->getChildByType<ScreenshotPopup>(0); foo) {
@@ -67,6 +66,9 @@ $on_mod(Loaded) {
 			fuck->removeFromParentAndCleanup(true);
 
 			layer->addChildAtPosition(Manager::get()->screenshotPopupForQOLMod, geode::Anchor::Center, {0.f, -25.f});
+
+			Manager::get()->screenshotPopupForQOLMod->ignoreAnchorPointForPosition(false);
+			Manager::get()->screenshotPopupForQOLMod->setScale(7.25f);
 
 			Manager::get()->trackAndroidUI = true;
 		}});

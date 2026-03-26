@@ -101,8 +101,8 @@ bool ScreenshotPopup::init() {
 	CCMenu* settingsMenu = CCMenu::create();
 	settingsMenu->setID("quick-settings"_spr);
 	settingsMenu->setPosition(ccp(245.f, 142.5f));
-	settingsMenu->setContentSize({180.f, 185.f});
-	settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(true)->setAxisReverse(true)->setAxisAlignment(AxisAlignment::Center));
+	settingsMenu->setContentSize({245.f, 185.f});
+	settingsMenu->setLayout(ColumnLayout::create()->setAutoScale(true)->setAxisReverse(true)->setAxisAlignment(AxisAlignment::Center)->setGap(Manager::get()->isAddingToQOLMod ? 0.f : 5.f));
 
 	#ifdef GEODE_IS_DESKTOP
 	settingsMenu->addChild(createSetting("Copy To Clipboard", "copy-clipboard"));

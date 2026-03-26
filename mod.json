@@ -18,7 +18,8 @@
 	},
 	"resources": {
 		"sprites": [
-			"resources/screenshot.png"
+			"resources/screenshot.png",
+			"resources/qolmod.png"
 		],
 		"files": [
 			"resources/*.mp3"
