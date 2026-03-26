@@ -19,12 +19,12 @@ CCMenu* ScreenshotPopup::createSetting(const std::string& title, const std::stri
 			mod->setSettingValue<bool>(key, !mod->getSettingValue<bool>(key));
 			if (key == "use-window-width") {
 				resolutionWidthInput->setString(numToString(Manager::get()->width));
-				if (!Manager::get().isAddingToQOLMod) resolutionWidthInput->setEnabled(!mod->getSettingValue<bool>(key));
+				if (!Manager::get()->isAddingToQOLMod) resolutionWidthInput->setEnabled(!mod->getSettingValue<bool>(key));
 				else resolutionWidthInput->setEnabled(false);
 			}
 			if (key == "use-window-height") {
 				resolutionHeightInput->setString(numToString(Manager::get()->height));
-				if (!Manager::get().isAddingToQOLMod) resolutionHeightInput->setEnabled(!mod->getSettingValue<bool>(key));
+				if (!Manager::get()->isAddingToQOLMod) resolutionHeightInput->setEnabled(!mod->getSettingValue<bool>(key));
 				else resolutionHeightInput->setEnabled(false);
 			}
 		})
@@ -118,7 +118,7 @@ bool ScreenshotPopup::init() {
 		settingsMenu->addChild(createSetting("Hide Grid", "hide-draw-grid-layer"));
 		settingsMenu->addChild(createSetting("Hide Hitboxes/Debug Draw", "hide-debug-draw"));
 		settingsMenu->addChild(createSetting("Hide Playtest Path + Clicks", "hide-playtest-path-clicks"));
-	} else if (Manager::get().isAddingToQOLMod && !pl && !lel) {
+	} else if (Manager::get()->isAddingToQOLMod && !pl && !lel) {
 		settingsMenu->addChild(createSetting("Hide Attempt Label", "hide-attempts"));
 		settingsMenu->addChild(createSetting("Hide Checkpoints", "hide-checkpoints"));
 		settingsMenu->addChild(createSetting("Hide Grid", "hide-draw-grid-layer"));

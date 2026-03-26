@@ -8,12 +8,12 @@ using namespace geode::prelude;
 class QOLModAndroidUITrackerDummyNode final : public CCNode {
 public:
 	void trackAndroidUIScheduler(float) {
-		if (!Manager::get().trackAndroidUI) return;
+		if (!Manager::get()->trackAndroidUI) return;
 		for (CCNode* child : cocos2d::CCScene::get()->getChildrenExt()) {
 			if (geode::cocos::getObjectName(child) == "AndroidUI") return;
 		}
-		Manager::get().trackAndroidUI = false;
-		Manager::get().screenshotPopupForQOLMod = nullptr;
+		Manager::get()->trackAndroidUI = false;
+		Manager::get()->screenshotPopupForQOLMod = nullptr;
 	}
 };
 
@@ -47,20 +47,20 @@ $on_mod(Loaded) {
 			layer->addChildAtPosition(iAmAlwaysWishingThatTheseWomenWereHimItsATerribleProblemIDontEverWantThatProblemToEverGoAway, geode::Anchor::Top, {0.f, -37.5f});
 			layer->addChildAtPosition(iHaveThisProblem, geode::Anchor::Top, {0.f, -45.f});
 
-			Manager::get().isAddingToQOLMod = true;
-			Manager::get().screenshotPopupForQOLMod = nullptr;
+			Manager::get()->isAddingToQOLMod = true;
+			Manager::get()->screenshotPopupForQOLMod = nullptr;
 			ScreenshotPopup* fuck = ScreenshotPopup::create();
 			fuck->show();
-			Manager::get().screenshotPopupForQOLMod = geode::Ref(fuck);
-			Manager::get().isAddingToQOLMod = false;
+			Manager::get()->screenshotPopupForQOLMod = geode::Ref(fuck);
+			Manager::get()->isAddingToQOLMod = false;
 
 			fuck->setKeypadEnabled(false);
 			fuck->setTouchEnabled(false);
 			fuck->removeFromParentAndCleanup(true);
 
-			layer->addChildAtPosition(Manager::get().screenshotPopupForQOLMod, geode::Anchor::Center, {0.f, -25.f});
+			layer->addChildAtPosition(Manager::get()->screenshotPopupForQOLMod, geode::Anchor::Center, {0.f, -25.f});
 
-			Manager::get().trackAndroidUI = true;
+			Manager::get()->trackAndroidUI = true;
 		}});
 	});
 }
