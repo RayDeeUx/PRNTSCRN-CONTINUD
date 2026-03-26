@@ -23,6 +23,13 @@ $on_mod(Loaded) {
 		qolmod::ext::addCustomCategory({1, Mod::get()->getName(), "qolmod.png"_spr, Mod::get()->getID(), [](cocos2d::CCMenu* layer) {
 			if (!layer) return;
 
+			if (ScreenshotPopup* foo = CCScene::get()->getChildByType<ScreenshotPopup>(0); foo) {
+				geode::Popup::CloseEvent(foo).send();
+				foo->setKeypadEnabled(false);
+				foo->setTouchEnabled(false);
+				foo->removeFromParent();
+			}
+
 			// if you're going to steal my source code then at least watch Heated Rivalry S1E6 to understand these variable name references, you cheap clankers and/or fuckwads --raydeeux
 			CCLabelBMFont* iHaveThisProblem = CCLabelBMFont::create("[If you're viewing this inside the QOLMod Discord server, whoever sent this has never learned how to read.]", "chatFont.fnt");
 			iHaveThisProblem->limitLabelWidth(layer->getContentWidth() * .65f, 1.f, .0001f);
