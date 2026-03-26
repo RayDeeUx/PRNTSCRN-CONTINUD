@@ -44,6 +44,10 @@ class LevelProgressionLives final : public CCNode {
 	// dummy declaration because dogotrigger never gave an _spr suffix to the node and i do not want to tempt fate --raydeeux
 };
 
+class AndroidUI final : public CCNode {
+	// dummy declaration for qolmod --raydeeux
+};
+
 std::string SharedScreenshotLogic::getFormattedDate() {
 	auto nowTimeT = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 	auto now = std::localtime(&nowTimeT);
@@ -342,6 +346,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	bool originalDifficultyProgressionVisibility = false;
 	bool originalGDHNoclipTintVisibility = false;
 	bool originalPrismMenuTintVisibility = false;
+	bool originalQOLModVisibility = false;
 
 	// i dont trust absolute and i dont have the tools to load megahack on a macbook and i need this update out quick, leave me alone --raydeeux
 	bool originalMegaHackLabelContainerVisibility = false;
@@ -360,6 +365,10 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
 		originalEclipsePopupVisibility = eclipsePopup->isVisible();
 		eclipsePopup->setVisible(false);
+	}
+	if (CCNode* androidUI = CCScene::get()->getChildByType<AndroidUI>(0); androidUI) {
+		originalQOLModVisibility = androidUI->isVisible();
+		androidUI->setVisible(false);
 	}
 	if (isCtrl) ADD_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
 	if (hideOM && node == CCScene::get() && geode::OverlayManager::get()) {
@@ -535,6 +544,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
 		eclipsePopup->setVisible(originalEclipsePopupVisibility);
+	}
+	if (CCNode* androidUI = CCScene::get()->getChildByType<AndroidUI>(0); androidUI) {
+		androidUI->setVisible(originalQOLModVisibility);
 	}
 	if (isCtrl) RES_NODE(CCScene::get(), ninxout.prntscrn/ScreenshotPopup);
 	if (hideOM && node == CCScene::get() && geode::OverlayManager::get()) {

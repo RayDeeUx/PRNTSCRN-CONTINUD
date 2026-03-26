@@ -60,7 +60,7 @@
 			"migrate-from": "ninxout.prntscrn/screenshot",
 			"category": "universal",
 			"priority": -4000,
-			"default": ["F2", "Grave"]
+			"default": ["F2", "`"]
 		},
 		"plain-screenshot": {
 			"type": "keybind",
@@ -69,7 +69,7 @@
 			"migrate-from": "ninxout.prntscrn/plain-screenshot",
 			"category": "universal",
 			"priority": -4000,
-			"default": ["Ctrl + F2", "Ctrl + Grave"]
+			"default": ["Ctrl + F2", "Ctrl + `"]
 		},
 		"copy-clipboard": {
 			"type": "bool",

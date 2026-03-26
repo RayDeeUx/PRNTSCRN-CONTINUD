@@ -13,8 +13,8 @@ Let <cy>PRNTSCRN</c> make the screenshotting process easier for you!
 - <c-ff9a00>Automate level screenshots</c> in percentage or seconds intervals!
 - <c-ff9a00>Customizable dimensions</c> for screenshots!<c-999999>\*\*</c>
 - <c-ff9a00>An API</c> for other mods to take screenshots through this mod!
-- <c-40a2f5>Eclipse Menu</c> integration!
-- <cs>Rebindable</c> keybinds! (macOS, Windows, and Android only)
+- <c-40a2f5>Eclipse Menu</c> and <c-ff7462>QOL</c><c-ff7462>Mod</c> integration!
+- <cs>Rebindable</c> keybinds!
 - <cs>Save as JPG</c>! (macOS/Windows only. All devices support PNG.)
 - <cs>Copy to clipboard</c>! (macOS/Windows only. <c-ff5555>Might break in Wine.</c>)
 

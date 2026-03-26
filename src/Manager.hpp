@@ -19,6 +19,9 @@ protected:
 public:
 	int width = 1980;
 	int height = 1080;
+	bool trackAndroidUI = false;
+	bool isAddingToQOLMod = false;
+	geode::Ref<FLAlertLayer> screenshotPopupForQOLMod = nullptr;
 	static Manager* get() {
 		if (!instance) instance = new Manager();
 		return instance;

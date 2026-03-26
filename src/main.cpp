@@ -284,4 +284,14 @@ class $modify(MyCCDirector, CCDirector) {
 		if (Mod::get()->getSettingValue<bool>("use-window-width")) Manager::get()->width = CCDirector::get()->getWinSizeInPixels().width;
 		if (Mod::get()->getSettingValue<bool>("use-window-height")) Manager::get()->height = CCDirector::get()->getWinSizeInPixels().height;
 	}
+	void updateScreenScale(cocos2d::CCSize p0) {
+		CCDirector::updateScreenScale(p0);
+		if (Mod::get()->getSettingValue<bool>("use-window-width")) Manager::get()->width = CCDirector::get()->getWinSizeInPixels().width;
+		if (Mod::get()->getSettingValue<bool>("use-window-height")) Manager::get()->height = CCDirector::get()->getWinSizeInPixels().height;
+	}
+	void setViewport() {
+		CCDirector::setViewport();
+		if (Mod::get()->getSettingValue<bool>("use-window-width")) Manager::get()->width = CCDirector::get()->getWinSizeInPixels().width;
+		if (Mod::get()->getSettingValue<bool>("use-window-height")) Manager::get()->height = CCDirector::get()->getWinSizeInPixels().height;
+	}
 };
