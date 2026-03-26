@@ -204,6 +204,10 @@ bool ScreenshotPopup::init() {
 	xLabel->setID("finicky-multiplication-sign"_spr);
 	xLabel->setAnchorPoint({.5f, .4f}); // to avoid visual off-center illusion on the y-axis
 
+	if (Manager::get()->isAddingToQOLMod) {
+		if (this->m_closeBtn) this->m_closeBtn->removeMeAndCleanup();
+	}
+
 	return true;
 }
 
