@@ -158,6 +158,7 @@ bool ScreenshotPopup::init() {
 		autoPercentInput->setString(numToString(selectedSetting));
 		autoPercentInput->getInputNode()->setID(selectedInputNodeID);
 		autoPercentInput->getInputNode()->setDelegate(this);
+		if (Manager::get()->isAddingToQOLMod) autoPercentInput->setEnabled(false);
 
 		Build<CCLabelBMFont>::create(selectedLabel.c_str(), "bigFont.fnt")
 			.id("auto-screenshot-label"_spr)
