@@ -65,6 +65,11 @@ $on_mod(Loaded) {
 			fuck->setTouchEnabled(false);
 			fuck->removeFromParentAndCleanup(true);
 
+			// so what you need to be doing is unregistering force prio since it isn't being used as a popup --alphalaneous --raydeeux
+			if (!geode::Loader::get()->isModLoaded("alk.better-touch-prio")) {
+				CCTouchDispatcher::get()->unregisterForcePrio(Manager::get()->screenshotPopupForQOLMod);
+			}
+
 			layer->addChildAtPosition(Manager::get()->screenshotPopupForQOLMod, geode::Anchor::Center, {0.f, -25.f});
 
 			Manager::get()->screenshotPopupForQOLMod->ignoreAnchorPointForPosition(false);
