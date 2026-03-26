@@ -5,7 +5,7 @@
 using namespace geode::prelude;
 
 // this sounds evil on paper but i swear i have a good reason for doing this --raydeeux
-class QOLModAndroidUITrackerDummyNode final : public CCNode {
+class QOLModAndroidUITrackerDummyNodeForPRNTSCRN final : public CCNode {
 public:
 	void trackAndroidUIScheduler(float) {
 		if (!Manager::get()->trackAndroidUI) return;
@@ -18,8 +18,9 @@ public:
 };
 
 $on_mod(Loaded) {
+	geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");
 	Loader::get()->queueInMainThread([]() {
-		GameManager::get()->schedule(schedule_selector(QOLModAndroidUITrackerDummyNode::trackAndroidUIScheduler));
+		GameManager::get()->schedule(schedule_selector(QOLModAndroidUITrackerDummyNodeForPRNTSCRN::trackAndroidUIScheduler));
 		qolmod::ext::addCustomCategory({1, Mod::get()->getName(), "qolmod.png"_spr, Mod::get()->getID(), [](cocos2d::CCMenu* layer) {
 			if (!layer) return;
 
