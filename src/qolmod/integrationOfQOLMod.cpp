@@ -18,10 +18,10 @@ public:
 };
 
 $on_mod(Loaded) {
-	geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");
 	Loader::get()->queueInMainThread([]() {
 		GameManager::get()->schedule(schedule_selector(QOLModAndroidUITrackerDummyNodeForPRNTSCRN::trackAndroidUIScheduler));
 		qolmod::ext::addCustomCategory({1, Mod::get()->getName(), "qolmod.png"_spr, Mod::get()->getID(), [](cocos2d::CCMenu* layer) {
+			geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");geode::log::info("googoogaga");
 			if (!layer) return;
 
 			if (ScreenshotPopup* foo = CCScene::get()->getChildByType<ScreenshotPopup>(0); foo) {
