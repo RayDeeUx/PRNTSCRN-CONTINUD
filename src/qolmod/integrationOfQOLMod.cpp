@@ -49,10 +49,15 @@ $on_mod(Loaded) {
 			iAmAlwaysWishingThatTheseWomenWereHimItsATerribleProblemIDontEverWantThatProblemToEverGoAway->setBlendFunc({GL_ONE_MINUS_DST_COLOR, GL_ONE_MINUS_SRC_ALPHA});
 			iAmAlwaysWishingThatTheseWomenWereHimItsATerribleProblemIDontEverWantThatProblemToEverGoAway->setScale(.45f);
 
+			layer->addChildAtPosition(iHaveThisProblem, geode::Anchor::Top, {0.f, -45.f});
 			layer->addChildAtPosition(iLikeWomenYesAndEverywhereIGoImSurroundedByBeautifulWomenAndTheyLoveMeAndTheseWomenTheyreSoSexyAndFun, geode::Anchor::Top, {0.f, -10.f});
 			layer->addChildAtPosition(butImAlwaysThinkgAboutThisSlowFuckingHockeyPlayerWithBeautifulFrecklesAndAWeakBackhandAndHesSoBoringAndHeDrivesThisTerribleCar, geode::Anchor::Top, {0.f, -25.f});
 			layer->addChildAtPosition(iAmAlwaysWishingThatTheseWomenWereHimItsATerribleProblemIDontEverWantThatProblemToEverGoAway, geode::Anchor::Top, {0.f, -37.5f});
-			layer->addChildAtPosition(iHaveThisProblem, geode::Anchor::Top, {0.f, -45.f});
+
+			iHaveThisProblem->setID("warning-footer-one"_spr);
+			iLikeWomenYesAndEverywhereIGoImSurroundedByBeautifulWomenAndTheyLoveMeAndTheseWomenTheyreSoSexyAndFun->setID("warning-gold-header"_spr);
+			butImAlwaysThinkgAboutThisSlowFuckingHockeyPlayerWithBeautifulFrecklesAndAWeakBackhandAndHesSoBoringAndHeDrivesThisTerribleCar->setID("warning-sub-header"_spr);
+			iAmAlwaysWishingThatTheseWomenWereHimItsATerribleProblemIDontEverWantThatProblemToEverGoAway->setID("warning-footer-two"_spr);
 
 			Manager::get()->isAddingToQOLMod = true;
 			Manager::get()->screenshotPopupForQOLMod = nullptr;

@@ -2,6 +2,7 @@
 ## v1.0.13
 - Improved compatibility with SDL mod.
 - Added QOLMod integration.
+- Fixed an issue with the GRAVE keybind not being set properly for first-time installs.
 ## v1.0.12
 - Added a new option to hide Geode's Overlay Manager when taking screenshots.
   - This setting only hides Geode's Overlay Manager when taking screenshots of what's on the screen itself (and not when screenshotting a specific level or the level editor).
