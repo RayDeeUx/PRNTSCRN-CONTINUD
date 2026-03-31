@@ -79,7 +79,8 @@ $on_mod(Loaded) {
 			layer->addChildAtPosition(Manager::get()->screenshotPopupForQOLMod, geode::Anchor::Center, {0.f, -25.f});
 
 			Manager::get()->screenshotPopupForQOLMod->ignoreAnchorPointForPosition(false);
-			Manager::get()->screenshotPopupForQOLMod->setScale(7.25f);
+			Manager::get()->screenshotPopupForQOLMod->setScale(1.f);
+			Manager::get()->screenshotPopupForQOLMod->m_mainLayer->setScale(.75f);
 
 			CCMenuItemSpriteExtra* bar = geode::cocos::CCMenuItemExt::createSpriteExtraWithFilename("screenshot.png"_spr, .125f, [](CCObject*) {
 				CCDirector::get()->getKeypadDispatcher()->dispatchKeypadMSG(ccKeypadMSGType::kTypeBackClicked);
