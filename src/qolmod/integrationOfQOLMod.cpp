@@ -80,6 +80,14 @@ $on_mod(Loaded) {
 			Manager::get()->screenshotPopupForQOLMod->ignoreAnchorPointForPosition(false);
 			Manager::get()->screenshotPopupForQOLMod->setScale(7.25f);
 
+			CCMenuItemSpriteExtra* bar = geode::cocos::CCMenuItemExt::createSpriteExtraWithFilename("screenshot.png"_spr, .25f, [](CCObject*) {
+				CCDirector::get()->getKeypadDispatcher()->dispatchKeypadMSG(ccKeypadMSGType::kTypeBackClicked);
+				geode::openSettingsPopup(Mod::get());
+			});
+
+			bar->setID("settings-shortcut-qolmod-integration"_spr);
+			layer->addChildAtPosition(bar, Anchor::BottomRight, {-10.f, 10.f});
+
 			Manager::get()->trackAndroidUI = true;
 		}});
 	});
