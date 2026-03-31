@@ -1,6 +1,7 @@
 #include "CategoryExt.hpp"
 #include "../Manager.hpp"
 #include "../ScreenshotPopup.hpp"
+#include <Geode/ui/GeodeUI.hpp>
 
 using namespace geode::prelude;
 
