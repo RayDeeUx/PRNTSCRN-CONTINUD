@@ -137,10 +137,10 @@ $on_mod(Loaded) {
 		if (!hideTheseQuerySelectors.empty() && !formerNodeIDsVisibilityStates.empty()) {
 			for (auto [querySelectorToRestore, formerVisibility] : formerNodeIDsVisibilityStates) {
 				if (querySelectorToRestore.empty()) continue;
-				log::debug("querySelectorToHide: {}", querySelectorToHide);
+				log::debug("querySelectorToRestore: {}", querySelectorToRestore);
 				CCNode* theNodeToRestore = nodeBeingScreenshotted->querySelector(querySelectorToRestore);
 				if (!theNodeToRestore) continue;
-				log::debug("{} found in node tree, now unhiding", querySelectorToHide);
+				log::debug("{} found in node tree, now unhiding", querySelectorToRestore);
 				theNodeToRestore->setVisible(formerVisibility);
 			}
 		}
