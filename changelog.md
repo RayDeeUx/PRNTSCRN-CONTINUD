@@ -1,4 +1,6 @@
 # <cy>PRNTSCRN</c> Changelog
+## v1.0.14
+- Fix a very stupid and avoidable crash.
 ## v1.0.13
 - Improved compatibility with SDL mod.
 - Added QOLMod integration.

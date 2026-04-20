@@ -92,7 +92,7 @@ $on_mod(Loaded) {
 			return ListenerResult::Propagate;
 		}
 
-		// log::info("[PRNTSCRN API] ev->getSenderModID(): {}", ev->getSenderModID());
+		log::debug("[PRNTSCRN API] ev->getSenderModID(): {}", ev->getSenderModID());
 
 		std::unordered_map<std::string, bool> formerNodeIDsVisibilityStates = {};
 		std::unordered_map<CCNode*, bool> formerNodePointersVisibilityStates = {};
@@ -122,10 +122,12 @@ $on_mod(Loaded) {
 		}
 		if (!hideTheseQuerySelectors.empty()) {
 			for (std::string querySelectorToHide : hideTheseQuerySelectors) {
+				log::debug("querySelectorToHide: {}", querySelectorToHide);
 				if (querySelectorToHide.empty()) continue;
 				CCNode* theNodeToHide = nodeBeingScreenshotted->querySelector(querySelectorToHide);
 				if (!theNodeToHide) continue;
 				if (theNodeToHide == nodeBeingScreenshotted) continue;
+				log::debug("{} found in node tree, now hiding", querySelectorToHide);
 				formerNodeIDsVisibilityStates[querySelectorToHide] = theNodeToHide->isVisible();
 				theNodeToHide->setVisible(false);
 			}
@@ -145,8 +147,11 @@ $on_mod(Loaded) {
 		}
 		if (!hideTheseQuerySelectors.empty() && !formerNodeIDsVisibilityStates.empty()) {
 			for (auto [querySelectorToRestore, formerVisibility] : formerNodeIDsVisibilityStates) {
+				if (querySelectorToRestore.empty()) continue;
+				log::debug("querySelectorToHide: {}", querySelectorToHide);
 				CCNode* theNodeToRestore = nodeBeingScreenshotted->querySelector(querySelectorToRestore);
 				if (!theNodeToRestore) continue;
+				log::debug("{} found in node tree, now unhiding", querySelectorToHide);
 				theNodeToRestore->setVisible(formerVisibility);
 			}
 		}
