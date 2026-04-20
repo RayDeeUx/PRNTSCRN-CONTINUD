@@ -75,36 +75,25 @@ $on_mod(Loaded) {
 	listenForSettingChanges<bool>("use-window-height", [](bool unused) { setHeight(); });
 	// new EventListener<EventFilter<PRNTSCRN::ScreenshotEvent>>(+[](PRNTSCRN::ScreenshotEvent* ev) {
 	auto listener = PRNTSCRN::ScreenshotEvent().listen([](CCNode* nodeBeingScreenshotted, std::vector<CCNode*> hideThesePointers, std::vector<std::string> hideTheseQuerySelectors, std::string senderModID) {
-		/*
-		if (!ev) {
-			log::error("[PRNTSCRN API] THE EVENT WAS NULLPTR.");
-			return ListenerResult::Stop;
-		}
-		*/
-		// if (!ev->getNode()) {
 		if (!nodeBeingScreenshotted) {
 			log::error("[PRNTSCRN API] THE NODE WAS NULLPTR.");
 			return ListenerResult::Propagate;
 		}
-		// if (ev->getSenderModID().empty()) {
 		if (senderModID.empty()) {
 			log::error("[PRNTSCRN API] THE MOD ID WAS EMPTY.");
 			return ListenerResult::Propagate;
 		}
 
-		log::debug("[PRNTSCRN API] ev->getSenderModID(): {}", ev->getSenderModID());
+		log::debug("[PRNTSCRN API] senderModID: {}", senderModID);
 
 		std::unordered_map<std::string, bool> formerNodeIDsVisibilityStates = {};
 		std::unordered_map<CCNode*, bool> formerNodePointersVisibilityStates = {};
 		std::unordered_map<CCNode*, float> formerPlayerOnePointersScaleStates = {};
 		std::unordered_map<CCNode*, float> formerPlayerTwoPointersScaleStates = {};
 
-		// CCNode* nodeBeingScreenshotted = ev->getNode();
 		nodeBeingScreenshotted->setUserObject("has-custom-nodes-to-hide"_spr, CCBool::create(false));
 		nodeBeingScreenshotted->setUserObject("mod-asking-for-screenshot"_spr, CCString::create(senderModID /* ev->getSenderModID() */));
 
-		// std::vector<CCNode*> hideThesePointers = ev->getPointersToHide();
-		// std::vector<std::string> hideTheseQuerySelectors = ev->getQuerysToHide();
 		if (!hideThesePointers.empty() || !hideTheseQuerySelectors.empty()) {
 			nodeBeingScreenshotted->setUserObject("has-custom-nodes-to-hide"_spr, CCBool::create(true));
 		}
