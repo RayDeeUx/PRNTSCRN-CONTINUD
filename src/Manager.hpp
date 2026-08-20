@@ -21,6 +21,7 @@ public:
 	int height = 1080;
 	bool trackAndroidUI = false;
 	bool isAddingToQOLMod = false;
+	bool fuckVibecodersAndExitscammers = false;
 	geode::Ref<FLAlertLayer> screenshotPopupForQOLMod = nullptr;
 	static Manager* get() {
 		if (!instance) instance = new Manager();

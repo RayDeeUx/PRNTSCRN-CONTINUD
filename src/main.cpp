@@ -27,6 +27,10 @@ void setHeight() {
 	}
 }
 
+$on_game(ModsLoaded) {
+	Manager::get()->fuckVibecodersAndExitscammers = Loader::get()->isModLoaded("jackz.click-indicators");
+}
+
 /*
 #ifndef GEODE_IS_IOS
 #include <geode.custom-keybinds/include/Keybinds.hpp>

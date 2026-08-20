@@ -4,6 +4,7 @@
 // ReSharper disable CppDFAConstantConditions
 // ReSharper disable CppLocalVariableMayBeConst
 // yeah that's right clion stop shitting on my code >:(
+#include "./cosmicclones/API.hpp"
 #include "SharedScreenshotLogic.hpp"
 #include "Screenshot.hpp"
 #include "Manager.hpp"
@@ -362,6 +363,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	bool robtopIsAFuckingDumbass = false; // YOU HAVE NO FUCKING IDEA HOW MUCH PAIN AND SUFFERING I HAD TO GO THROUGH TO JUSTIFY ADDING THIS FUCKING LOCAL VARIABLE. WHY THE ***__FUCK__*** DID ROBTOP DECIDED TO STORE EDITOR OBJECT HITBOXES AND THE EDITOR PLAYTEST PATH AND THE EDITOR PLAYTEST CLICK INDICATORS IN THE SAME FUCKING CCDRAWNODE WHY THE FUCK BRO HOW THE FUCK DOES THAT SHIT MAKE ANY FUCKING SENSE I WILL FUCKING THROW MYSELF INTO NIAGRA FALLS IF I HAVE TO PUT UP WITH EQUALLY ASININE BULLSHIT AS THIS I SWEAR TO FUCKING GOD ROBTOP
 
+	bool iHopeJackzGetsAFateWorseThanDeath = false;
+	bool noSeriouslyIHopeThatSalesTaxEvadingMotherfuckerGetsTheFuckingComeuppanceTheyFuckingDeserve = false;
+
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
 		originalEclipsePopupVisibility = eclipsePopup->isVisible();
 		eclipsePopup->setVisible(false);
@@ -381,6 +385,21 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			originalZilkoGrayscaleScale = pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")->getScale();
 			pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")->setScale(0.f);
 		}
+	}
+	if (pl->m_uiLayer && Manager::get()->fuckVibecodersAndExitscammers) {
+		ADD_NODE(pl->m_uiLayer, jackz.click-indicators/ci-overlay);
+		ADD_NODE(pl->m_uiLayer, jackz.click-indicators/ci-judge-rel);
+		ADD_NODE(pl->m_uiLayer, jackz.click-indicators/ci-judge);
+		ADD_NODE(pl->m_uiLayer, jackz.click-indicators/ci-judge-hw);
+		ADD_NODE(pl->m_uiLayer, jackz.click-indicators/ci-drift);
+	}
+	if (pl && Manager::get()->fuckVibecodersAndExitscammers) {
+		CCNode* foo = pl->getChildByIDRecursive("jackz.click-indicators/ci-pulse");
+		CCNode* bar = pl->getChildByIDRecursive("jackz.click-indicators/ci-miss");
+		iHopeJackzGetsAFateWorseThanDeath = foo ? foo->isVisible() : false;
+		noSeriouslyIHopeThatSalesTaxEvadingMotherfuckerGetsTheFuckingComeuppanceTheyFuckingDeserve = bar ? bar->isVisible() : false;
+		if (foo) foo->setVisible(false);
+		if (bar) bar->setVisible(false);
 	}
 	if (hideUI && pl) {
 		ADD_MEM(pl, m_uiLayer);
@@ -481,6 +500,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			megahackNoclipTint->setPosition({-99999, -99999});
 			megahackNoclipTint->setScale(0.f);
 		}
+
+		ADD_NODE(pl, mythicalrev.noclip-at/nc-tint);
 	}
 	if (hideUI && lel) {
 		ADD_NODE(lel, UILayer);
@@ -529,6 +550,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		if (pl->m_objectLayer) {
 			ADD_NODE(pl->m_objectLayer, zilko.editor_trail_in_game/drawy-node);
 		}
+
+		cosmic_clones::setClonesVisible(false);
 	}
 	if (hideOT && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
@@ -557,6 +580,19 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		if (pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")) {
 			pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")->setScale(originalZilkoGrayscaleScale);
 		}
+	}
+	if (pl->m_uiLayer && Manager::get()->fuckVibecodersAndExitscammers) {
+		RES_NODE(pl->m_uiLayer, jackz.click-indicators/ci-overlay);
+		RES_NODE(pl->m_uiLayer, jackz.click-indicators/ci-judge-rel);
+		RES_NODE(pl->m_uiLayer, jackz.click-indicators/ci-judge);
+		RES_NODE(pl->m_uiLayer, jackz.click-indicators/ci-judge-hw);
+		RES_NODE(pl->m_uiLayer, jackz.click-indicators/ci-drift);
+	}
+	if (pl && Manager::get()->fuckVibecodersAndExitscammers) {
+		CCNode* foo = pl->getChildByIDRecursive("jackz.click-indicators/ci-pulse");
+		CCNode* bar = pl->getChildByIDRecursive("jackz.click-indicators/ci-miss");
+		if (foo) foo->setVisible(iHopeJackzGetsAFateWorseThanDeath);
+		if (bar) bar->setVisible(noSeriouslyIHopeThatSalesTaxEvadingMotherfuckerGetsTheFuckingComeuppanceTheyFuckingDeserve);
 	}
 	if (hideUI && pl) {
 		RES_MEM(pl, m_uiLayer);
@@ -640,6 +676,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			megahackNoclipTint->setPosition(originalMegaHackLabelNoclipTintPosition);
 			megahackNoclipTint->setScale(originalMegaHackLabelNoclipTintScale);
 		}
+
+		RES_NODE(pl, mythicalrev.noclip-at/nc-tint);
 	}
 	if (hideUI && lel) {
 		RES_NODE(lel, UILayer);
@@ -694,6 +732,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			RES_NODE(gjbgl->m_objectLayer, dankmeme.globed2/player-node)
 			SharedScreenshotLogic::unhideOtherPlayersIn(gjbgl, gjbgl->m_objectLayer, otherPlayerVisibilities, otherPlayerPointerScales);
 		}
+
+		cosmic_clones::setClonesVisible(true);
 	}
 
 	// log::info("modIDAskingForScreenshot: {}", modIDAskingForScreenshot);
