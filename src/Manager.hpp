@@ -1,17 +1,6 @@
 #pragma once
 
-/*
-#ifndef GEODE_IS_IOS
-#include <geode.custom-keybinds/include/Keybinds.hpp>
-#endif
-*/
-
 using namespace geode;
-/*
-#ifndef GEODE_IS_IOS
-using namespace keybinds;
-#endif
-*/
 
 class Manager {
 protected:
@@ -34,25 +23,6 @@ public:
 		return bodyText;
 	}
 	static std::string getBindsStringFor(const std::string& key, bool hasColor = true) {
-		/*
-		#ifdef GEODE_IS_IOS
-		if (hasColor) return "<c_>N/A</c>";
-		return "N/A";
-		#else
-		std::vector<Ref<keybinds::Bind>> binds = BindManager::get()->getBindsFor(key);
-		if (!binds.empty()) {
-			const std::string& keybindString = binds.at(0)->toString();
-			if (!keybindString.empty()) {
-				if (hasColor) return fmt::format("<cl>{}</c>", keybindString);
-				return keybindString;
-			}
-			if (hasColor) return "<co>[Unknown]</c>";
-			return "[Unknown]";
-		}
-		if (hasColor) return "<c_>NONE SET</c>";
-		return "NONE SET";
-		#endif
-		*/
 		std::string toReturn;
 		for (auto bind : Mod::get()->getSettingValue<std::vector<Keybind>>(key)) {
 			if (hasColor) toReturn += fmt::format("<cl>{}</c>, ", bind.toString());
@@ -60,8 +30,9 @@ public:
 		}
 		if (toReturn.empty()) {
 			if (hasColor) return "<c_>N/A</c>";
-			else return "N/A";
-		} else if (toReturn.size() > 2 && geode::utils::string::endsWith(toReturn, ", ")) {
+			return "N/A";
+		}
+		if (toReturn.size() > 2 && geode::utils::string::endsWith(toReturn, ", ")) {
 			toReturn.pop_back();
 			toReturn.pop_back();
 		}
