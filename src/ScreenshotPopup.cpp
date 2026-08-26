@@ -1,3 +1,4 @@
+#include "ScreenshotGalleryPopup.hpp"
 #include "SharedScreenshotLogic.hpp"
 #include "ScreenshotPopup.hpp"
 #include "Manager.hpp"
@@ -190,6 +191,16 @@ bool ScreenshotPopup::init() {
 	configDirButton->setPosition(ccp(80, 80));
 	m_buttonMenu->addChild(configDirButton);
 
+	if (!Manager::get()->isAddingToQOLMod) {
+		CCMenuItemSpriteExtra* screenshotGalleryButton = CCMenuItemSpriteExtra::create(
+			CCSprite::createWithSpriteFrameName("GJ_everyplayBtn_001.png"),
+			this, menu_selector(ScreenshotPopup::onGallery)
+		);
+		screenshotGalleryButton->setID("screenshots-gallery-button"_spr);
+		screenshotGalleryButton->setPosition(ccp(80, 130));
+		m_buttonMenu->addChild(screenshotGalleryButton);
+	}
+
 	#ifndef GEODE_IS_IOS
 	InfoAlertButton* infoButton = InfoAlertButton::create("PRNTSCRN - Keybinds", Manager::fetchKeybindsStrings(), .7f);
 	infoButton->setID("keybinds-help-button"_spr);
@@ -225,6 +236,10 @@ void ScreenshotPopup::onScreenshot(CCObject*) {
 
 void ScreenshotPopup::onConfigDir(CCObject*) {
 	geode::utils::file::openFolder(Mod::get()->getConfigDir());
+}
+
+void ScreenshotPopup::onGallery(CCObject*) {
+	ScreenshotGalleryPopup::create()->show();
 }
 
 void ScreenshotPopup::textChanged(CCTextInputNode* p0) {

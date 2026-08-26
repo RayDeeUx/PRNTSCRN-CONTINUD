@@ -22,6 +22,7 @@ protected:
 
 	void onScreenshot(cocos2d::CCObject*);
 	void onConfigDir(cocos2d::CCObject*);
+	void onGallery(cocos2d::CCObject*);
 
 	void textChanged(CCTextInputNode* p0) override;
 };

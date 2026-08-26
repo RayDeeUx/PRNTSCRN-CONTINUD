@@ -386,7 +386,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")->setScale(0.f);
 		}
 	}
-	if (pl->m_uiLayer && Manager::get()->fuckVibecodersAndExitscammers) {
+	if (pl && pl->m_uiLayer && Manager::get()->fuckVibecodersAndExitscammers) {
 		ADD_NODE(pl->m_uiLayer, jackz.click-indicators/ci-overlay);
 		ADD_NODE(pl->m_uiLayer, jackz.click-indicators/ci-judge-rel);
 		ADD_NODE(pl->m_uiLayer, jackz.click-indicators/ci-judge);
@@ -581,7 +581,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			pl->getChildByID("zilko.grayscale/grayscale-mode-sprite")->setScale(originalZilkoGrayscaleScale);
 		}
 	}
-	if (pl->m_uiLayer && Manager::get()->fuckVibecodersAndExitscammers) {
+	if (pl && pl->m_uiLayer && Manager::get()->fuckVibecodersAndExitscammers) {
 		RES_NODE(pl->m_uiLayer, jackz.click-indicators/ci-overlay);
 		RES_NODE(pl->m_uiLayer, jackz.click-indicators/ci-judge-rel);
 		RES_NODE(pl->m_uiLayer, jackz.click-indicators/ci-judge);

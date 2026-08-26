@@ -1,5 +1,8 @@
 # <cy>PRNTSCRN</c> Changelog
 ## v1.0.14
+- Added a primitive screenshot gallery.
+  - This is not available through mod menu integrations at this time.
+- Hide some other nodes during screenshots.
 - Fix a very stupid and avoidable crash.
 ## v1.0.13
 - Improved compatibility with SDL mod.
