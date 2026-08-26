@@ -757,10 +757,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	std::filesystem::path folder = Mod::get()->getConfigDir() / targetFolderName;
 
-	if (!std::filesystem::exists(folder)) std::filesystem::create_directory(folder);
+	std::error_code ea, eb, ec;
+	if (!std::filesystem::exists(folder, ea)) std::filesystem::create_directory(folder, eb);
 
 	int index = 1;
-	while (std::filesystem::exists(folder / (numToString(index) + extension))) {
+	while (std::filesystem::exists(folder / (geode::utils::numToString(index) + extension), ec)) {
 		index++;
 	}
 
