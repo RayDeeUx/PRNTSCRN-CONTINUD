@@ -52,7 +52,7 @@ bool ScreenshotGalleryPopup::init() {
 		totalImageCount++;
 		if (i < 5) continue;
 
-		row->setLayout(RowLayout::create()->setGap(20.f)->setAxisReverse(false)->setGrowCrossAxis(false));
+		row->setLayout(RowLayout::create()->setGap(10.f)->setAxisReverse(false)->setGrowCrossAxis(false));
 		row->setID(fmt::format("screenshots-row-{}"_spr, rowCount + 1));
 
 		this->m_scrollLayer->m_contentLayer->addChild(row);
