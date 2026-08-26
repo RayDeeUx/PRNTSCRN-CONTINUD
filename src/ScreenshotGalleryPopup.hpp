@@ -41,17 +41,15 @@ public:
 		this->setContentSize({85.f, 105.f});
 		this->addChildAtPosition(this->m_screenshot, geode::Anchor::Center);
 
-		this->m_fileNameLabel = geode::Label::create(fmt::format("{} - {}", geode::utils::string::pathToString(screenshotInfo.path.parent_path().stem()), geode::utils::string::pathToString(screenshotInfo.path.stem())), "chatFont.fnt");
+		this->m_fileNameLabel = geode::Label::create(fmt::format("{} - {}", geode::utils::string::pathToString(screenshotInfo.path.parent_path().stem()), geode::utils::string::pathToString(screenshotInfo.path.stem())), "bigFont.fnt");
 		this->m_fileNameLabel->setLimitLabelSize({80.f, 32.f});
 		this->m_fileNameLabel->setID("file-name-label"_spr);
-
-		this->addChildAtPosition(this->m_fileNameLabel, geode::Anchor::Top, {0.f, -10.f});
+		this->addChildAtPosition(this->m_fileNameLabel, geode::Anchor::Top, {0.f, -12.5f});
 
 		this->m_fileDateLabel = geode::Label::create(fmt::format("{:%A, %B} {}, {:%Y %H:%M}", screenshotInfo.lastWriteTime, screenshotInfo.lastWriteTime.tm_mday, screenshotInfo.lastWriteTime), "chatFont.fnt");
 		this->m_fileDateLabel->setLimitLabelSize({80.f, 32.f});
 		this->m_fileDateLabel->setID("file-date-label"_spr);
-
-		this->addChildAtPosition(this->m_fileDateLabel, geode::Anchor::Bottom, {0.f, 10.f});
+		this->addChildAtPosition(this->m_fileDateLabel, geode::Anchor::Bottom, {0.f, 12.5f});
 
 		return true;
 	}

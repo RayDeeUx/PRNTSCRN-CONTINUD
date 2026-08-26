@@ -26,7 +26,7 @@ bool ScreenshotGalleryPopup::init() {
 			if (geode::utils::string::pathToString(path.extension()) != ".png" && geode::utils::string::pathToString(path.extension()) != ".jpg") continue;
 			images.push_back({
 				.path = path,
-				.lastWriteTime = geode::localtime(std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(std::filesystem::file_time_type::clock::to_sys(std::filesystem::last_write_time(path, ee))))),
+				.lastWriteTime = geode::localtime(std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(GEODE_WINDOWS(std::chrono::clock_cast<std::chrono::system_clock>)GEODE_MOBILE(std::filesystem::file_time_type::clock::to_sys)GEODE_MACOS(std::filesystem::file_time_type::clock::to_sys)(std::filesystem::last_write_time(path, ee))))),
 				.lastWriteTimeInRawForm = std::filesystem::last_write_time(path, ef)
 			});
 		}
