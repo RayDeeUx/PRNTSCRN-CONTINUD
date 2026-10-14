@@ -330,6 +330,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 	std::unordered_map<const char*, bool> gameVariablesAndTheirFormerValues = {};
 
+	std::unordered_map<PlayerObject*, bool> playerSnakePlayerObjectsAndVisibilities = {};
+
 	bool hideUI = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-ui");
 	bool hidePL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-player");
 	bool hideAL = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-attempts");
@@ -411,6 +413,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		if (auto pur = pl->m_objectLayer->getChildByType<PolygonUnionRenderer>(0); pur) {
 			originalPolygonUnionRenderer = pur->isVisible();
 			pur->setVisible(false);
+			if (auto ccdn = pl->m_objectLayer->getChildByType<cocos2d::CCDrawNode>(-1); ccdn) {
+				ccdn->setPositionX(-1000000.f);
+			}
 		}
 	}
 	if (hideUI && pl) {
@@ -566,6 +571,14 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 		if (pl && pl->m_objectLayer) {
 			ADD_NODE(pl->m_objectLayer, zilko.editor_trail_in_game/drawy-node);
+			if (Manager::get()->waveFix) ADD_NODE(pl->m_objectLayer, wavefix-trajectory);
+			if (Manager::get()->playerSnake) {
+				for (CCNode* child : pl->m_objectLayer->getChildrenExt<CCNode>()) {
+					if (geode::cocos::getObjectName(child) != "PlayerObject" || !geode::utils::string::startsWith(child->getID(), "xboctatuk.player-snake/fake-player-")) continue;
+					playerSnakePlayerObjectsAndVisibilities[static_cast<PlayerObject*>(child)] = child->isVisible();
+					child->setVisible(false);
+				}
+			}
 		}
 
 		cosmic_clones::setClonesVisible(false);
@@ -614,6 +627,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	if (pl && pl->m_objectLayer) {
 		if (auto pur = pl->m_objectLayer->getChildByType<PolygonUnionRenderer>(0); pur) {
 			pur->setVisible(originalPolygonUnionRenderer);
+			if (auto ccdn = pl->m_objectLayer->getChildByType<cocos2d::CCDrawNode>(-1); ccdn) {
+				ccdn->setPositionX(0.f);
+			}
 		}
 	}
 	if (hideUI && pl) {
@@ -750,7 +766,16 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 
 		if (pl && pl->m_objectLayer) {
 			RES_NODE(pl->m_objectLayer, zilko.editor_trail_in_game/drawy-node);
+			if (Manager::get()->waveFix) RES_NODE(pl->m_objectLayer, wavefix-trajectory);
+			if (Manager::get()->playerSnake) {
+				for (auto& [child, original] : playerSnakePlayerObjectsAndVisibilities) {
+					if (!child) continue;
+					child->setVisible(original);
+				}
+			}
 		}
+
+		cosmic_clones::setClonesVisible(true);
 	}
 	if (hideOT && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
@@ -758,8 +783,6 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			RES_NODE(gjbgl->m_objectLayer, dankmeme.globed2/player-node)
 			SharedScreenshotLogic::unhideOtherPlayersIn(gjbgl, gjbgl->m_objectLayer, otherPlayerVisibilities, otherPlayerPointerScales);
 		}
-
-		cosmic_clones::setClonesVisible(true);
 	}
 
 	// log::info("modIDAskingForScreenshot: {}", modIDAskingForScreenshot);

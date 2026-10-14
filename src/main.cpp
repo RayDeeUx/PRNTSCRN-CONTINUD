@@ -29,6 +29,8 @@ void setHeight() {
 
 $on_game(ModsLoaded) {
 	Manager::get()->fuckVibecodersAndExitscammers = Loader::get()->isModLoaded("jackz.click-indicators");
+	if (Loader::get()->isModLoaded("imes.wavefix")) Manager::get()->playerSnake = Loader::get()->getLoadedMod("imes.wavefix");
+	if (Loader::get()->isModLoaded("xboctatuk.player-snake")) Manager::get()->playerSnake = Loader::get()->getLoadedMod("xboctatuk.player-snake");
 }
 
 /*

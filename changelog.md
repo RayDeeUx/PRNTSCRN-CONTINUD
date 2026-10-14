@@ -1,4 +1,6 @@
 # <cy>PRNTSCRN</c> Changelog
+## v1.0.15
+- Fix very stupid and avoidable crashes.
 ## v1.0.14
 - Added a primitive screenshot gallery.
   - This is not available through mod menu integrations at this time.
