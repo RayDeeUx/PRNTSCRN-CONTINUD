@@ -49,6 +49,10 @@ class AndroidUI final : public CCNode {
 	// dummy declaration for qolmod --raydeeux
 };
 
+class PolygonUnionRenderer final : public CCNode {
+	// dummy declaration for hitzones mod --raydeeux
+};
+
 std::string SharedScreenshotLogic::getFormattedDate() {
 	auto nowTimeT = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 	auto now = std::localtime(&nowTimeT);
@@ -366,6 +370,8 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	bool iHopeJackzGetsAFateWorseThanDeath = false;
 	bool noSeriouslyIHopeThatSalesTaxEvadingMotherfuckerGetsTheFuckingComeuppanceTheyFuckingDeserve = false;
 
+	bool originalPolygonUnionRenderer = false;
+
 	if (CCNode* eclipsePopup = CCScene::get()->getChildByType<eclipse::gui::cocos::Popup>(0); eclipsePopup) {
 		originalEclipsePopupVisibility = eclipsePopup->isVisible();
 		eclipsePopup->setVisible(false);
@@ -400,6 +406,12 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		noSeriouslyIHopeThatSalesTaxEvadingMotherfuckerGetsTheFuckingComeuppanceTheyFuckingDeserve = bar ? bar->isVisible() : false;
 		if (foo) foo->setVisible(false);
 		if (bar) bar->setVisible(false);
+	}
+	if (pl && pl->m_objectLayer) {
+		if (auto pur = pl->m_objectLayer->getChildByType<PolygonUnionRenderer>(0); pur) {
+			originalPolygonUnionRenderer = pur->isVisible();
+			pur->setVisible(false);
+		}
 	}
 	if (hideUI && pl) {
 		ADD_MEM(pl, m_uiLayer);
@@ -510,7 +522,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(lel, dankmeme.globed2/game-overlay);
 	}
 	if (hideDD && lel) {
-		if (lel->m_debugDrawNode) ADD_NODE(lel->m_debugDrawNode->getParent(), eclipse.eclipse-menu/hitboxes);
+		if (lel->m_debugDrawNode && lel->m_debugDrawNode->getParent()) ADD_NODE(lel->m_debugDrawNode->getParent(), eclipse.eclipse-menu/hitboxes);
 		ADD_GAMEVARIABLE("0045", false);
 		robtopIsAFuckingDumbass = lel->m_isDebugDrawEnabled;
 		lel->m_isDebugDrawEnabled = false;
@@ -519,19 +531,19 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		lel->updateDebugDraw();
 		lel->m_isDebugDrawEnabled = false;
 	}
-	if (hideDG && lel) {
-		ADD_MEM(lel, m_drawGridLayer);
+	if (hideDG && lel && lel->m_drawGridLayer) {
+		if (lel->m_drawGridLayer) ADD_MEM(lel, m_drawGridLayer);
 	}
 	if (hidePT && lel) {
 		ADD_GAMEVARIABLE("0152", true);
 		ADD_GAMEVARIABLE("0149", false);
 		lel->updateOptions();
 		lel->updateDebugDraw();
-		if (lel->m_debugDrawNode) {
+		if (lel->m_debugDrawNode && lel->m_debugDrawNode->getParent()) {
 			ADD_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-trail);
 			ADD_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
 		}
-		ADD_MEM(lel, m_playtestDeathSprite);
+		if (lel->m_playtestDeathSprite) ADD_MEM(lel, m_playtestDeathSprite);
 		ADD_NODE(lel, sorkopiko.levelpath/level-path-node);
 	}
 	if (hideTN && lel) {
@@ -541,13 +553,18 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
-		ADD_MEM(gjbgl, m_player1);
-		SharedScreenshotLogic::hideOtherPartsOfPlayerOne(playerPointerScales, gjbgl);
 
-		ADD_MEM(gjbgl, m_player2);
-		SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
+		if (gjbgl->m_player1) {
+			ADD_MEM(gjbgl, m_player1);
+			SharedScreenshotLogic::hideOtherPartsOfPlayerOne(playerPointerScales, gjbgl);
+		}
 
-		if (pl->m_objectLayer) {
+		if (gjbgl->m_player2) {
+			ADD_MEM(gjbgl, m_player2);
+			SharedScreenshotLogic::hideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
+		}
+
+		if (pl && pl->m_objectLayer) {
 			ADD_NODE(pl->m_objectLayer, zilko.editor_trail_in_game/drawy-node);
 		}
 
@@ -555,7 +572,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	}
 	if (hideOT && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
-		if (gjbgl->m_objectLayer) {
+		if (gjbgl && gjbgl->m_objectLayer) {
 			ADD_NODE(gjbgl->m_objectLayer, dankmeme.globed2/player-node)
 			SharedScreenshotLogic::hideOtherPlayersIn(gjbgl, gjbgl->m_objectLayer, otherPlayerVisibilities, otherPlayerPointerScales);
 		}
@@ -593,6 +610,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		CCNode* bar = pl->getChildByIDRecursive("jackz.click-indicators/ci-miss");
 		if (foo) foo->setVisible(iHopeJackzGetsAFateWorseThanDeath);
 		if (bar) bar->setVisible(noSeriouslyIHopeThatSalesTaxEvadingMotherfuckerGetsTheFuckingComeuppanceTheyFuckingDeserve);
+	}
+	if (pl && pl->m_objectLayer) {
+		if (auto pur = pl->m_objectLayer->getChildByType<PolygonUnionRenderer>(0); pur) {
+			pur->setVisible(originalPolygonUnionRenderer);
+		}
 	}
 	if (hideUI && pl) {
 		RES_MEM(pl, m_uiLayer);
@@ -686,7 +708,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(lel, dankmeme.globed2/game-overlay);
 	}
 	if (hideDD && lel) {
-		if (lel->m_debugDrawNode) RES_NODE(lel->m_debugDrawNode->getParent(), eclipse.eclipse-menu/hitboxes);
+		if (lel->m_debugDrawNode && lel->m_debugDrawNode->getParent()) RES_NODE(lel->m_debugDrawNode->getParent(), eclipse.eclipse-menu/hitboxes);
 		RES_GAMEVARIABLE("0045");
 		lel->m_isDebugDrawEnabled = robtopIsAFuckingDumbass;
 		lel->updateOptions();
@@ -694,19 +716,19 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		lel->updateDebugDraw();
 		lel->m_isDebugDrawEnabled = robtopIsAFuckingDumbass;
 	}
-	if (hideDG && lel) {
-		RES_MEM(lel, m_drawGridLayer);
+	if (hideDG && lel && lel->m_drawGridLayer) {
+		if (lel->m_drawGridLayer) RES_MEM(lel, m_drawGridLayer);
 	}
 	if (hidePT && lel) {
 		RES_GAMEVARIABLE("0152");
 		RES_GAMEVARIABLE("0149");
 		lel->updateOptions();
 		lel->updateDebugDraw();
-		if (lel->m_debugDrawNode) {
+		if (lel->m_debugDrawNode && lel->m_debugDrawNode->getParent()) {
 			RES_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-trail);
 			RES_NODE(lel->m_debugDrawNode->getParent(), nwo5.better_editor_trail/better-trail-indicators);
 		}
-		RES_MEM(lel, m_playtestDeathSprite);
+		if (lel->m_playtestDeathSprite) RES_MEM(lel, m_playtestDeathSprite);
 		RES_NODE(lel, sorkopiko.levelpath/level-path-node);
 	}
 	if (hideTN && lel) {
@@ -716,19 +738,23 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
-		RES_MEM(gjbgl, m_player1);
-		SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(playerPointerScales, gjbgl);
+		if (gjbgl && gjbgl->m_player1) {
+			RES_MEM(gjbgl, m_player1);
+			SharedScreenshotLogic::unhideOtherPartsOfPlayerOne(playerPointerScales, gjbgl);
+		}
 
-		RES_MEM(gjbgl, m_player2);
-		SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
+		if (gjbgl && gjbgl->m_player2) {
+			RES_MEM(gjbgl, m_player2);
+			SharedScreenshotLogic::unhideOtherPartsOfPlayerTwo(playerPointerScales, gjbgl);
+		}
 
-		if (pl->m_objectLayer) {
+		if (pl && pl->m_objectLayer) {
 			RES_NODE(pl->m_objectLayer, zilko.editor_trail_in_game/drawy-node);
 		}
 	}
 	if (hideOT && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
-		if (gjbgl->m_objectLayer) {
+		if (gjbgl && gjbgl->m_objectLayer) {
 			RES_NODE(gjbgl->m_objectLayer, dankmeme.globed2/player-node)
 			SharedScreenshotLogic::unhideOtherPlayersIn(gjbgl, gjbgl->m_objectLayer, otherPlayerVisibilities, otherPlayerPointerScales);
 		}
@@ -819,7 +845,7 @@ void SharedScreenshotLogic::screenshotLevelOrScene() {
 		}
 		return;
 	}
-	if (lel && lel->getParent() == CCScene::get()) {
+	if (lel && lel->getParent() && lel->getParent() == CCScene::get()) {
 		SharedScreenshotLogic::screenshot(lel);
 		if (lel->getChildByID("EditorPauseLayer")) {
 			CCScene* baseScene = CCScene::get();
