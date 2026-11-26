@@ -255,23 +255,31 @@ class $modify(NewEditorPauseLayer, EditorPauseLayer) {
 
 		auto bg = NineSlice::create("GJ_button_05.png");
 		bg->setContentSize({82.f, 26.f});
-		bg->setLayout(SimpleRowLayout::create()->setGap(4.f)->setMainAxisScaling(AxisScaling::Scale)->setCrossAxisScaling(AxisScaling::Scale)->setPadding({8.f, 4.f, 8.f, 6.f}));
 
 		geode::Label* label = Label::create("PRNTSCRN", "bigFont.fnt");
 		label->setLimitLabelWidth(56.f, 0.5f, 0.01f);
 		label->setID("screenshot-button-label"_spr);
 
 		CCSprite* sprite = CCSprite::create("screenshot.png"_spr);
-		sprite->setID("screenshot-button-label"_spr);
+		sprite->setScale(.15f);
+		sprite->setID("screenshot-button-sprite"_spr);
 
 		bg->addChild(label);
 		bg->addChild(sprite);
+		bg->setLayout(SimpleRowLayout::create()->setGap(5.f)->setMainAxisScaling(AxisScaling::Scale)->setCrossAxisScaling(AxisScaling::Scale)->setPadding({8.f, 4.f, 8.f, 6.f}));
+		bg->setID("screenshot-button-background-sprite"_spr);
 
 		CCMenuItemSpriteExtra* btn = CCMenuItemSpriteExtra::create(bg, this, menu_selector(NewEditorPauseLayer::onScreenshotPopup));
 		btn->setID("screenshot-button"_spr);
 
+		sprite->setScale(.12f);
 		settingsMenu->addChild(btn);
-		settingsMenu->updateLayout();
+
+		settingsMenu->runAction(geode::cocos::CallFuncExt::create([btnRef = geode::Ref(btn), settingsMenuRef = geode::Ref(settingsMenu)]() {
+			btnRef->setZOrder(-20262511);
+			settingsMenuRef->updateLayout();
+		}));
+
 		return true;
 	}
 
