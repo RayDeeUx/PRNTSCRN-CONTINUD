@@ -561,9 +561,19 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(lel, thesillydoggo.qolmod/noclip-tint-overlay); // QOLMod v2
 	}
 	if (hideDM && (pl || lel)) {
-		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
-		if (gjbgl->m_debugDrawNode && gjbgl->m_debugDrawNode->getParent()) {
-			for (CCNode* chode : gjbgl->m_debugDrawNode->getParent()->getChildrenExt<CCNode>()) {
+		if (pl && pl->m_debugDrawNode && pl->m_debugDrawNode->getParent()) {
+			for (CCNode* chode : pl->m_debugDrawNode->getParent()->getChildrenExt<CCNode>()) {
+				// geode::log::info("chode->getTag(): {}", chode->getTag());
+				// geode::log::info("chode->getTag() != -9999: {}", chode->getTag() != -9999);
+				// geode::log::info("geode::cocos::getObjectName(chode): {}", geode::cocos::getObjectName(chode));
+				// geode::log::info("geode::cocos::getObjectName(chode) != \"DeathMarkerLayer\" && geode::cocos::getObjectName(chode) != \"CCNode\": {}", geode::cocos::getObjectName(chode) != "DeathMarkerLayer" && geode::cocos::getObjectName(chode) != "CCNode");
+				// geode::log::info("chode->getTag() != -9999 && (geode::cocos::getObjectName(chode) != \"DeathMarkerLayer\" && geode::cocos::getObjectName(chode) != \"CCNode\"): {}", chode->getTag() != -9999 && (geode::cocos::getObjectName(chode) != "DeathMarkerLayer" && geode::cocos::getObjectName(chode) != "CCNode"));
+				if (chode->getTag() != -9999 && (geode::cocos::getObjectName(chode) != "DeathMarkerLayer" && geode::cocos::getObjectName(chode) != "CCNode")) continue;
+				deathMarkerLayersAndVisibilities[chode] = chode->isVisible();
+				chode->setVisible(false);
+			}
+		} else if (lel && lel->m_objectLayer && lel->m_objectLayer->getParent()) {
+			for (CCNode* chode : lel->m_objectLayer->getChildrenExt<CCNode>()) {
 				// geode::log::info("chode->getTag(): {}", chode->getTag());
 				// geode::log::info("chode->getTag() != -9999: {}", chode->getTag() != -9999);
 				// geode::log::info("geode::cocos::getObjectName(chode): {}", geode::cocos::getObjectName(chode));
