@@ -3,7 +3,7 @@
 #include <Geode/ui/TextInput.hpp>
 #include <Geode/ui/Popup.hpp>
 
-class ScreenshotPopup : public geode::Popup, public TextInputDelegate {
+class ScreenshotPopup : public geode::Popup {
 public:
 	static ScreenshotPopup* create();
 protected:

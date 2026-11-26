@@ -1,4 +1,6 @@
 # <cy>PRNTSCRN</c> Changelog
+## v1.0.16
+- 2.2091 as a game update was a net negative.
 ## v1.0.15
 - Fix very stupid and avoidable crashes.
 ## v1.0.14

@@ -1,4 +1,5 @@
 #include "ScreenshotGalleryPopup.hpp"
+#include <asp/fs/std.hpp>
 #include <UIBuilder.hpp>
 #include <asp/fs/fs.hpp>
 
@@ -16,18 +17,23 @@ bool ScreenshotGalleryPopup::init() {
 	this->m_mainLayer->addChildAtPosition(this->m_scrollLayer, geode::Anchor::Center, {0.f, -15.f});
 
 	std::vector<ScreenshotInfo> images = {};
-	for (auto entry : asp::fs::iterdir(Mod::get()->getConfigDir()).unwrapOrDefault()) {
+	for (auto fakeEntry : asp::fs::DirectoryIterator::create(Mod::get()->getConfigDir()).unwrap()) {
 		std::error_code ea;
-		if (!entry.is_directory(ea)) continue;
-		for (auto nestedEntry : asp::fs::iterdir(entry).unwrapOrDefault()) {
+		if (!fakeEntry.isErr()) continue;
+		auto entry = fakeEntry.unwrap();
+		if (!entry.isDir()) continue;
+		for (auto fakeNestedEntry : asp::fs::DirectoryIterator::create(entry.path).unwrap()) {
 			std::error_code eb, ec, ed, ee, ef;
-			if (nestedEntry.is_directory(eb) || !nestedEntry.exists(ec) || !nestedEntry.is_regular_file(ed)) continue;
-			const std::filesystem::path& path = nestedEntry.path();
-			if (geode::utils::string::pathToString(path.extension()) != ".png" && geode::utils::string::pathToString(path.extension()) != ".jpg") continue;
+			if (!fakeNestedEntry) continue;
+			auto nestedEntry = fakeNestedEntry.unwrap();
+			if (!nestedEntry.path.exists() || !nestedEntry.isFile() || nestedEntry.isDir()) continue;
+			asp::fs::Path& path = nestedEntry.path;
+			if (path.extension().value() != ".png" && path.extension().value() != ".jpg") continue;
+			const std::filesystem::path& stdPath = path.toStdPath().unwrapOr(std::filesystem::path{});
 			images.push_back({
-				.path = path,
-				.lastWriteTime = geode::localtime(std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(GEODE_WINDOWS(std::chrono::clock_cast<std::chrono::system_clock>)GEODE_MOBILE(std::filesystem::file_time_type::clock::to_sys)GEODE_MACOS(std::filesystem::file_time_type::clock::to_sys)(std::filesystem::last_write_time(path, ee))))),
-				.lastWriteTimeInRawForm = std::filesystem::last_write_time(path, ef)
+				.path = stdPath,
+				.lastWriteTime = geode::localtime(std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(GEODE_WINDOWS(std::chrono::clock_cast<std::chrono::system_clock>)GEODE_MOBILE(std::filesystem::file_time_type::clock::to_sys)GEODE_MACOS(std::filesystem::file_time_type::clock::to_sys)(std::filesystem::last_write_time(stdPath, ee))))),
+				.lastWriteTimeInRawForm = std::filesystem::last_write_time(stdPath, ef)
 			});
 		}
 	}

@@ -1,14 +1,14 @@
 {
-	"geode": "5.10.1",
+	"geode": "6.0.0",
 	"gd": {
-		"win": "2.2081",
-		"mac": "2.2081",
-		"ios": "2.2081",
-		"android": "2.2081"
+		"win": "2.2091",
+		"mac": "2.2091",
+		"ios": "2.2091",
+		"android": "2.2091"
 	},
 	"id": "ninxout.prntscrn",
 	"name": "PRNTSCRN",
-	"version": "v1.0.15",
+	"version": "v1.0.17",
 	"developers": ["RayDeeUx", "ninXout", "mat", "Prevter", "hiimjasmine00"],
 	"description": "Quick and easy screenshot tool!",
 	"links": {
@@ -26,7 +26,7 @@
 		]
 	},
 	"dependencies": {
-		"geode.node-ids": ">=1.22.0",
+		"geode.node-ids": ">=1.23.0",
 		"prevter.imageplus": {
 			"version": ">=1.1.0",
 			"platforms": ["android", "ios"],
@@ -120,6 +120,12 @@
 			"type": "bool",
 			"name": "Hide Practice Mode Checkpoints",
 			"description": "Hides checkpoints from Practice Mode when taking a screenshot\nwhile playing a level.",
+			"default": false
+		},
+		"hide-death-markers": {
+			"type": "bool",
+			"name": "Hide Death Markers",
+			"description": "Hides Death markers when taking a screenshot\nwhile playing a level or while inside the level editor.",
 			"default": false
 		},
 		"hide-noclip-tints": {

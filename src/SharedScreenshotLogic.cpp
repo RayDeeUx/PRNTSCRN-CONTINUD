@@ -4,6 +4,8 @@
 // ReSharper disable CppDFAConstantConditions
 // ReSharper disable CppLocalVariableMayBeConst
 // yeah that's right clion stop shitting on my code >:(
+#include <asp/fs/std.hpp>
+#include <asp/fs/fs.hpp>
 #include "./cosmicclones/API.hpp"
 #include "SharedScreenshotLogic.hpp"
 #include "Screenshot.hpp"
@@ -327,6 +329,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	std::unordered_map<CCNode*, float> otherPlayerPointerScales = {};
 	std::unordered_map<CCNode*, bool> otherPlayerUIVisibilities = {};
 	std::unordered_map<GameObject*, GLubyte> checkpointOpacities = {};
+	std::unordered_map<CCNode*, bool> deathMarkerLayersAndVisibilities = {};
 
 	std::unordered_map<const char*, bool> gameVariablesAndTheirFormerValues = {};
 
@@ -338,6 +341,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 	bool hideCK = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-checkpoints");
 	bool hideOT = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-multiplayers");
 	bool hideTN = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-noclip-tints");
+	bool hideDM = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-death-markers");
 
 	bool hideDD = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-debug-draw");
 	bool hideDG = hasCustomNodesToHide ? false : Mod::get()->getSettingValue<bool>("hide-draw-grid-layer");
@@ -521,9 +525,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		ADD_NODE(pl, mythicalrev.noclip-at/nc-tint);
 	}
 	if (hideUI && lel) {
+		if (CCScene::get()) ADD_NODE(CCScene::get(), EditorPauseLayer);
 		ADD_NODE(lel, UILayer);
 		ADD_NODE(lel, EditorUI);
-		ADD_NODE(lel, EditorPauseLayer);
 		ADD_NODE(lel, dankmeme.globed2/game-overlay);
 	}
 	if (hideDD && lel) {
@@ -555,6 +559,21 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		// funny story: i was supposed to add this far earlier, but forgot. oops! --raydeeux
 		ADD_NODE(lel, thesillydoggo.qolmod/noclip-tint-popup); // QOLMod v1
 		ADD_NODE(lel, thesillydoggo.qolmod/noclip-tint-overlay); // QOLMod v2
+	}
+	if (hideDM && (pl || lel)) {
+		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
+		if (gjbgl->m_debugDrawNode && gjbgl->m_debugDrawNode->getParent()) {
+			for (CCNode* chode : gjbgl->m_debugDrawNode->getParent()->getChildrenExt<CCNode>()) {
+				// geode::log::info("chode->getTag(): {}", chode->getTag());
+				// geode::log::info("chode->getTag() != -9999: {}", chode->getTag() != -9999);
+				// geode::log::info("geode::cocos::getObjectName(chode): {}", geode::cocos::getObjectName(chode));
+				// geode::log::info("geode::cocos::getObjectName(chode) != \"DeathMarkerLayer\" && geode::cocos::getObjectName(chode) != \"CCNode\": {}", geode::cocos::getObjectName(chode) != "DeathMarkerLayer" && geode::cocos::getObjectName(chode) != "CCNode");
+				// geode::log::info("chode->getTag() != -9999 && (geode::cocos::getObjectName(chode) != \"DeathMarkerLayer\" && geode::cocos::getObjectName(chode) != \"CCNode\"): {}", chode->getTag() != -9999 && (geode::cocos::getObjectName(chode) != "DeathMarkerLayer" && geode::cocos::getObjectName(chode) != "CCNode"));
+				if (chode->getTag() != -9999 && (geode::cocos::getObjectName(chode) != "DeathMarkerLayer" && geode::cocos::getObjectName(chode) != "CCNode")) continue;
+				deathMarkerLayersAndVisibilities[chode] = chode->isVisible();
+				chode->setVisible(false);
+			}
+		}
 	}
 	if (hidePL && (pl || lel)) {
 		GJBaseGameLayer* gjbgl = static_cast<GJBaseGameLayer*>(node);
@@ -718,9 +737,9 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		RES_NODE(pl, mythicalrev.noclip-at/nc-tint);
 	}
 	if (hideUI && lel) {
+		if (CCScene::get()) RES_NODE(CCScene::get(), EditorPauseLayer);
 		RES_NODE(lel, UILayer);
 		RES_NODE(lel, EditorUI);
-		RES_NODE(lel, EditorPauseLayer);
 		RES_NODE(lel, dankmeme.globed2/game-overlay);
 	}
 	if (hideDD && lel) {
@@ -784,6 +803,11 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 			SharedScreenshotLogic::unhideOtherPlayersIn(gjbgl, gjbgl->m_objectLayer, otherPlayerVisibilities, otherPlayerPointerScales);
 		}
 	}
+	if (hideDM && (pl || lel)) {
+		for (auto& [chode, former] : deathMarkerLayersAndVisibilities) {
+			if (chode) chode->setVisible(former);
+		}
+	}
 
 	// log::info("modIDAskingForScreenshot: {}", modIDAskingForScreenshot);
 	// log::info("pauseMenuTypeForSetting: {}", pauseMenuTypeForSetting);
@@ -804,13 +828,13 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		targetFolderName += fmt::format("{} - {} ({})", lvlIDString, level->m_levelName, formattedDate);
 	} else targetFolderName += formattedDate;
 
-	std::filesystem::path folder = Mod::get()->getConfigDir() / targetFolderName;
+	asp::fs::Path folder = Mod::get()->getConfigDir() / targetFolderName;
 
 	std::error_code ea, eb, ec;
-	if (!std::filesystem::exists(folder, ea)) std::filesystem::create_directory(folder, eb);
+	if (!folder.exists()) (void) asp::fs::createDir(folder);
 
 	int index = 1;
-	while (std::filesystem::exists(folder / (geode::utils::numToString(index) + extension), ec)) {
+	while ((folder / (geode::utils::numToString(index) + extension)).exists()) {
 		index++;
 	}
 
@@ -818,7 +842,7 @@ void SharedScreenshotLogic::screenshot(CCNode* node) {
 		if (pl->getChildByID("EndLevelLayer")->getScale() == 0.f) extension = " (without endscreen)" + extension; // prevent filename collision
 	}
 
-	std::string filename = geode::utils::string::pathToString(folder / (numToString(index) + extension));
+	std::string filename = asp::fs::Path::fromStdPath(folder / (geode::utils::numToString(index) + extension)).string();
 	bool shouldPlaySFX = screenshotterIsSelf && Mod::get()->getSettingValue<bool>("play-sfx");
 	// log::info("filename: {}", filename);
 	ss.intoFile(filename, shouldPlaySFX, jpeg);
@@ -870,7 +894,7 @@ void SharedScreenshotLogic::screenshotLevelOrScene() {
 	}
 	if (lel && lel->getParent() && lel->getParent() == CCScene::get()) {
 		SharedScreenshotLogic::screenshot(lel);
-		if (lel->getChildByID("EditorPauseLayer")) {
+		if (CCScene::get()->getChildByID("EditorPauseLayer")) {
 			CCScene* baseScene = CCScene::get();
 			baseScene->setUserObject("pause-menu-type"_spr, CCString::create("EditorPauseLayer"));
 			SharedScreenshotLogic::screenshot(baseScene);

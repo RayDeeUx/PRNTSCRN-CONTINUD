@@ -1,5 +1,5 @@
 #define ECLIPSE_MODULES_HPP
-#include <eclipse.eclipse-menu/include/eclipse.hpp>
+#include <eclipse.eclipse-menu/eclipse.hpp>
 #include <Geode/ui/GeodeUI.hpp>
 #include "../Manager.hpp"
 #include "../ScreenshotPopup.hpp"
@@ -33,6 +33,7 @@ $on_mod(Loaded) {
 		addSetting(tab, "hide-noclip-tints");
 		addSetting(tab, "hide-attempts");
 		addSetting(tab, "hide-checkpoints");
+		addSetting(tab, "hide-death-markers");
 		addSetting(tab, "hide-draw-grid-layer");
 		addSetting(tab, "hide-debug-draw");
 		addSetting(tab, "hide-playtest-path-clicks");

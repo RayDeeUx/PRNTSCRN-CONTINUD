@@ -80,8 +80,8 @@ bool ScreenshotPopup::init() {
 		.collect();
 
 	resolutionWidthInput->setString(numToString(Manager::get()->width));
-	resolutionWidthInput->getInputNode()->setID("resolution-width-input"_spr);
-	resolutionWidthInput->getInputNode()->setDelegate(this);
+	resolutionWidthInput->setID("resolution-width-input"_spr);
+	// resolutionWidthInput->setDelegate(this);
 	resolutionWidthInput->setEnabled(!Mod::get()->getSettingValue<bool>("use-window-width"));
 
 	CCLabelBMFont* xLabel = CCLabelBMFont::create("x", "bigFont.fnt");
@@ -95,8 +95,8 @@ bool ScreenshotPopup::init() {
 		.collect();
 
 	resolutionHeightInput->setString(numToString(Manager::get()->height));
-	resolutionHeightInput->getInputNode()->setID("resolution-height-input"_spr);
-	resolutionHeightInput->getInputNode()->setDelegate(this);
+	resolutionHeightInput->setID("resolution-height-input"_spr);
+	// resolutionHeightInput->setDelegate(this);
 	resolutionHeightInput->setEnabled(!Mod::get()->getSettingValue<bool>("use-window-height"));
 
 	CCMenu* settingsMenu = CCMenu::create();
@@ -112,6 +112,7 @@ bool ScreenshotPopup::init() {
 	settingsMenu->addChild(createSetting("Hide Player", "hide-player"));
 	settingsMenu->addChild(createSetting("Hide Other Players", "hide-multiplayers"));
 	settingsMenu->addChild(createSetting("Hide Noclip Tints", "hide-noclip-tints"));
+	settingsMenu->addChild(createSetting("Hide Death Markers", "hide-death-markers"));
 	if (pl) {
 		settingsMenu->addChild(createSetting("Hide Attempt Label", "hide-attempts"));
 		settingsMenu->addChild(createSetting("Hide Checkpoints", "hide-checkpoints"));
@@ -122,6 +123,7 @@ bool ScreenshotPopup::init() {
 	} else if (Manager::get()->isAddingToQOLMod && !pl && !lel) {
 		settingsMenu->addChild(createSetting("Hide Attempt Label", "hide-attempts"));
 		settingsMenu->addChild(createSetting("Hide Checkpoints", "hide-checkpoints"));
+		settingsMenu->addChild(createSetting("Hide Death Markers", "hide-death-markers"));
 		settingsMenu->addChild(createSetting("Hide Grid", "hide-draw-grid-layer"));
 		settingsMenu->addChild(createSetting("Hide Hitboxes/Debug Draw", "hide-debug-draw"));
 		settingsMenu->addChild(createSetting("Hide Playtest Path + Clicks", "hide-playtest-path-clicks"));
@@ -157,8 +159,8 @@ bool ScreenshotPopup::init() {
 			.collect();
 
 		autoPercentInput->setString(numToString(selectedSetting));
-		autoPercentInput->getInputNode()->setID(selectedInputNodeID);
-		autoPercentInput->getInputNode()->setDelegate(this);
+		autoPercentInput->setID(selectedInputNodeID);
+		// autoPercentInput->setDelegate(this);
 		if (Manager::get()->isAddingToQOLMod) autoPercentInput->setEnabled(false);
 
 		Build<CCLabelBMFont>::create(selectedLabel.c_str(), "bigFont.fnt")

@@ -24,8 +24,9 @@ public:
 
 		this->m_screenshotInfo = screenshotInfo;
 
+		const asp::fs::Path screenshotPath = asp::fs::Path::fromStdPath(screenshotInfo.path);
 		this->m_screenshot = geode::Ref<geode::LazySprite>(geode::LazySprite::create({85.f, 85.f}));
-		this->m_screenshot->loadFromFile(screenshotInfo.path);
+		this->m_screenshot->loadFromFile(screenshotPath);
 
 		this->m_screenshot->setLoadCallback([screenshot = geode::Ref(this->m_screenshot)](const geode::Result<>& result) {
 			if (!result.isErr()) {
@@ -41,7 +42,7 @@ public:
 		this->setContentSize({85.f, 105.f});
 		this->addChildAtPosition(this->m_screenshot, geode::Anchor::Center);
 
-		this->m_fileNameLabel = geode::Label::create(fmt::format("{} - {}", geode::utils::string::pathToString(screenshotInfo.path.parent_path().stem()), geode::utils::string::pathToString(screenshotInfo.path.stem())), "bigFont.fnt");
+		this->m_fileNameLabel = geode::Label::create(fmt::format("{} - {}", screenshotPath.parent().value().stem().value(), screenshotPath.stem().value()), "bigFont.fnt");
 		this->m_fileNameLabel->setLimitLabelSize({80.f, 32.f});
 		this->m_fileNameLabel->setID("file-name-label"_spr);
 		this->addChildAtPosition(this->m_fileNameLabel, geode::Anchor::Top, {0.f, -12.5f});

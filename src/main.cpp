@@ -220,13 +220,13 @@ class $modify(NewPauseLayer, PauseLayer) {
 		#ifdef GEODE_IS_DESKTOP
 		addPauseButton = Mod::get()->getSettingValue<bool>("pause-menu-button");
 		#endif
-		if (!addPauseButton) return;
+		if (!addPauseButton || !this->m_mainLayer) return;
 
-		auto leftMenu = getChildByID("left-button-menu");
+		auto leftMenu = m_mainLayer->getChildByID("left-button-menu");
 		if (!leftMenu) return;
 
 		auto btn = CCMenuItemSpriteExtra::create(
-			CircleButtonSprite::createWithSprite("screenshot.png"_spr),
+			CircleButtonSprite::createWithSprite("screenshot.png"_spr, 1.f, CircleBaseColor::Green, CircleBaseSize::Tiny),
 			this, menu_selector(NewPauseLayer::onScreenshotPopup)
 		);
 		btn->setID("screenshot-button"_spr);
@@ -250,14 +250,26 @@ class $modify(NewEditorPauseLayer, EditorPauseLayer) {
 		#endif
 		if (!addPauseButton) return true;
 
-		auto settingsMenu = getChildByID("settings-menu");
+		auto settingsMenu = this->getChildByID("settings-menu");
 		if (!settingsMenu) return true;
 
-		auto btn = CCMenuItemSpriteExtra::create(
-			CircleButtonSprite::createWithSprite("screenshot.png"_spr, 1, CircleBaseColor::Green, CircleBaseSize::Tiny),
-			this, menu_selector(NewEditorPauseLayer::onScreenshotPopup)
-		);
+		auto bg = NineSlice::create("GJ_button_05.png");
+		bg->setContentSize({82.f, 26.f});
+		bg->setLayout(SimpleRowLayout::create()->setGap(4.f)->setMainAxisScaling(AxisScaling::Scale)->setCrossAxisScaling(AxisScaling::Scale)->setPadding({8.f, 4.f, 8.f, 6.f}));
+
+		geode::Label* label = Label::create("PRNTSCRN", "bigFont.fnt");
+		label->setLimitLabelWidth(56.f, 0.5f, 0.01f);
+		label->setID("screenshot-button-label"_spr);
+
+		CCSprite* sprite = CCSprite::create("screenshot.png"_spr);
+		sprite->setID("screenshot-button-label"_spr);
+
+		bg->addChild(label);
+		bg->addChild(sprite);
+
+		CCMenuItemSpriteExtra* btn = CCMenuItemSpriteExtra::create(bg, this, menu_selector(NewEditorPauseLayer::onScreenshotPopup));
 		btn->setID("screenshot-button"_spr);
+
 		settingsMenu->addChild(btn);
 		settingsMenu->updateLayout();
 		return true;
