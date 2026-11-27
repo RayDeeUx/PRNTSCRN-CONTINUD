@@ -17,12 +17,12 @@ bool ScreenshotGalleryPopup::init() {
 	this->m_mainLayer->addChildAtPosition(this->m_scrollLayer, geode::Anchor::Center, {0.f, -15.f});
 
 	std::vector<ScreenshotInfo> images = {};
-	for (auto fakeEntry : asp::fs::DirectoryIterator::create(Mod::get()->getConfigDir()).unwrap()) {
+	for (auto fakeEntry : asp::fs::iterDir(Mod::get()->getConfigDir()).unwrap()) {
 		std::error_code ea;
 		if (!fakeEntry.isErr()) continue;
 		auto entry = fakeEntry.unwrap();
 		if (!entry.isDir()) continue;
-		for (auto fakeNestedEntry : asp::fs::DirectoryIterator::create(entry.path).unwrap()) {
+		for (auto fakeNestedEntry : asp::fs::iterDir(entry.path).unwrap()) {
 			std::error_code eb, ec, ed, ee, ef;
 			if (!fakeNestedEntry) continue;
 			auto nestedEntry = fakeNestedEntry.unwrap();

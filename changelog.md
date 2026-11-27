@@ -1,4 +1,7 @@
 # <cy>PRNTSCRN</c> Changelog
+## v1.0.17
+- Fix the primitive Screenshot Gallery not working as intended.
+  - (Hopefully, anyhow.)
 ## v1.0.16
 - 2.2091 as a game update was a net negative.
 - Added an option to hide Death Markers.
