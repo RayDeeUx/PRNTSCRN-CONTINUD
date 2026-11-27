@@ -17,19 +17,33 @@ bool ScreenshotGalleryPopup::init() {
 	this->m_mainLayer->addChildAtPosition(this->m_scrollLayer, geode::Anchor::Center, {0.f, -15.f});
 
 	std::vector<ScreenshotInfo> images = {};
-	for (auto fakeEntry : asp::fs::iterDir(Mod::get()->getConfigDir()).unwrap()) {
-		std::error_code ea;
-		if (!fakeEntry.isErr()) continue;
+	auto iterDir = asp::fs::iterDir(Mod::get()->getConfigDir());
+	// if (iterDir.isErr()) log::info("FUCKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKKK");
+	for (auto fakeEntry : iterDir.unwrap()) {
+		if (fakeEntry.isErr()) continue;
 		auto entry = fakeEntry.unwrap();
+		// geode::log::info("!entry.isDir(): {}", !entry.isDir());
 		if (!entry.isDir()) continue;
-		for (auto fakeNestedEntry : asp::fs::iterDir(entry.path).unwrap()) {
-			std::error_code eb, ec, ed, ee, ef;
-			if (!fakeNestedEntry) continue;
+		// geode::log::info("entry.path: {}", entry.path);
+		auto entryIterDir = asp::fs::iterDir(entry.path);
+		// if (entryIterDir.isErr()) log::info("SHITTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT");
+		for (auto fakeNestedEntry : entryIterDir.unwrap()) {
+			std::error_code ee, ef;
+			if (fakeNestedEntry.isErr()) continue;
 			auto nestedEntry = fakeNestedEntry.unwrap();
+			// geode::log::info("nestedEntry.path: {}", nestedEntry.path);
+			// geode::log::info("!nestedEntry.path.exists(): {}", !nestedEntry.path.exists());
+			// geode::log::info("!nestedEntry.isFile(): {}", !nestedEntry.isFile());
+			// geode::log::info("nestedEntry.isDir(): {}", nestedEntry.isDir());
+			// geode::log::info("!nestedEntry.path.exists() || !nestedEntry.isFile() || nestedEntry.isDir(): {}", !nestedEntry.path.exists() || !nestedEntry.isFile() || nestedEntry.isDir());
 			if (!nestedEntry.path.exists() || !nestedEntry.isFile() || nestedEntry.isDir()) continue;
-			asp::fs::Path& path = nestedEntry.path;
-			if (path.extension().value() != ".png" && path.extension().value() != ".jpg") continue;
+			const asp::fs::Path& path = nestedEntry.path;
+			// geode::log::info("path.extension().value(): {}", path.extension().value());
+			if (path.extension().value() != "png" && path.extension().value() != "jpg") continue;
+			// geode::log::info("adding it hopefully");
 			const std::filesystem::path& stdPath = path.toStdPath().unwrapOr(std::filesystem::path{});
+			// geode::log::info("path: {}", path);
+			// geode::log::info("stdPath: {}", stdPath);
 			images.push_back({
 				.path = stdPath,
 				.lastWriteTime = geode::localtime(std::chrono::system_clock::to_time_t(std::chrono::time_point_cast<std::chrono::system_clock::duration>(GEODE_WINDOWS(std::chrono::clock_cast<std::chrono::system_clock>)GEODE_MOBILE(std::filesystem::file_time_type::clock::to_sys)GEODE_MACOS(std::filesystem::file_time_type::clock::to_sys)(std::filesystem::last_write_time(stdPath, ee))))),
